@@ -26,7 +26,13 @@ Preferred communication style: Simple, everyday language.
 **🚀 NEW: GCP Architecture (Target)**
 
 **Backend Infrastructure:**
-- **Cloud Run Multi-Region Deployment** - Flask app on Cloud Run with native WebSocket support across `us-central1`, `europe-west1`, and `asia-southeast1`.
+- **Cloud Run Global Deployment** - Flask app on Cloud Run with native WebSocket support across 6 regions:
+  - `asia-south1` (Mumbai) - India, Pakistan, Bangladesh, Middle East
+  - `europe-west2` (London) - UK, Europe, Africa
+  - `asia-northeast1` (Tokyo) - Japan, South Korea, Hong Kong
+  - `australia-southeast1` (Sydney) - Australia, New Zealand
+  - `southamerica-east1` (São Paulo) - Brazil, South America
+  - `northamerica-northeast1` (Montreal) - Canada, Mexico
 - **Global HTTPS Load Balancer** - Automatic traffic distribution with Cloud CDN, session affinity for WebSocket connections.
 - **Hybrid Compute Strategy:**
   - **Cloud Run**: Main Flask application (full features, 60-minute timeout)

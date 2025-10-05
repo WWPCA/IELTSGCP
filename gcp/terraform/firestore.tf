@@ -1,11 +1,15 @@
 # Firestore Configuration for IELTS GenAI Prep
 # Multi-region database with automatic replication
 
-# Firestore Database (use nam5 for US multi-region)
+# Firestore Database
+# Using nam5 (North America multi-region) for automatic replication and 99.999% SLA
+# Note: Firestore only offers multi-region within same continent (nam5, eur3)
+# Google's global backbone provides acceptable latency (~50-100ms) to all regions
+# Alternative: Use asia-south1 single-region for lowest latency to India/Asia markets
 resource "google_firestore_database" "main" {
   project     = var.project_id
   name        = "(default)"
-  location_id = "nam5"  # US multi-region (covers us-central1, us-east1, etc.)
+  location_id = "nam5"  # Multi-region for high availability
   type        = "FIRESTORE_NATIVE"
   
   # Point-in-time recovery for backups

@@ -1,5 +1,11 @@
 # GCP Infrastructure for IELTS GenAI Prep
-# Multi-Region Deployment: us-central1, europe-west1, asia-southeast1
+# Global Multi-Region Deployment:
+# - asia-south1 (Mumbai) - India, Pakistan, Bangladesh, Middle East
+# - europe-west2 (London) - UK, Europe, Africa
+# - asia-northeast1 (Tokyo) - Japan, Korea, Hong Kong
+# - australia-southeast1 (Sydney) - Australia, New Zealand
+# - southamerica-east1 (São Paulo) - Brazil, South America
+# - northamerica-northeast1 (Montreal) - Canada, Mexico, North America
 
 terraform {
   required_version = ">= 1.0"
@@ -24,15 +30,21 @@ variable "project_id" {
 }
 
 variable "primary_region" {
-  description = "Primary region"
+  description = "Primary region - Mumbai for India/Pakistan/Bangladesh/Middle East"
   type        = string
-  default     = "us-central1"
+  default     = "asia-south1"
 }
 
 variable "secondary_regions" {
-  description = "Secondary regions"
+  description = "Secondary regions for global coverage"
   type        = list(string)
-  default     = ["europe-west1", "asia-southeast1"]
+  default     = [
+    "europe-west2",           # London - UK, Europe, Africa
+    "asia-northeast1",        # Tokyo - Japan, Korea, Hong Kong
+    "australia-southeast1",   # Sydney - Australia, New Zealand
+    "southamerica-east1",     # São Paulo - Brazil, South America
+    "northamerica-northeast1" # Montreal - Canada, Mexico, North America
+  ]
 }
 
 variable "domain_name" {
