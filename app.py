@@ -724,7 +724,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         
         subject = "IELTS GenAI Prep - Password Reset Request"
         
-        # Professional HTML email template matching your brand
+        # Professional HTML email template matching new IELTS.org-inspired branding
         html_body = f"""
         <!DOCTYPE html>
         <html>
@@ -732,51 +732,50 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             <meta charset="UTF-8">
             <title>Password Reset - IELTS GenAI Prep</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
-            <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+        <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
                 <!-- Header -->
-                <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #6f42c1;">
-                    <h1 style="color: #6f42c1; margin-bottom: 10px; font-size: 28px;">IELTS GenAI Prep</h1>
-                    <p style="color: #6c757d; margin: 0; font-size: 14px;">Powered by TrueScore® & ClearScore® AI Assessment Technology</p>
+                <div style="background: #ffffff; text-align: center; padding: 30px 20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #E33219;">
+                    <h1 style="color: #E33219; margin: 0 0 10px 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">IELTS GenAI Prep</h1>
+                    <p style="color: #666; margin: 0; font-size: 14px;">Your Personalized Path to IELTS Success</p>
                 </div>
                 
                 <!-- Main Content -->
-                <div style="background: #f8f9fa; padding: 30px; border-radius: 8px; margin-bottom: 30px;">
-                    <h2 style="color: #495057; font-weight: normal; text-align: center; margin-bottom: 20px;">Password Reset Request</h2>
+                <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 8px 8px;">
+                    <h2 style="color: #1a1a1a; font-weight: 600; margin-bottom: 20px; font-size: 22px;">Password Reset Request</h2>
                     
-                    <p style="margin-bottom: 20px;">Hello {username},</p>
+                    <p style="margin-bottom: 20px; color: #333;">Hello {username},</p>
                     
-                    <p style="margin-bottom: 20px;">We received a request to reset your password for your IELTS GenAI Prep account. 
+                    <p style="margin-bottom: 25px; color: #333;">We received a request to reset your password for your IELTS GenAI Prep account. 
                     If you made this request, please click the button below to reset your password:</p>
                     
-                    <div style="text-align: center; margin: 30px 0;">
+                    <div style="text-align: center; margin: 35px 0;">
                         <a href="{reset_link}" 
-                           style="background: #6f42c1; color: white; padding: 15px 40px; 
-                                  text-decoration: none; border-radius: 5px; display: inline-block;
-                                  font-weight: bold; font-size: 16px; box-shadow: 0 4px 6px rgba(111, 66, 193, 0.3);">
+                           style="background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%); color: white; padding: 16px 40px; 
+                                  text-decoration: none; border-radius: 8px; display: inline-block;
+                                  font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(227, 50, 25, 0.3);">
                             Reset My Password
                         </a>
                     </div>
                     
-                    <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; margin: 20px 0;">
+                    <div style="background: #fff3cd; padding: 16px; border-radius: 8px; border-left: 4px solid #E33219; margin: 25px 0;">
                         <p style="margin: 0; color: #856404; font-size: 14px;">
                             <strong>Security Notice:</strong> This link will expire in 1 hour for your protection.
                         </p>
                     </div>
                     
-                    <p style="margin-bottom: 0;">If you didn't request a password reset, please ignore this email. 
+                    <p style="margin-bottom: 0; color: #333;">If you didn't request a password reset, please ignore this email. 
                     Your password will remain unchanged and your account is secure.</p>
-                </div>
-                
-                <!-- Footer -->
-                <div style="border-top: 1px solid #dee2e6; padding-top: 20px; font-size: 14px; color: #6c757d;">
-                    <p style="margin-bottom: 15px;">If the button doesn't work, copy and paste this link into your browser:</p>
-                    <p style="word-break: break-all; background: #f8f9fa; padding: 10px; border-radius: 4px; margin-bottom: 20px;">{reset_link}</p>
                     
-                    <div style="text-align: center; margin-top: 30px;">
-                        <p style="margin-bottom: 5px; font-weight: bold;">Best regards,</p>
-                        <p style="margin-bottom: 15px;">The IELTS GenAI Prep Team</p>
-                        <p style="font-size: 12px; color: #adb5bd;">© 2025 IELTS GenAI Prep. All rights reserved.</p>
+                    <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 30px 0;">
+                    
+                    <p style="margin-bottom: 10px; color: #666; font-size: 14px;">If the button doesn't work, copy and paste this link into your browser:</p>
+                    <p style="word-break: break-all; background: #f5f5f5; padding: 12px; border-radius: 6px; margin-bottom: 25px; font-size: 13px; color: #0891B2;">{reset_link}</p>
+                    
+                    <div style="text-align: center; margin-top: 35px;">
+                        <p style="margin-bottom: 5px; font-weight: 600; color: #1a1a1a;">Best regards,</p>
+                        <p style="margin-bottom: 15px; color: #333;">The IELTS GenAI Prep Team</p>
+                        <p style="font-size: 12px; color: #999;">© 2025 IELTS GenAI Prep. All rights reserved.</p>
                     </div>
                 </div>
             </div>

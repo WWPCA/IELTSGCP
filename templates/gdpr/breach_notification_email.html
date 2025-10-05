@@ -6,73 +6,100 @@
     <title>Important Security Notice - IELTS GenAI Prep</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
             line-height: 1.6;
             color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
             max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
         .header {
-            border-bottom: 3px solid #dc3545;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
+            background: #ffffff;
+            text-align: center;
+            padding: 30px 20px;
+            border-radius: 8px 8px 0 0;
+            border-bottom: 3px solid #E33219;
+        }
+        .header h1 {
+            color: #E33219;
+            margin: 0 0 10px 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        .header p {
+            color: #666;
+            margin: 0;
+            font-size: 14px;
+        }
+        .content {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 0 0 8px 8px;
         }
         .footer {
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-            margin-top: 30px;
+            text-align: center;
+            padding: 20px;
             font-size: 12px;
-            color: #666;
+            color: #999;
         }
         .alert-box {
-            background-color: #f8d7da;
-            border: 1px solid #f5c6cb;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 20px;
+            background-color: #fff3cd;
+            border-left: 4px solid #E33219;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 25px;
         }
         .info-box {
-            background-color: #e2f0fd;
-            border: 1px solid #b8daff;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 20px;
-        }
-        h1 {
-            color: #dc3545;
-            font-size: 24px;
-            margin-top: 0;
+            background-color: #f5f5f5;
+            border-left: 4px solid #0891B2;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 25px;
         }
         h2 {
-            font-size: 18px;
+            font-size: 20px;
             margin-top: 25px;
-            color: #444;
+            margin-bottom: 15px;
+            color: #1a1a1a;
+            font-weight: 600;
         }
         ul {
             padding-left: 20px;
+            line-height: 1.8;
         }
         .button {
             display: inline-block;
-            background-color: #007bff;
+            background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%);
             color: white;
             text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 14px 32px;
+            border-radius: 8px;
             margin-top: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(227, 50, 25, 0.3);
         }
         .contact {
             margin-top: 25px;
-            background-color: #f8f9fa;
-            padding: 15px;
-            border-radius: 4px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>Important Security Notice</h1>
-    </div>
+    <div class="container">
+        <div class="header">
+            <h1>IELTS GenAI Prep</h1>
+            <p>Important Security Notice</p>
+        </div>
+        
+        <div class="content">
     
     <div class="alert-box">
         <p><strong>Notice of Data Breach</strong></p>
@@ -124,11 +151,13 @@
         <h2>For More Information</h2>
         <p>If you have questions or concerns, please visit our <a href="{{ help_url }}">Help Center</a> or use our Contact Us form on the website.</p>
     </div>
+        </div>
+    </div>
     
     <div class="footer">
-        <p>IELTS GenAI Prep takes the protection of your personal information very seriously. We sincerely apologize for any concern or inconvenience this incident may cause.</p>
-        <p>© {{ breach.discovery_date.year }} IELTS GenAI Prep. All rights reserved.</p>
-        <p>This is a mandatory security notification. Please do not reply to this email.</p>
+        <p style="margin-bottom: 10px;">IELTS GenAI Prep takes the protection of your personal information very seriously. We sincerely apologize for any concern or inconvenience this incident may cause.</p>
+        <p style="margin-bottom: 5px;">© {{ breach.discovery_date.year }} IELTS GenAI Prep. All rights reserved.</p>
+        <p style="margin: 0;">This is a mandatory security notification. Please do not reply to this email.</p>
     </div>
 </body>
 </html>
