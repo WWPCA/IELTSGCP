@@ -129,6 +129,14 @@
     </script>
     
     <style>
+        :root {
+            --brand-coral: #E33219;
+            --brand-coral-light: #FF6B55;
+            --brand-coral-dark: #B82818;
+            --brand-burgundy: #8B1A10;
+            --brand-peach: #FF8C7A;
+        }
+        
         body {
             font-family: 'Roboto', sans-serif;
             line-height: 1.6;
@@ -165,7 +173,7 @@
         }
         
         .hero {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--brand-coral) 0%, var(--brand-burgundy) 100%);
             color: white;
             padding: 80px 0;
         }
@@ -182,7 +190,7 @@
         
         .navbar-brand {
             font-weight: bold;
-            color: #4361ee !important;
+            color: var(--brand-coral) !important;
         }
         
         .navbar-nav .nav-link {
@@ -191,7 +199,60 @@
         }
         
         .navbar-nav .nav-link:hover {
-            color: #4361ee !important;
+            color: var(--brand-coral) !important;
+        }
+        
+        /* Custom brand color classes */
+        .bg-brand-coral {
+            background-color: var(--brand-coral) !important;
+        }
+        
+        .bg-brand-burgundy {
+            background-color: var(--brand-burgundy) !important;
+        }
+        
+        .bg-brand-peach {
+            background-color: var(--brand-peach) !important;
+        }
+        
+        .text-brand-coral {
+            color: var(--brand-coral) !important;
+        }
+        
+        .text-brand-burgundy {
+            color: var(--brand-burgundy) !important;
+        }
+        
+        .btn-brand-coral {
+            background-color: var(--brand-coral);
+            border-color: var(--brand-coral);
+            color: white;
+        }
+        
+        .btn-brand-coral:hover {
+            background-color: var(--brand-coral-dark);
+            border-color: var(--brand-coral-dark);
+            color: white;
+        }
+        
+        .btn-brand-burgundy {
+            background-color: var(--brand-burgundy);
+            border-color: var(--brand-burgundy);
+            color: white;
+        }
+        
+        .btn-brand-burgundy:hover {
+            background-color: #6B1410;
+            border-color: #6B1410;
+            color: white;
+        }
+        
+        .border-brand-coral {
+            border-color: var(--brand-coral) !important;
+        }
+        
+        .border-brand-peach {
+            border-color: var(--brand-peach) !important;
         }
         
         /* Enhanced animations and interactivity */
@@ -595,7 +656,7 @@
             <!-- TrueScore® Section -->
             <div class="genai-brand-section mb-5">
                 <div class="text-center mb-4">
-                    <div class="brand-icon text-success">
+                    <div class="brand-icon text-brand-coral">
                         <i class="fas fa-pencil-alt"></i>
                     </div>
                     <h3 class="brand-title">TrueScore® Writing Assessment</h3>
@@ -606,20 +667,20 @@
                     <!-- Academic Writing Assessment -->
                     <div class="col-lg-6 mb-4">
                         <div class="card pricing-card">
-                            <div class="card-header bg-success text-white text-center">
+                            <div class="card-header bg-brand-coral text-white text-center">
                                 <h3 class="my-0 font-weight-bold">Academic Writing</h3>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title text-center">$25<small class="text-muted"> for 2 assessments</small></h1>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li><i class="fas fa-check text-success me-2"></i>2 Unique Assessments Included</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Task 1 & Task 2 Assessment</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>TrueScore® GenAI Evaluation</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Official IELTS Criteria Alignment</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Detailed Band Score Feedback</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Writing Improvement Recommendations</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>2 Unique Assessments Included</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Task 1 & Task 2 Assessment</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>TrueScore® GenAI Evaluation</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Official IELTS Criteria Alignment</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Detailed Band Score Feedback</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Writing Improvement Recommendations</li>
                                 </ul>
-                                <a href="/qr-auth" class="btn btn-lg btn-block btn-success w-100">Purchase via Mobile App</a>
+                                <a href="/qr-auth" class="btn btn-lg btn-block btn-brand-coral w-100">Purchase via Mobile App</a>
                             </div>
                         </div>
                     </div>
@@ -627,20 +688,20 @@
                     <!-- General Writing Assessment -->
                     <div class="col-lg-6 mb-4">
                         <div class="card pricing-card">
-                            <div class="card-header bg-success text-white text-center">
+                            <div class="card-header bg-brand-coral text-white text-center">
                                 <h3 class="my-0 font-weight-bold">General Training Writing</h3>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title text-center">$25<small class="text-muted"> for 2 assessments</small></h1>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li><i class="fas fa-check text-success me-2"></i>2 Unique Assessments Included</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Letter & Essay Assessment</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>TrueScore® GenAI Evaluation</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Official IELTS Criteria Alignment</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Comprehensive Feedback System</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Target Band Achievement Support</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>2 Unique Assessments Included</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Letter & Essay Assessment</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>TrueScore® GenAI Evaluation</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Official IELTS Criteria Alignment</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Comprehensive Feedback System</li>
+                                    <li><i class="fas fa-check text-brand-coral me-2"></i>Target Band Achievement Support</li>
                                 </ul>
-                                <a href="/qr-auth" class="btn btn-lg btn-block btn-success w-100">Purchase via Mobile App</a>
+                                <a href="/qr-auth" class="btn btn-lg btn-block btn-brand-coral w-100">Purchase via Mobile App</a>
                             </div>
                         </div>
                     </div>
@@ -650,7 +711,7 @@
             <!-- ClearScore® Section -->
             <div class="genai-brand-section">
                 <div class="text-center mb-4">
-                    <div class="brand-icon text-primary">
+                    <div class="brand-icon text-brand-burgundy">
                         <i class="fas fa-microphone-alt"></i>
                     </div>
                     <h3 class="brand-title">ClearScore® Speaking Assessment</h3>
@@ -661,20 +722,20 @@
                     <!-- Academic Speaking Assessment -->
                     <div class="col-lg-6 mb-4">
                         <div class="card pricing-card">
-                            <div class="card-header bg-primary text-white text-center">
+                            <div class="card-header bg-brand-burgundy text-white text-center">
                                 <h3 class="my-0 font-weight-bold">Academic Speaking</h3>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title text-center">$25<small class="text-muted"> for 2 assessments</small></h1>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li><i class="fas fa-check text-primary me-2"></i>2 Unique Assessments Included</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>Interactive Maya AI Examiner</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>ClearScore® GenAI Analysis</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>Real-time Speech Assessment</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>All Three Speaking Parts</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>Pronunciation & Fluency Feedback</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>2 Unique Assessments Included</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>Interactive Maya AI Examiner</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>ClearScore® GenAI Analysis</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>Real-time Speech Assessment</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>All Three Speaking Parts</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>Pronunciation & Fluency Feedback</li>
                                 </ul>
-                                <a href="/qr-auth" class="btn btn-lg btn-block btn-primary w-100">Purchase via Mobile App</a>
+                                <a href="/qr-auth" class="btn btn-lg btn-block btn-brand-burgundy w-100">Purchase via Mobile App</a>
                             </div>
                         </div>
                     </div>
@@ -682,20 +743,20 @@
                     <!-- General Speaking Assessment -->
                     <div class="col-lg-6 mb-4">
                         <div class="card pricing-card">
-                            <div class="card-header bg-primary text-white text-center">
+                            <div class="card-header bg-brand-burgundy text-white text-center">
                                 <h3 class="my-0 font-weight-bold">General Training Speaking</h3>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title text-center">$25<small class="text-muted"> for 2 assessments</small></h1>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li><i class="fas fa-check text-primary me-2"></i>2 Unique Assessments Included</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>Maya AI Conversation Partner</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>ClearScore® GenAI Technology</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>Comprehensive Speaking Analysis</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>General Training Topic Focus</li>
-                                    <li><i class="fas fa-check text-primary me-2"></i>Instant Performance Feedback</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>2 Unique Assessments Included</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>Maya AI Conversation Partner</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>ClearScore® GenAI Technology</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>Comprehensive Speaking Analysis</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>General Training Topic Focus</li>
+                                    <li><i class="fas fa-check text-brand-burgundy me-2"></i>Instant Performance Feedback</li>
                                 </ul>
-                                <a href="/qr-auth" class="btn btn-lg btn-block btn-primary w-100">Purchase via Mobile App</a>
+                                <a href="/qr-auth" class="btn btn-lg btn-block btn-brand-burgundy w-100">Purchase via Mobile App</a>
                             </div>
                         </div>
                     </div>
@@ -705,7 +766,7 @@
             <!-- Full-Length Mock Tests Section -->
             <div class="genai-brand-section mt-5">
                 <div class="text-center mb-4">
-                    <div class="brand-icon text-warning">
+                    <div class="brand-icon text-brand-peach">
                         <i class="fas fa-clipboard-check"></i>
                     </div>
                     <h3 class="brand-title">Full-Length IELTS Mock Tests</h3>
@@ -715,44 +776,44 @@
                 <div class="row">
                     <!-- Academic Mock Test -->
                     <div class="col-lg-6 mb-4">
-                        <div class="card pricing-card border-warning">
-                            <div class="card-header bg-warning text-dark text-center">
+                        <div class="card pricing-card border-brand-peach">
+                            <div class="card-header bg-brand-peach text-white text-center">
                                 <h3 class="my-0 font-weight-bold">Academic Mock Test</h3>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title text-center">$99<small class="text-muted"> for 2 assessments</small></h1>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li><i class="fas fa-check text-success me-2"></i>2 full-length mock tests including:</li>
+                                    <li><i class="fas fa-check text-brand-peach me-2"></i>2 full-length mock tests including:</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Listening (30 min + 10 min transfer)</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Reading (60 minutes)</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Writing (60 min - TrueScore®)</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Speaking (11-14 min - ClearScore®)</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Complete band score report</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Audio recordings included</li>
+                                    <li><i class="fas fa-check text-brand-peach me-2"></i>Complete band score report</li>
+                                    <li><i class="fas fa-check text-brand-peach me-2"></i>Audio recordings included</li>
                                 </ul>
-                                <a href="/qr-auth" class="btn btn-lg btn-block btn-warning text-dark w-100">Purchase via Mobile App</a>
+                                <a href="/qr-auth" class="btn btn-lg btn-block btn-brand-coral w-100">Purchase via Mobile App</a>
                             </div>
                         </div>
                     </div>
 
                     <!-- General Training Mock Test -->
                     <div class="col-lg-6 mb-4">
-                        <div class="card pricing-card border-warning">
-                            <div class="card-header bg-warning text-dark text-center">
+                        <div class="card pricing-card border-brand-peach">
+                            <div class="card-header bg-brand-peach text-white text-center">
                                 <h3 class="my-0 font-weight-bold">General Training Mock Test</h3>
                             </div>
                             <div class="card-body">
                                 <h1 class="card-title pricing-card-title text-center">$99<small class="text-muted"> for 2 assessments</small></h1>
                                 <ul class="list-unstyled mt-3 mb-4">
-                                    <li><i class="fas fa-check text-success me-2"></i>2 full-length mock tests including:</li>
+                                    <li><i class="fas fa-check text-brand-peach me-2"></i>2 full-length mock tests including:</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Listening (30 min + 10 min transfer)</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Reading (60 minutes)</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Writing (60 min - TrueScore®)</li>
                                     <li class="ms-4"><i class="fas fa-circle fa-2xs text-muted me-2"></i>Speaking (11-14 min - ClearScore®)</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Complete band score report</li>
-                                    <li><i class="fas fa-check text-success me-2"></i>Audio recordings included</li>
+                                    <li><i class="fas fa-check text-brand-peach me-2"></i>Complete band score report</li>
+                                    <li><i class="fas fa-check text-brand-peach me-2"></i>Audio recordings included</li>
                                 </ul>
-                                <a href="/qr-auth" class="btn btn-lg btn-block btn-warning text-dark w-100">Purchase via Mobile App</a>
+                                <a href="/qr-auth" class="btn btn-lg btn-block btn-brand-coral w-100">Purchase via Mobile App</a>
                             </div>
                         </div>
                     </div>
