@@ -1,6 +1,6 @@
 """
 Apple App Store and Google Play Store Receipt Validation
-Implements secure purchase verification with AWS Certificate Manager
+Implements secure purchase verification with GCP Secret Manager
 """
 import os
 import json
@@ -11,14 +11,20 @@ from datetime import datetime, timedelta
 from typing import Dict, Any, Optional, List
 from dataclasses import dataclass
 from enum import Enum
+import sys
 
 import requests
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.x509 import load_pem_x509_certificate
 
-from aws_secrets_manager import get_apple_store_config, get_google_play_config
-from dynamodb_dal import get_dal
+# Import GCP Firestore DAL
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'gcp'))
+try:
+    from firestore_dal import FirestoreConnection
+    use_firestore = True
+except ImportError:
+    use_firestore = False
 
 logger = logging.getLogger(__name__)
 
@@ -48,10 +54,21 @@ class AppleReceiptValidator:
     """Apple App Store receipt validation"""
     
     def __init__(self):
-        self.config = get_apple_store_config()
+        # Get config from environment variables
+        self.config = {
+            'APPLE_SHARED_SECRET': os.environ.get('APPLE_SHARED_SECRET', '')
+        }
         self.production_url = "https://buy.itunes.apple.com/verifyReceipt"
         self.sandbox_url = "https://sandbox.itunes.apple.com/verifyReceipt"
-        self.dal = get_dal()
+        
+        # Initialize Firestore DAL if available
+        if use_firestore:
+            project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+            environment = os.environ.get('ENVIRONMENT', 'production')
+            db_connection = FirestoreConnection(project_id=project_id, environment=environment)
+            self.dal = db_connection
+        else:
+            self.dal = None
     
     def validate_receipt(self, receipt_data: str, user_id: str) -> PurchaseVerificationResult:
         """
@@ -216,8 +233,21 @@ class GooglePlayValidator:
     """Google Play Store receipt validation"""
     
     def __init__(self):
-        self.config = get_google_play_config()
-        self.dal = get_dal()
+        # Get config from environment variables
+        self.config = {
+            'GOOGLE_SERVICE_ACCOUNT_JSON': os.environ.get('GOOGLE_SERVICE_ACCOUNT_JSON', ''),
+            'GOOGLE_PACKAGE_NAME': os.environ.get('ANDROID_PACKAGE_NAME', 'com.ieltsaiprep.app')
+        }
+        
+        # Initialize Firestore DAL if available
+        if use_firestore:
+            project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+            environment = os.environ.get('ENVIRONMENT', 'production')
+            db_connection = FirestoreConnection(project_id=project_id, environment=environment)
+            self.dal = db_connection
+        else:
+            self.dal = None
+            
         self._setup_service_account()
     
     def _setup_service_account(self):
@@ -386,7 +416,16 @@ class ReceiptValidationService:
         try:
             self.apple_validator = AppleReceiptValidator()
             self.google_validator = GooglePlayValidator()
-            self.dal = get_dal()
+            
+            # Initialize Firestore DAL if available
+            if use_firestore:
+                project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+                environment = os.environ.get('ENVIRONMENT', 'production')
+                db_connection = FirestoreConnection(project_id=project_id, environment=environment)
+                self.dal = db_connection
+            else:
+                self.dal = None
+            
             self.production_ready = True
             
         except RuntimeError as e:
@@ -394,7 +433,7 @@ class ReceiptValidationService:
                 # Development: Log and continue with mock behavior
                 self.apple_validator = None
                 self.google_validator = None  
-                self.dal = get_dal()  # DAL should still work
+                self.dal = None
                 self.production_ready = False
                 print(f"[DEV] Receipt validation using fallback mode: {e}")
                 
