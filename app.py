@@ -637,13 +637,23 @@ def contact():
 
 @app.route('/terms_and_payment')
 def terms_and_payment():
-    """Terms and payment page"""
-    # Provide anonymous user context for template compatibility
-    class AnonymousUser:
-        is_authenticated = False
-        email = None
-        
-    return render_template('gdpr/terms_of_service.html', current_user=AnonymousUser())
+    """Terms and payment page with no-refund policy"""
+    try:
+        with open('approved_terms_of_service.html', 'r') as f:
+            content = f.read()
+        return content
+    except FileNotFoundError:
+        # Fallback to basic terms message
+        return '''
+        <html>
+        <head><title>Terms of Service</title></head>
+        <body style="font-family: Arial; padding: 40px;">
+            <h1>Terms of Service</h1>
+            <p><strong>ALL PURCHASES ARE FINAL AND NON-REFUNDABLE.</strong></p>
+            <a href="/">Back to Home</a>
+        </body>
+        </html>
+        '''
 
 @app.route('/privacy_policy')
 def privacy_policy():
