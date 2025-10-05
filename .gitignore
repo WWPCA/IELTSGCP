@@ -1,0 +1,21 @@
+# GCP-Only Codebase - Ignore AWS artifacts
+.aws-sam/
+*.zip
+node_modules/
+__pycache__/
+*.pyc
+.env
+.DS_Store
+*.log
+.cache/
+.pythonlibs/
+.upm/
+.config/
+.breakpoints
+venv/
+env/
+dist/
+build/
+
+# Keep GCP files
+!gcp/**

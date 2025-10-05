@@ -1,5 +1,0 @@
-{
-  "block_type": "deny_all_except_cloudfront",
-  "implementation_date": "2025-07-09",
-  "purpose": "Completely block direct API Gateway access"
-}
