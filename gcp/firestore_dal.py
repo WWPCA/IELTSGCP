@@ -17,16 +17,23 @@ logger = logging.getLogger(__name__)
 class FirestoreConnection:
     """Manages Firestore connection with multi-region support"""
     
-    def __init__(self, project_id: Optional[str] = None):
+    def __init__(self, project_id: Optional[str] = None, environment: Optional[str] = None):
         self.project_id = project_id or os.environ.get('GOOGLE_CLOUD_PROJECT')
+        self.environment = environment or os.environ.get('ENVIRONMENT', 'production')
+        
         # Firestore automatically handles multi-region replication with nam5/eur3
         self.db = firestore.Client(project=self.project_id)
         self.regions = ['us-central1', 'europe-west1', 'asia-southeast1']
-        logger.info(f"Firestore client initialized - project: {self.project_id}")
+        
+        # Use environment prefix for collection isolation
+        self.collection_prefix = f"{self.environment}_" if self.environment != 'production' else ""
+        
+        logger.info(f"Firestore client initialized - project: {self.project_id}, environment: {self.environment}, prefix: {self.collection_prefix}")
     
     def get_collection(self, collection_name: str) -> firestore.CollectionReference:
-        """Get Firestore collection reference"""
-        return self.db.collection(collection_name)
+        """Get Firestore collection reference with environment prefix"""
+        prefixed_name = f"{self.collection_prefix}{collection_name}"
+        return self.db.collection(prefixed_name)
 
 
 class UserDAL:

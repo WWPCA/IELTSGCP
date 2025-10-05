@@ -71,7 +71,7 @@ resource "google_cloud_run_v2_service" "app" {
       # Startup probe
       startup_probe {
         http_get {
-          path = "/health"
+          path = "/api/health"
           port = 5000
         }
         initial_delay_seconds = 0
@@ -83,7 +83,7 @@ resource "google_cloud_run_v2_service" "app" {
       # Liveness probe
       liveness_probe {
         http_get {
-          path = "/health"
+          path = "/api/health"
           port = 5000
         }
         initial_delay_seconds = 10
