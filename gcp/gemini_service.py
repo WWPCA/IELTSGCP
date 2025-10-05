@@ -86,63 +86,163 @@ class GeminiService:
         student_response: str,
         word_count: int
     ) -> str:
-        """Generate evaluation prompt for writing tasks"""
-        
-        criteria = {
-            'academic_task1': ['Task Achievement', 'Coherence and Cohesion', 'Lexical Resource', 'Grammatical Range and Accuracy'],
-            'academic_task2': ['Task Response', 'Coherence and Cohesion', 'Lexical Resource', 'Grammatical Range and Accuracy'],
-            'general_task1': ['Task Achievement', 'Coherence and Cohesion', 'Lexical Resource', 'Grammatical Range and Accuracy'],
-            'general_task2': ['Task Response', 'Coherence and Cohesion', 'Lexical Resource', 'Grammatical Range and Accuracy']
-        }
+        """Generate comprehensive evaluation prompt for writing tasks with detailed IELTS rubrics"""
         
         word_requirement = 150 if 'task1' in task_type else 250
+        first_criterion = "Task Achievement" if 'task1' in task_type else "Task Response"
         
-        prompt = f"""You are an experienced IELTS examiner evaluating a {task_type.replace('_', ' ').title()} response.
+        prompt = f"""You are an expert IELTS examiner with deep knowledge of official IELTS writing band descriptors. Evaluate this {task_type.replace('_', ' ').title()} response with precision and detail.
+
+OFFICIAL IELTS WRITING BAND DESCRIPTORS:
+
+{first_criterion}:
+Band 9: Fully addresses all parts. Clear position. Fully extended, well-supported ideas.
+Band 7-8: Addresses all parts. Clear position. Relevant, extended, well-supported ideas.
+Band 5-6: Addresses task but format/coverage may be incomplete. Position unclear. Limited support/development.
+Band 3-4: Does not address all parts. Unclear position. Limited/irrelevant ideas.
+
+Coherence and Cohesion:
+Band 9: Skillful paragraphing. Cohesion that never attracts attention.
+Band 7-8: Logical organization. Clear progression. Skillful use of cohesive devices.
+Band 5-6: Some organization/progression. Inadequate/inaccurate/overuse of cohesive devices.
+Band 3-4: Information/ideas not arranged coherently. Very limited linking.
+
+Lexical Resource:
+Band 9: Wide range. Natural, sophisticated control. Rare minor errors.
+Band 7-8: Sufficient flexibility. Less common lexical items with awareness of style. Occasional errors.
+Band 5-6: Adequate range. Attempts less common vocabulary with errors. Noticeable spelling errors.
+Band 3-4: Very limited range. Errors may severely distort meaning.
+
+Grammatical Range and Accuracy:
+Band 9: Wide range. Full flexibility. Error-free.
+Band 7-8: Variety of complex structures. Frequent error-free sentences. Good control.
+Band 5-6: Mix of simple/complex. Frequent errors but meaning clear.
+Band 3-4: Very limited range. Errors predominate. May severely distort meaning.
 
 TASK PROMPT:
 {task_prompt}
 
-STUDENT RESPONSE (Word count: {word_count}):
+STUDENT RESPONSE (Word count: {word_count}/{word_requirement} required):
 {student_response}
 
-Evaluate this response according to official IELTS writing assessment criteria and provide feedback in the following JSON format:
+EVALUATION INSTRUCTIONS:
+1. Carefully assess against all 4 IELTS criteria using official band descriptors
+2. Quote specific examples from the student's response
+3. Provide precise band scores (use .5 increments: 6.0, 6.5, 7.0, etc.)
+4. Give detailed, actionable feedback with specific improvement strategies
+
+Provide evaluation in the following JSON format:
 
 {{
-    "overall_band": <float 0-9>,
-    "task_achievement": {{
+    "overall_band": <float 0-9 (average of 4 criteria)>,
+    "band_prediction": "<e.g., 'Band 7.0 - Good User'>",
+    "{first_criterion.lower().replace(' ', '_')}": {{
         "score": <float 0-9>,
-        "strengths": [<list of specific strengths>],
-        "weaknesses": [<list of specific areas for improvement>],
-        "commentary": "<detailed analysis>"
+        "band_descriptor": "<which band level achieved and why>",
+        "strengths": [
+            "<specific strength with quote>",
+            "<another strength with evidence>"
+        ],
+        "weaknesses": [
+            "<specific weakness with example>",
+            "<area needing development>"
+        ],
+        "specific_examples": {{
+            "positive": ["<quote showing task addressed well>"],
+            "negative": ["<quote showing task not fully addressed>"]
+        }},
+        "commentary": "<detailed paragraph analyzing task response>"
     }},
     "coherence_cohesion": {{
         "score": <float 0-9>,
-        "strengths": [<list>],
-        "weaknesses": [<list>],
-        "commentary": "<analysis>"
+        "band_descriptor": "<band level and justification>",
+        "strengths": [
+            "<organizational strength with example>",
+            "<cohesive device used well>"
+        ],
+        "weaknesses": [
+            "<organizational issue with example>",
+            "<cohesion problem>"
+        ],
+        "specific_examples": {{
+            "positive": ["<effective paragraph structure/linking>"],
+            "negative": ["<poor cohesion/organization>"]
+        }},
+        "paragraphing": "<assessment of paragraph structure>",
+        "cohesive_devices": "<analysis of linking words/phrases>",
+        "commentary": "<detailed analysis>"
     }},
     "lexical_resource": {{
         "score": <float 0-9>,
-        "strengths": [<list>],
-        "weaknesses": [<list>],
-        "commentary": "<analysis>"
+        "band_descriptor": "<band level and why>",
+        "strengths": [
+            "<effective vocabulary with examples>",
+            "<range/precision shown>"
+        ],
+        "weaknesses": [
+            "<vocabulary errors with corrections>",
+            "<limited range in specific areas>"
+        ],
+        "specific_examples": {{
+            "positive": ["<sophisticated/appropriate vocabulary used>"],
+            "negative": ["<errors: 'incorrect word' → 'correction'>"]
+        }},
+        "vocabulary_range": "<assessment of range and flexibility>",
+        "spelling_accuracy": "<spelling assessment>",
+        "commentary": "<detailed analysis>"
     }},
-    "grammatical_range": {{
+    "grammatical_range_accuracy": {{
         "score": <float 0-9>,
-        "strengths": [<list>],
-        "weaknesses": [<list>],
-        "commentary": "<analysis>"
+        "band_descriptor": "<band level and justification>",
+        "strengths": [
+            "<complex structures used successfully>",
+            "<accuracy in specific areas>"
+        ],
+        "weaknesses": [
+            "<grammatical errors with corrections>",
+            "<limited structure variety>"
+        ],
+        "specific_examples": {{
+            "positive": ["<correct complex sentences>"],
+            "negative": ["<error: 'incorrect' → 'correction'>"]
+        }},
+        "structure_variety": "<assessment of range>",
+        "error_frequency": "<how often errors occur>",
+        "commentary": "<detailed analysis>"
     }},
-    "detailed_feedback": "<comprehensive paragraph with specific examples from the response>",
-    "word_count_assessment": "{{'meets_requirement': <boolean>, 'note': '<comment if under {word_requirement} words>'}}",
-    "recommendations": [<list of 3-5 actionable recommendations for improvement>]
+    "word_count_assessment": {{
+        "meets_requirement": <boolean>,
+        "actual_count": {word_count},
+        "required_minimum": {word_requirement},
+        "impact": "<penalty description if under minimum>"
+    }},
+    "detailed_feedback": "<comprehensive 2-3 paragraph analysis covering: overall performance, how well task was addressed, organization quality, vocabulary and grammar highlights, and main areas for improvement>",
+    "performance_summary": {{
+        "strongest_criterion": "<which criterion scored highest>",
+        "weakest_criterion": "<which needs most work>",
+        "key_takeaway": "<main insight about writing level>"
+    }},
+    "sample_improvements": [
+        "{{\"original\": \"<sentence from response>\", \"improved\": \"<better version>\", \"reason\": \"<why this is better>\"}}",
+        "{{\"original\": \"<another sentence>\", \"improved\": \"<improved version>\", \"reason\": \"<explanation>\"}}"
+    ],
+    "recommendations": [
+        "{{\"priority\": \"high\", \"area\": \"<criterion>\", \"action\": \"<specific improvement step>\", \"example\": \"<how to practice>\"}}",
+        "{{\"priority\": \"high\", \"area\": \"<criterion>\", \"action\": \"<another key action>\", \"example\": \"<practice method>\"}}",
+        "{{\"priority\": \"medium\", \"area\": \"<criterion>\", \"action\": \"<development area>\", \"example\": \"<how to improve>\"}}"
+    ],
+    "next_steps": [
+        "<specific study recommendation>",
+        "<practice activity>",
+        "<resource or technique>"
+    ]
 }}
 
-Important:
-- Be specific and reference actual examples from the student's response
-- Scores should be realistic and aligned with IELTS band descriptors
-- Overall band is the average of the four criteria scores
-- Provide constructive, encouraging feedback
+IMPORTANT:
+- Quote specific sentences/phrases from the response as evidence
+- Provide corrections for errors (show original → improved)
+- Be precise with band scores using official descriptors
+- Give constructive, actionable feedback with clear examples
 """
         return prompt
     

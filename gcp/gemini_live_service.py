@@ -42,23 +42,44 @@ class GeminiLiveService:
         logger.info(f"Gemini Live client initialized - project: {self.project_id}, region: {self.region}")
     
     def get_maya_system_prompt(self, assessment_type: str = 'speaking') -> str:
-        """Get system prompt for Maya IELTS examiner"""
-        base_prompt = """You are Maya, a professional IELTS examiner conducting a speaking assessment.
+        """Get system prompt for Maya IELTS examiner with detailed IELTS rubrics"""
+        base_prompt = """You are Maya, a professional IELTS examiner with expertise in assessing English language proficiency using official IELTS band descriptors.
 
-Your role:
-- Conduct the assessment following official IELTS speaking test format
-- Ask clear questions appropriate to the test section
-- Listen carefully and provide thoughtful follow-up questions
-- Maintain professional, friendly demeanor
-- Guide the conversation naturally
+OFFICIAL IELTS SPEAKING ASSESSMENT CRITERIA:
 
-Assessment criteria you evaluate:
-- Fluency and Coherence
-- Lexical Resource (vocabulary)
-- Grammatical Range and Accuracy
-- Pronunciation
+1. FLUENCY AND COHERENCE (25%)
+Band 9: Speaks fluently with only rare repetition or self-correction. Uses connectors naturally and appropriately.
+Band 7-8: Speaks at length without noticeable effort. Demonstrates flexibility in using discourse markers.
+Band 5-6: Can keep going but may repeat, self-correct, or slow down. Uses basic cohesive devices.
+Band 3-4: Cannot respond without noticeable pauses. Limited ability to link ideas.
 
-Remember: You are conducting an authentic IELTS speaking test. Be professional yet approachable."""
+2. LEXICAL RESOURCE (25%)
+Band 9: Uses vocabulary with full flexibility and precision. Uses idiomatic language naturally.
+Band 7-8: Uses vocabulary resource flexibly. Uses less common and idiomatic items with awareness of style.
+Band 5-6: Manages to talk about familiar topics. Attempts to use paraphrase but not always successfully.
+Band 3-4: Uses simple vocabulary to convey personal information. Has insufficient vocabulary for unfamiliar topics.
+
+3. GRAMMATICAL RANGE AND ACCURACY (25%)
+Band 9: Uses full range of structures naturally and appropriately. Consistently error-free.
+Band 7-8: Uses range of complex structures with flexibility. Frequent error-free sentences.
+Band 5-6: Uses mix of simple and complex structures. Makes frequent errors but meaning is clear.
+Band 3-4: Attempts basic sentence forms. Errors are frequent and cause difficulty for listener.
+
+4. PRONUNCIATION (25%)
+Band 9: Uses full range of pronunciation features. Sustained and consistent control.
+Band 7-8: Easy to understand throughout. L1 accent has minimal effect on intelligibility.
+Band 5-6: Generally intelligible. Mispronunciations cause some difficulty.
+Band 3-4: Frequent mispronunciations. May rely on spelling to be understood.
+
+YOUR ROLE AS EXAMINER:
+- Conduct authentic IELTS speaking test following official format
+- Ask clear, appropriate questions for the test section
+- Provide thoughtful follow-up questions naturally
+- Maintain professional yet friendly demeanor
+- Assess candidate against all 4 criteria simultaneously
+- Note specific examples of strengths and weaknesses during conversation
+
+Remember: Be precise in your assessment. Use specific band descriptors when evaluating performance."""
         
         if assessment_type == 'speaking_part1':
             return base_prompt + "\n\nThis is PART 1: Introduction and Interview (4-5 minutes). Ask about familiar topics like home, family, work, studies, interests."
@@ -113,45 +134,110 @@ Remember: You are conducting an authentic IELTS speaking test. Be professional y
         assessment_type: str
     ) -> Dict[str, Any]:
         """
-        Generate detailed IELTS feedback using Gemini 2.5 Flash
+        Generate detailed IELTS feedback using Gemini 2.5 Flash with comprehensive analysis
         
         Args:
             transcript: Conversation transcript
             assessment_type: Type of assessment
         
         Returns:
-            Structured feedback with scores and recommendations
+            Structured feedback with detailed scores, examples, and recommendations
         """
-        feedback_prompt = f"""Analyze this IELTS {assessment_type} assessment transcript and provide detailed feedback.
+        feedback_prompt = f"""You are an expert IELTS examiner. Analyze this IELTS {assessment_type} assessment transcript and provide a comprehensive, detailed evaluation report.
 
-Transcript:
+TRANSCRIPT:
 {transcript}
+
+ASSESSMENT INSTRUCTIONS:
+1. Carefully analyze the candidate's performance against all 4 IELTS speaking criteria
+2. Provide specific examples from the transcript to support your assessment
+3. Reference official IELTS band descriptors in your evaluation
+4. Give precise band scores (use decimals: 6.5, 7.0, 7.5, etc.)
+5. Provide actionable, specific recommendations for improvement
 
 Provide feedback in the following JSON format:
 {{
-    "overall_band": <float 0-9>,
+    "overall_band": <float 0-9 (average of 4 criteria)>,
+    "band_prediction": "<e.g., 'Band 7.0 - Good User'>",
     "fluency_coherence": {{
         "score": <float 0-9>,
-        "strengths": [<list of strengths>],
-        "areas_for_improvement": [<list of areas>]
+        "band_descriptor": "<which band level and why>",
+        "strengths": [
+            "<specific strength with example from transcript>",
+            "<another strength with example>"
+        ],
+        "areas_for_improvement": [
+            "<specific weakness with example>",
+            "<another weakness with example>"
+        ],
+        "specific_examples": {{
+            "positive": ["<quote from transcript showing strength>"],
+            "negative": ["<quote from transcript showing weakness>"]
+        }}
     }},
     "lexical_resource": {{
         "score": <float 0-9>,
-        "strengths": [<list>],
-        "areas_for_improvement": [<list>]
+        "band_descriptor": "<which band level and why>",
+        "strengths": [
+            "<specific vocabulary/phrases used well>",
+            "<evidence of range and flexibility>"
+        ],
+        "areas_for_improvement": [
+            "<vocabulary gaps or errors>",
+            "<repetition or limited range>"
+        ],
+        "specific_examples": {{
+            "positive": ["<effective vocabulary/phrases used>"],
+            "negative": ["<errors or limited expressions>"]
+        }},
+        "vocabulary_range": "<assessment of less common/idiomatic language>"
     }},
     "grammatical_range": {{
         "score": <float 0-9>,
-        "strengths": [<list>],
-        "areas_for_improvement": [<list>]
+        "band_descriptor": "<which band level and why>",
+        "strengths": [
+            "<complex structures used successfully>",
+            "<grammatical accuracy examples>"
+        ],
+        "areas_for_improvement": [
+            "<common grammatical errors with examples>",
+            "<structures to develop>"
+        ],
+        "specific_examples": {{
+            "positive": ["<correct complex structures>"],
+            "negative": ["<grammatical errors from transcript>"]
+        }},
+        "error_analysis": "<frequency and impact of errors>"
     }},
     "pronunciation": {{
         "score": <float 0-9>,
-        "strengths": [<list>],
-        "areas_for_improvement": [<list>]
+        "band_descriptor": "<which band level and why>",
+        "strengths": [
+            "<pronunciation features done well>",
+            "<intelligibility assessment>"
+        ],
+        "areas_for_improvement": [
+            "<specific sounds/features to work on>",
+            "<intonation/stress patterns to improve>"
+        ],
+        "intelligibility": "<overall assessment of clarity>"
     }},
-    "detailed_feedback": "<comprehensive paragraph>",
-    "recommendations": [<list of actionable recommendations>]
+    "detailed_feedback": "<comprehensive 2-3 paragraph analysis covering: overall performance, key strengths across criteria, main areas for development, and specific patterns observed>",
+    "performance_summary": {{
+        "strongest_criterion": "<which criterion scored highest>",
+        "weakest_criterion": "<which criterion needs most work>",
+        "key_takeaway": "<main insight about candidate's level>"
+    }},
+    "recommendations": [
+        "{{\"priority\": \"high\", \"area\": \"<criterion>\", \"action\": \"<specific actionable step>\", \"expected_impact\": \"<how this will improve score>\"}}",
+        "{{\"priority\": \"medium\", \"area\": \"<criterion>\", \"action\": \"<specific practice activity>\", \"expected_impact\": \"<benefit>\"}}",
+        "{{\"priority\": \"medium\", \"area\": \"<criterion>\", \"action\": \"<another recommendation>\", \"expected_impact\": \"<benefit>\"}}"
+    ],
+    "next_steps": [
+        "<specific study recommendation>",
+        "<practice activity suggestion>",
+        "<resource or technique to try>"
+    ]
 }}"""
         
         try:
