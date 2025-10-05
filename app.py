@@ -92,14 +92,28 @@ try:
 except ImportError:
     print("[INFO] Mobile API blueprint not available")
 
-# Import receipt validation for endpoints 
+# Import receipt validation for endpoints (lazy initialization)
+receipt_service = None
+
+def get_receipt_service():
+    """Lazy-load receipt validation service"""
+    global receipt_service
+    if receipt_service is None:
+        try:
+            from receipt_validation import ReceiptValidationService
+            receipt_service = ReceiptValidationService()
+            print("[INFO] Receipt validation services initialized")
+        except (ImportError, RuntimeError) as e:
+            print(f"[INFO] Receipt validation services not available: {e}")
+            receipt_service = False  # Use False to indicate initialization was attempted
+    return receipt_service if receipt_service is not False else None
+
+# Import types for use in routes
 try:
-    from receipt_validation import ReceiptValidationService, PurchaseStatus, validate_app_store_purchase
-    receipt_service = ReceiptValidationService()
-    print("[INFO] Receipt validation services initialized")
-except (ImportError, RuntimeError) as e:
-    print(f"[INFO] Receipt validation services not available: {e}")
-    receipt_service = None
+    from receipt_validation import PurchaseStatus, validate_app_store_purchase
+except ImportError:
+    PurchaseStatus = None
+    validate_app_store_purchase = None
 
 # Apply security headers and CORS for mobile app support
 @app.after_request

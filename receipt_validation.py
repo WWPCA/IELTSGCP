@@ -253,11 +253,16 @@ class GooglePlayValidator:
     def _setup_service_account(self):
         """Setup Google Play service account credentials"""
         try:
-            # Parse service account JSON
+            # Parse service account JSON - skip if empty
+            if not self.config['GOOGLE_SERVICE_ACCOUNT_JSON']:
+                logger.info("Google Play credentials not configured (dev mode)")
+                self.service_account = None
+                return
+                
             self.service_account = json.loads(self.config['GOOGLE_SERVICE_ACCOUNT_JSON'])
             self.package_name = self.config['GOOGLE_PACKAGE_NAME']
         except Exception as e:
-            logger.error(f"Failed to setup Google Play credentials: {e}")
+            logger.warning(f"Failed to setup Google Play credentials: {e}")
             self.service_account = None
     
     def validate_receipt(self, receipt_data: str, user_id: str) -> PurchaseVerificationResult:
