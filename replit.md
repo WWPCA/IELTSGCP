@@ -4,11 +4,18 @@ IELTS GenAI Prep is an AI-powered platform for IELTS test preparation. It offers
 
 ### GCP Migration Status
 
-**Migration Phase:** Infrastructure Build Complete ✅
-- **Target Go-Live:** TBD (pending data migration and testing)
-- **Migration Guide:** See `gcp/GCP_MIGRATION_GUIDE.md`
+**Migration Phase:** Infrastructure Build Complete ✅ - Ready to Deploy
+- **Target Go-Live:** TBD (pending UI/pricing testing on test.ieltsaiprep.com)
+- **Test Environment:** test.ieltsaiprep.com (isolated data via Firestore collection prefixing)
 - **Migration Type:** Direct migration (no live users, full cutover)
 - **Cost Savings:** ~23% reduction (~$218/month)
+- **Documentation:** 
+  - `gcp/QUICK_START.md` - Fast deployment guide
+  - `gcp/ISOLATION_GUIDE.md` - Test/production data separation
+  - `gcp/GCP_MIGRATION_GUIDE.md` - Comprehensive migration guide
+- **Deployment Scripts:**
+  - `gcp/deploy_test.sh` - Deploy test environment only
+  - `gcp/deploy.sh` - Full production deployment
 
 ### User Preferences
 
