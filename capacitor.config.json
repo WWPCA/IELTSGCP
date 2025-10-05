@@ -1,6 +1,6 @@
 {
   "appId": "com.ieltsgenaiprep.app",
-  "appName": "IELTS GenAI Prep",
+  "appName": "IELTS AI Prep",
   "webDir": "static",
   "server": {
     "url": "https://www.ieltsaiprep.com",

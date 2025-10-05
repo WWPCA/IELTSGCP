@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">IELTS GenAI Prep</string>
-    <string name="title_activity_main">IELTS GenAI Prep</string>
+    <string name="app_name">IELTS AI Prep</string>
+    <string name="title_activity_main">IELTS AI Prep</string>
     <string name="package_name">com.ieltsaiprep.app</string>
     <string name="custom_url_scheme">com.ieltsaiprep.app</string>
 </resources>
