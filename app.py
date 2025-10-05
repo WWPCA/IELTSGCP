@@ -636,6 +636,9 @@ def contact():
     return render_template('contact.html', current_user=AnonymousUser())
 
 @app.route('/terms_and_payment')
+@app.route('/terms-and-payment')  # Alias with dashes
+@app.route('/terms-of-service')  # Alias for app store compliance
+@app.route('/terms_of_service')  # Alias with underscores
 def terms_and_payment():
     """Terms and payment page with no-refund policy"""
     try:
@@ -656,6 +659,7 @@ def terms_and_payment():
         '''
 
 @app.route('/privacy_policy')
+@app.route('/privacy-policy')  # Alias for app store compliance
 def privacy_policy():
     """Privacy policy page - GenAI focused July 2025 version"""
     try:

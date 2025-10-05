@@ -18,6 +18,13 @@
       "termsOfService": "https://www.ieltsaiprep.com/terms-of-service",
       "support": "https://www.ieltsaiprep.com/"
     },
+    "appStoreCompliance": {
+      "privacyPolicyUrl": "https://www.ieltsaiprep.com/privacy-policy",
+      "termsOfServiceUrl": "https://www.ieltsaiprep.com/terms-of-service",
+      "noRefundPolicy": true,
+      "dataCollectionDisclosed": true,
+      "requiresAccount": true
+    },
     "inAppPurchases": [
       {
         "productId": "com.ieltsgenaiprep.app.academic.writing",
