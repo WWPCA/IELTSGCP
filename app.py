@@ -959,51 +959,52 @@ def send_password_reset_confirmation_email(email: str) -> bool:
         )
         
         username = email.split('@')[0].title()
-        subject = "IELTS GenAI Prep - Password Reset Successful"
+        subject = "IELTS AI Prep - Password Reset Successful"
         
-        # Confirmation email template
+        # Confirmation email template with new IELTS AI Prep branding
         html_body = f"""
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>Password Reset Successful - IELTS GenAI Prep</title>
+            <title>Password Reset Successful - IELTS AI Prep</title>
         </head>
-        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0;">
-            <div style="max-width: 600px; margin: 0 auto; padding: 20px; background-color: #ffffff;">
+        <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
                 <!-- Header -->
-                <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #28a745;">
-                    <h1 style="color: #28a745; margin-bottom: 10px; font-size: 28px;">IELTS GenAI Prep</h1>
-                    <p style="color: #6c757d; margin: 0; font-size: 14px;">Powered by TrueScore® & ClearScore® AI Assessment Technology</p>
+                <div style="background: #ffffff; text-align: center; padding: 30px 20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #0891B2;">
+                    <h1 style="color: #E33219; margin: 0 0 10px 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">IELTS AI Prep</h1>
+                    <p style="color: #666; margin: 0; font-size: 14px;">Your Personalized Path to IELTS Success</p>
                 </div>
                 
                 <!-- Success Message -->
-                <div style="background: #d4edda; padding: 30px; border-radius: 8px; border-left: 4px solid #28a745; margin-bottom: 30px;">
-                    <h2 style="color: #155724; margin-bottom: 20px; text-align: center;">
-                        ✅ Password Reset Successful
-                    </h2>
-                    
-                    <p style="margin-bottom: 20px; color: #155724;">Hello {username},</p>
-                    
-                    <p style="margin-bottom: 20px; color: #155724;">Your password has been successfully reset. You can now log in to your IELTS GenAI Prep account using your new password.</p>
-                    
-                    <div style="text-align: center; margin: 30px 0;">
-                        <a href="https://ieltsaiprep.com/login" 
-                           style="background: #28a745; color: white; padding: 15px 40px; 
-                                  text-decoration: none; border-radius: 5px; display: inline-block;
-                                  font-weight: bold; font-size: 16px;">
-                            Login to My Account
-                        </a>
+                <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 8px 8px;">
+                    <div style="background: #e8f5e9; padding: 25px; border-radius: 8px; border-left: 4px solid #0891B2; margin-bottom: 30px;">
+                        <h2 style="color: #1a1a1a; margin-bottom: 20px; text-align: center; font-weight: 600; font-size: 22px;">
+                            ✅ Password Reset Successful
+                        </h2>
+                        
+                        <p style="margin-bottom: 20px; color: #333;">Hello {username},</p>
+                        
+                        <p style="margin-bottom: 25px; color: #333;">Your password has been successfully reset. You can now log in to your IELTS AI Prep account using your new password.</p>
+                        
+                        <div style="text-align: center; margin: 30px 0;">
+                            <a href="https://ieltsaiprep.com/login" 
+                               style="background: linear-gradient(135deg, #0891B2 0%, #0E7490 100%); color: white; padding: 16px 40px; 
+                                      text-decoration: none; border-radius: 8px; display: inline-block;
+                                      font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(8, 145, 178, 0.3);">
+                                Login to My Account
+                            </a>
+                        </div>
+                        
+                        <p style="margin-bottom: 0; color: #666; font-size: 14px;">If you did not reset your password, please contact our support team immediately.</p>
                     </div>
                     
-                    <p style="margin-bottom: 0; color: #155724; font-size: 14px;">If you did not reset your password, please contact our support team immediately.</p>
-                </div>
-                
-                <!-- Footer -->
-                <div style="border-top: 1px solid #dee2e6; padding-top: 20px; font-size: 14px; color: #6c757d; text-align: center;">
-                    <p style="margin-bottom: 5px; font-weight: bold;">Best regards,</p>
-                    <p style="margin-bottom: 15px;">The IELTS GenAI Prep Team</p>
-                    <p style="font-size: 12px; color: #adb5bd;">© 2025 IELTS GenAI Prep. All rights reserved.</p>
+                    <div style="text-align: center; margin-top: 35px;">
+                        <p style="margin-bottom: 5px; font-weight: 600; color: #1a1a1a;">Best regards,</p>
+                        <p style="margin-bottom: 15px; color: #333;">The IELTS AI Prep Team</p>
+                        <p style="font-size: 12px; color: #999;">© 2025 IELTS AI Prep. All rights reserved.</p>
+                    </div>
                 </div>
             </div>
         </body>
