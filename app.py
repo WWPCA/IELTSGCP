@@ -261,15 +261,20 @@ def index():
         
     return render_template('index.html', current_user=AnonymousUser())
 
-@app.route('/assessment-products')
-def assessment_products_page():
+@app.route('/assessments')
+def assessments_page():
     """Assessment products page"""
     # Provide anonymous user context for template compatibility
     class AnonymousUser:
         is_authenticated = False
         email = None
         
-    return render_template('assessment_products.html', current_user=AnonymousUser())
+    return render_template('assessments.html', current_user=AnonymousUser())
+
+@app.route('/assessment-products')
+def assessment_products_page():
+    """Redirect old route to new assessments page"""
+    return redirect(url_for('assessments_page'))
 
 @app.route('/preview/writing-assessment')
 def preview_writing_assessment():
