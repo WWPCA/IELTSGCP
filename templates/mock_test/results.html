@@ -1,0 +1,277 @@
+{% extends "layout.html" %}
+
+{% block body_class %}bg-white{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .results-header {
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 15px;
+        text-align: center;
+    }
+    
+    .overall-score {
+        font-size: 4rem;
+        font-weight: bold;
+        background: white;
+        color: #28a745;
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 2rem auto;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .section-score-card {
+        background: white;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .section-score-card:hover {
+        border-color: #28a745;
+        box-shadow: 0 4px 15px rgba(40, 167, 69, 0.2);
+    }
+    
+    .section-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .band-score {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #28a745;
+    }
+    
+    .score-breakdown {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+    
+    .criterion {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .criterion:last-child {
+        border-bottom: none;
+    }
+    
+    .criterion-name {
+        font-weight: bold;
+        color: #495057;
+    }
+    
+    .criterion-score {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #28a745;
+    }
+    
+    .feedback-section {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        border-radius: 5px;
+        margin-top: 1rem;
+    }
+    
+    .strengths {
+        color: #28a745;
+    }
+    
+    .improvements {
+        color: #dc3545;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="results-header">
+        <h1 class="display-4 mb-3">Full Mock Test Results</h1>
+        <p class="lead mb-0">{{ test_type|replace('_', ' ')|title }}</p>
+        <div class="overall-score">{{ overall_band }}</div>
+        <h2>Overall Band Score</h2>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="row">
+                <!-- Listening Results -->
+                <div class="col-md-6 mb-3">
+                    <div class="section-score-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Listening</h3>
+                        <div class="text-center">
+                            <div class="band-score">{{ listening_score.band }}</div>
+                            <div class="text-muted">{{ listening_score.correct }}/40 correct</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Reading Results -->
+                <div class="col-md-6 mb-3">
+                    <div class="section-score-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Reading</h3>
+                        <div class="text-center">
+                            <div class="band-score">{{ reading_score.band }}</div>
+                            <div class="text-muted">{{ reading_score.correct }}/40 correct</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Writing Results -->
+                <div class="col-md-6 mb-3">
+                    <div class="section-score-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Writing</h3>
+                        <div class="text-center">
+                            <div class="band-score">{{ writing_score.overall_band }}</div>
+                        </div>
+                        
+                        <div class="score-breakdown">
+                            <div class="criterion">
+                                <span class="criterion-name">Task 1</span>
+                                <span class="criterion-score">{{ writing_score.task1_band }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Task 2</span>
+                                <span class="criterion-score">{{ writing_score.task2_band }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Task Achievement</span>
+                                <span class="criterion-score">{{ writing_score.task_achievement }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Coherence & Cohesion</span>
+                                <span class="criterion-score">{{ writing_score.coherence }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Lexical Resource</span>
+                                <span class="criterion-score">{{ writing_score.lexical }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Grammar</span>
+                                <span class="criterion-score">{{ writing_score.grammar }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-section mt-3">
+                            <h5>AI Feedback</h5>
+                            <div class="mb-2">
+                                <strong class="strengths">Strengths:</strong>
+                                <ul>
+                                    {% for strength in writing_score.strengths %}
+                                    <li>{{ strength }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div>
+                                <strong class="improvements">Areas for Improvement:</strong>
+                                <ul>
+                                    {% for improvement in writing_score.improvements %}
+                                    <li>{{ improvement }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Speaking Results -->
+                <div class="col-md-6 mb-3">
+                    <div class="section-score-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Speaking</h3>
+                        <div class="text-center">
+                            <div class="band-score">{{ speaking_score.overall_band }}</div>
+                        </div>
+                        
+                        <div class="score-breakdown">
+                            <div class="criterion">
+                                <span class="criterion-name">Fluency & Coherence</span>
+                                <span class="criterion-score">{{ speaking_score.fluency }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Lexical Resource</span>
+                                <span class="criterion-score">{{ speaking_score.lexical }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Grammar</span>
+                                <span class="criterion-score">{{ speaking_score.grammar }}</span>
+                            </div>
+                            <div class="criterion">
+                                <span class="criterion-name">Pronunciation</span>
+                                <span class="criterion-score">{{ speaking_score.pronunciation }}</span>
+                            </div>
+                        </div>
+                        
+                        <div class="feedback-section mt-3">
+                            <h5>AI Feedback from Maya</h5>
+                            <div class="mb-2">
+                                <strong class="strengths">Strengths:</strong>
+                                <ul>
+                                    {% for strength in speaking_score.strengths %}
+                                    <li>{{ strength }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                            <div>
+                                <strong class="improvements">Areas for Improvement:</strong>
+                                <ul>
+                                    {% for improvement in speaking_score.improvements %}
+                                    <li>{{ improvement }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <a href="{{ url_for('profile') }}" class="btn btn-primary btn-lg me-3">
+                    <i class="fas fa-home me-2"></i> Back to Profile
+                </a>
+                <a href="{{ url_for('download_results', assessment_id=assessment_id) }}" class="btn btn-success btn-lg">
+                    <i class="fas fa-download me-2"></i> Download Results (PDF)
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
