@@ -588,13 +588,17 @@ def terms_and_payment():
 
 @app.route('/privacy_policy')
 def privacy_policy():
-    """Privacy policy page"""
-    # Provide anonymous user context for template compatibility
-    class AnonymousUser:
-        is_authenticated = False
-        email = None
-        
-    return render_template('gdpr/privacy_policy.html', current_user=AnonymousUser())
+    """Privacy policy page - GenAI focused July 2025 version"""
+    try:
+        with open('approved_privacy_policy_genai.html', 'r') as f:
+            content = f.read()
+        return content
+    except FileNotFoundError:
+        # Fallback to template version
+        class AnonymousUser:
+            is_authenticated = False
+            email = None
+        return render_template('gdpr/privacy_policy.html', current_user=AnonymousUser())
 
 @app.route('/forgot_password')
 def forgot_password():
