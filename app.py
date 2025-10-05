@@ -352,7 +352,7 @@ def login():
                                     <div class="alert alert-info mb-3">
                                         <small><i class="fas fa-info-circle me-2"></i>Registration is only available through our mobile app</small>
                                     </div>
-                                    <a href="/qr-auth" class="btn btn-success btn-lg w-100">
+                                    <a href="/download" class="btn btn-success btn-lg w-100">
                                         <i class="fas fa-download me-2"></i>Download App & Register
                                     </a>
                                 </div>
@@ -449,7 +449,7 @@ def login():
                                             <div class="alert alert-warning">
                                                 <h6><i class="fas fa-mobile-alt me-2"></i>Don't have our mobile app yet?</h6>
                                                 <p class="mb-2 small">Download our app to register your account and enjoy the full mobile experience!</p>
-                                                <a href="/qr-auth" class="btn btn-warning">
+                                                <a href="/download" class="btn btn-warning">
                                                     <i class="fas fa-download me-2"></i>Get the Mobile App
                                                 </a>
                                             </div>
