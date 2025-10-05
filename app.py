@@ -308,13 +308,18 @@ def login():
     try:
         with open('working_template.html', 'r') as f:
             content = f.read()
+        
+        # Fix navigation links to point to home page sections
+        content = content.replace('href="#how-it-works"', 'href="/#how-it-works"')
+        content = content.replace('href="#faq"', 'href="/#faq"')
+        
         # Inject redesigned login page with clear instructions
         login_section = '''
         <div class="container py-5">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8">
                     <div class="text-center mb-4">
-                        <h1 class="fw-bold text-primary mb-3">Welcome to IELTS GenAI Prep</h1>
+                        <h1 class="fw-bold text-primary mb-3">Welcome to IELTS AI Prep</h1>
                         <p class="lead text-muted">Choose how you'd like to access your account</p>
                     </div>
 
@@ -345,7 +350,7 @@ def login():
                             <div class="card h-100 border-success shadow-sm">
                                 <div class="card-header bg-success text-white text-center">
                                     <i class="fas fa-user-plus fa-2x mb-2"></i>
-                                    <h4 class="mb-0">New to IELTS GenAI Prep?</h4>
+                                    <h4 class="mb-0">New to IELTS AI Prep?</h4>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="card-text mb-4">Create your account through our mobile app to get started with AI-powered IELTS assessments.</p>
