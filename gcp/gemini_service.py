@@ -231,6 +231,33 @@ Provide evaluation in the following JSON format:
         "{{\"priority\": \"high\", \"area\": \"<criterion>\", \"action\": \"<another key action>\", \"example\": \"<practice method>\"}}",
         "{{\"priority\": \"medium\", \"area\": \"<criterion>\", \"action\": \"<development area>\", \"example\": \"<how to improve>\"}}"
     ],
+    "personalized_improvement_plan": {{
+        "focus_areas": [
+            "{{\"criterion\": \"<weakest criterion>\", \"current_band\": <score>, \"target_band\": <score + 0.5 or 1.0>, \"specific_issues\": [\"<issue 1>\", \"<issue 2>\"], \"practice_activities\": [\"<activity 1>\", \"<activity 2>\", \"<activity 3>\"], \"estimated_time\": \"<e.g., 3-4 weeks with consistent practice>\"}}",
+            "{{\"criterion\": \"<second weakest>\", \"current_band\": <score>, \"target_band\": <score + 0.5>, \"specific_issues\": [\"<issue>\"], \"practice_activities\": [\"<activity 1>\", \"<activity 2>\"], \"estimated_time\": \"<timeframe>\"}}"
+        ],
+        "immediate_actions": [
+            "<action you can take today to improve>",
+            "<another quick improvement step>",
+            "<one more immediate practice activity>"
+        ],
+        "study_schedule": {{
+            "daily_practice": "<15-30 min focused practice on weakest area>",
+            "weekly_focus": "<dedicate 2-3 hours to targeted exercises>",
+            "monthly_milestone": "<complete X practice tasks, review all feedback>"
+        }},
+        "writing_exercises": [
+            "<specific type of writing practice based on weaknesses>",
+            "<targeted grammar/vocabulary exercises>",
+            "<timed writing practice recommendations>"
+        ],
+        "target_overall_band": <current_band + 0.5 or 1.0>,
+        "estimated_timeline": "<realistic timeframe to achieve target, e.g., 6-8 weeks with regular practice>",
+        "progress_tracking": {{
+            "track_these_metrics": [\"<metric 1 based on weakness>\", \"<metric 2>\"],
+            "reassess_after": "<timeframe for next practice test>"
+        }}
+    }},
     "next_steps": [
         "<specific study recommendation>",
         "<practice activity>",
@@ -243,6 +270,7 @@ IMPORTANT:
 - Provide corrections for errors (show original → improved)
 - Be precise with band scores using official descriptors
 - Give constructive, actionable feedback with clear examples
+- Create a personalized improvement plan that's realistic and achievable
 """
         return prompt
     

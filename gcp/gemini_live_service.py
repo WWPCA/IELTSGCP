@@ -233,6 +233,24 @@ Provide feedback in the following JSON format:
         "{{\"priority\": \"medium\", \"area\": \"<criterion>\", \"action\": \"<specific practice activity>\", \"expected_impact\": \"<benefit>\"}}",
         "{{\"priority\": \"medium\", \"area\": \"<criterion>\", \"action\": \"<another recommendation>\", \"expected_impact\": \"<benefit>\"}}"
     ],
+    "personalized_improvement_plan": {{
+        "focus_areas": [
+            "{{\"criterion\": \"<weakest criterion>\", \"current_band\": <score>, \"target_band\": <score + 0.5 or 1.0>, \"specific_weakness\": \"<exact issue>\", \"practice_activities\": [\"<activity 1>\", \"<activity 2>\"], \"estimated_time\": \"<e.g., 2-3 weeks with daily practice>\"}}",
+            "{{\"criterion\": \"<second weakest>\", \"current_band\": <score>, \"target_band\": <score + 0.5>, \"specific_weakness\": \"<issue>\", \"practice_activities\": [\"<activity>\"], \"estimated_time\": \"<timeframe>\"}}"
+        ],
+        "immediate_actions": [
+            "<action you can take today>",
+            "<another immediate step>",
+            "<one more quick win>"
+        ],
+        "weekly_practice_schedule": {{
+            "day_1_3": "<focus on criterion X with specific exercises>",
+            "day_4_5": "<work on criterion Y with activities>",
+            "day_6_7": "<practice full speaking tests and review>"
+        }},
+        "target_overall_band": <current_band + 0.5 or 1.0>,
+        "estimated_timeline": "<realistic timeframe to reach target, e.g., 4-6 weeks>"
+    }},
     "next_steps": [
         "<specific study recommendation>",
         "<practice activity suggestion>",

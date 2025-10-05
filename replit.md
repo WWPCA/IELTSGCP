@@ -80,6 +80,20 @@ Preferred communication style: Simple, everyday language.
 - Real-time content moderation using Google Cloud Natural Language API.
 - Advanced moderation with graduated response system (guidance → redirection → termination).
 - Native multilingual support with improved speech recognition.
+- **Comprehensive IELTS Assessment Prompts:**
+  - Official IELTS band descriptors (Band 3-9) embedded in system prompts for all 4 criteria
+  - Speaking: Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy, Pronunciation
+  - Writing: Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy
+  - Evidence-based feedback with specific quotes from student responses
+  - Sample improvements showing "original → corrected" versions
+  - **Personalized improvement plans** with:
+    - Focus areas identifying weakest criteria with target band scores
+    - Immediate actionable steps students can take today
+    - Weekly/daily practice schedules tailored to individual weaknesses
+    - Estimated timelines to reach target band (e.g., 4-6 weeks)
+    - Progress tracking metrics and reassessment recommendations
+  - Performance summaries highlighting strongest/weakest criteria
+  - Prioritized recommendations with expected impact on band scores
 
 **🔧 LEGACY: AWS Bedrock (Current)**
 - Amazon Nova Sonic for bidirectional speech-to-speech conversations (primarily `us-east-1`).
