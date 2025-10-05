@@ -42,15 +42,35 @@ In contrast, cruise ship tourists experienced more consistent growth, rising fro
             word_count=len(student_response.split())
         )
         
-        # Assertions
+        # Assertions - Basic structure
         assert 'overall_band' in result
         assert 0 <= result['overall_band'] <= 9
+        assert 'band_prediction' in result
+        
+        # All 4 IELTS criteria present
         assert 'task_achievement' in result
         assert 'coherence_cohesion' in result
         assert 'lexical_resource' in result
         assert 'grammatical_range_accuracy' in result
+        
+        # Detailed feedback components
         assert 'personalized_improvement_plan' in result
+        improvement_plan = result['personalized_improvement_plan']
+        assert 'focus_areas' in improvement_plan
+        assert 'immediate_actions' in improvement_plan
+        assert 'study_schedule' in improvement_plan
+        assert 'target_overall_band' in improvement_plan
+        assert 'estimated_timeline' in improvement_plan
+        assert 'progress_tracking' in improvement_plan
+        
+        # Sample improvements present
         assert 'sample_improvements' in result
+        assert len(result['sample_improvements']) > 0
+        
+        # Performance summary
+        assert 'performance_summary' in result
+        assert 'strongest_criterion' in result['performance_summary']
+        assert 'weakest_criterion' in result['performance_summary']
     
     @pytest.mark.asyncio
     async def test_real_writing_evaluation_general_task2(self, gemini_service):
@@ -74,11 +94,27 @@ In conclusion, both early and delayed formal education have merits. A moderate a
             word_count=len(student_response.split())
         )
         
-        # Assertions
+        # Assertions - Basic structure
         assert result['overall_band'] >= 6.0
         assert 'task_response' in result
-        assert 'focus_areas' in result['personalized_improvement_plan']
-        assert 'immediate_actions' in result['personalized_improvement_plan']
+        
+        # Comprehensive improvement plan
+        improvement_plan = result['personalized_improvement_plan']
+        assert 'focus_areas' in improvement_plan
+        assert 'immediate_actions' in improvement_plan
+        assert 'study_schedule' in improvement_plan
+        assert 'writing_exercises' in improvement_plan
+        assert 'target_overall_band' in improvement_plan
+        assert 'estimated_timeline' in improvement_plan
+        
+        # Verify focus areas have required fields
+        if len(improvement_plan['focus_areas']) > 0:
+            focus_area = improvement_plan['focus_areas'][0]
+            assert 'criterion' in focus_area
+            assert 'current_band' in focus_area
+            assert 'target_band' in focus_area
+            assert 'practice_activities' in focus_area
+            assert 'estimated_time' in focus_area
 
 
 @pytest.mark.integration
@@ -111,13 +147,40 @@ Student: Probably not permanently. While I love London, it's quite expensive and
             assessment_type='speaking'
         )
         
-        # Assertions
+        # Assertions - Basic structure
         assert 'overall_band' in result
         assert 0 <= result['overall_band'] <= 9
+        assert 'band_prediction' in result
+        
+        # All 4 speaking criteria present
         assert 'fluency_coherence' in result
         assert 'lexical_resource' in result
         assert 'grammatical_range' in result
         assert 'pronunciation' in result
+        
+        # Detailed feedback components
         assert 'personalized_improvement_plan' in result
-        assert 'weekly_practice_schedule' in result['personalized_improvement_plan']
-        assert 'estimated_timeline' in result['personalized_improvement_plan']
+        improvement_plan = result['personalized_improvement_plan']
+        assert 'focus_areas' in improvement_plan
+        assert 'immediate_actions' in improvement_plan
+        assert 'weekly_practice_schedule' in improvement_plan
+        assert 'target_overall_band' in improvement_plan
+        assert 'estimated_timeline' in improvement_plan
+        
+        # Verify focus areas structure
+        if len(improvement_plan['focus_areas']) > 0:
+            focus_area = improvement_plan['focus_areas'][0]
+            assert 'criterion' in focus_area
+            assert 'current_band' in focus_area
+            assert 'target_band' in focus_area
+            assert 'specific_weakness' in focus_area
+            assert 'practice_activities' in focus_area
+            assert 'estimated_time' in focus_area
+        
+        # Performance summary
+        assert 'performance_summary' in result
+        assert 'strongest_criterion' in result['performance_summary']
+        assert 'weakest_criterion' in result['performance_summary']
+        
+        # Detailed feedback present
+        assert 'detailed_feedback' in result
