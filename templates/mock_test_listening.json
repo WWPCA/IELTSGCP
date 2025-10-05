@@ -1,0 +1,86 @@
+{
+  "test_type": "listening",
+  "format": "ielts_full_mock_test",
+  "duration_minutes": 30,
+  "transfer_time_minutes": 10,
+  "total_questions": 40,
+  "instructions": "You will hear four recordings. Each recording is played ONCE ONLY. You have time to read the questions before each recording. Write your answers as you listen. At the end, you have 10 minutes to transfer your answers to the answer sheet.",
+  
+  "parts": [
+    {
+      "part_number": 1,
+      "title": "Everyday Social Conversation",
+      "description": "A conversation between two speakers in an everyday social context",
+      "question_range": "1-10",
+      "question_count": 10,
+      "audio_file": null,
+      "context": "Two people discussing everyday matters",
+      "question_types": ["form_completion", "multiple_choice", "matching"],
+      "sample_context": "A conversation between a customer and a booking agent about accommodation",
+      "questions": []
+    },
+    {
+      "part_number": 2,
+      "title": "Monologue in Everyday Context",
+      "description": "A monologue in an everyday social context (e.g., speech about local facilities)",
+      "question_range": "11-20",
+      "question_count": 10,
+      "audio_file": null,
+      "context": "One person speaking about a topic",
+      "question_types": ["note_completion", "multiple_choice", "labeling_diagram"],
+      "sample_context": "A guide describing features of a museum or facility",
+      "questions": []
+    },
+    {
+      "part_number": 3,
+      "title": "Educational/Training Conversation",
+      "description": "A conversation between up to 4 people in an educational or training context",
+      "question_range": "21-30",
+      "question_count": 10,
+      "audio_file": null,
+      "context": "Multiple speakers discussing academic/training topics",
+      "question_types": ["multiple_choice", "matching", "sentence_completion"],
+      "sample_context": "Students and tutor discussing a research project",
+      "questions": []
+    },
+    {
+      "part_number": 4,
+      "title": "Academic Lecture/Monologue",
+      "description": "A monologue on an academic subject (e.g., university lecture)",
+      "question_range": "31-40",
+      "question_count": 10,
+      "audio_file": null,
+      "context": "Academic presentation or lecture",
+      "question_types": ["sentence_completion", "summary_completion", "table_completion"],
+      "sample_context": "A lecture on environmental science, history, or business",
+      "questions": []
+    }
+  ],
+  
+  "scoring": {
+    "total_marks": 40,
+    "band_conversion": {
+      "39-40": 9.0,
+      "37-38": 8.5,
+      "35-36": 8.0,
+      "32-34": 7.5,
+      "30-31": 7.0,
+      "26-29": 6.5,
+      "23-25": 6.0,
+      "18-22": 5.5,
+      "16-17": 5.0,
+      "13-15": 4.5,
+      "10-12": 4.0
+    }
+  },
+  
+  "metadata": {
+    "same_for_academic_and_general": true,
+    "accents": ["British", "Australian", "New Zealand", "North American"],
+    "audio_played_once": true,
+    "answer_formats": ["words", "numbers", "dates", "times"],
+    "spelling_matters": true,
+    "created_date": "2025-10-05",
+    "template_version": "1.0"
+  }
+}

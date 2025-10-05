@@ -4,12 +4,16 @@ IELTS GenAI Prep is an AI-powered platform for IELTS test preparation. It offers
 
 ### GCP Migration Status
 
-**Migration Phase:** ✅ **CODE MIGRATION COMPLETE (90%)** - Application Ready for Deployment
-- **Status:** All AWS dependencies replaced with GCP equivalents
+**Migration Phase:** ✅ **CODE MIGRATION COMPLETE (95%)** - Gemini Endpoints Added
+- **Status:** All AWS dependencies replaced with GCP equivalents, AI endpoints implemented
 - **Target Go-Live:** TBD (pending UI/pricing testing on test.ieltsaiprep.com)
 - **Test Environment:** test.ieltsaiprep.com (isolated data via Firestore collection prefixing)
 - **Migration Type:** Direct migration (no live users, full cutover)
-- **Cost Savings:** 54% reduction ($202/month) - $375 → $173
+- **Cost Savings:** 
+  - **Base cost:** $43-49/month (scale-to-zero with minimal traffic)
+  - **With moderate usage:** ~$173/month (54% savings vs AWS)
+  - **AWS current:** $375/month
+  - **Savings:** $202/month at moderate scale
 - **Completed:**
   - ✅ Firestore DAL implementation (replaces DynamoDB)
   - ✅ Gemini AI services (replaces Bedrock Nova)
@@ -18,8 +22,9 @@ IELTS GenAI Prep is an AI-powered platform for IELTS test preparation. It offers
   - ✅ Cloud Run production app with all GCP services
   - ✅ Terraform infrastructure (6 regions, load balancer, CDN)
 - **Remaining Work:**
-  - ⚠️ Add WebSocket/REST endpoints for Gemini assessment integration (2-5 hours)
+  - ✅ WebSocket/REST endpoints for Gemini assessment added
   - ⚠️ Deploy to test.ieltsaiprep.com for UI/pricing validation
+  - ⚠️ Create Listening/Reading templates for full mock tests
 - **Documentation:** 
   - `gcp/MIGRATION_STATUS.md` - Complete migration status and readiness report
   - `gcp/QUICK_START.md` - Fast deployment guide

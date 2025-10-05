@@ -1,0 +1,200 @@
+{
+  "test_type": "full_mock_test_general_training",
+  "test_format": "ielts_general_training",
+  "total_duration_minutes": 165,
+  "sections_no_breaks": true,
+  "speaking_separate_scheduling": true,
+  
+  "test_structure": {
+    "written_exam": {
+      "sections_in_order": ["listening", "reading", "writing"],
+      "duration_minutes": 150,
+      "no_breaks": true,
+      "sections": [
+        {
+          "section": "listening",
+          "order": 1,
+          "duration_minutes": 40,
+          "template_file": "mock_test_listening.json",
+          "total_questions": 40,
+          "audio_required": true,
+          "audio_parts": 4,
+          "transfer_time_included": true,
+          "note": "Identical to Academic Listening"
+        },
+        {
+          "section": "reading",
+          "order": 2,
+          "duration_minutes": 60,
+          "template_file": "mock_test_reading_general.json",
+          "total_questions": 40,
+          "passages": "2-3 short texts + 2 workplace texts + 1 longer text",
+          "transfer_time_included": true
+        },
+        {
+          "section": "writing",
+          "order": 3,
+          "duration_minutes": 60,
+          "tasks": 2,
+          "task_1": {
+            "type": "general_task1",
+            "description": "Write a letter (formal, semi-formal, or informal)",
+            "minimum_words": 150,
+            "recommended_time_minutes": 20,
+            "letter_types": ["request information", "explain situation", "complain", "thank someone"],
+            "scoring_criteria": ["Task Achievement", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"]
+          },
+          "task_2": {
+            "type": "general_task2",
+            "description": "Essay responding to point of view, argument, or problem",
+            "minimum_words": 250,
+            "recommended_time_minutes": 40,
+            "topics": "General interest (more accessible than Academic)",
+            "scoring_criteria": ["Task Response", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"]
+          }
+        }
+      ]
+    },
+    
+    "speaking_test": {
+      "scheduling": "Same day or within 7 days before/after written exam",
+      "duration_minutes": "11-14",
+      "format": "face_to_face_or_video",
+      "note": "Identical to Academic Speaking",
+      "parts": [
+        {
+          "part": 1,
+          "title": "Introduction and Interview",
+          "duration_minutes": "4-5",
+          "topics": ["yourself", "home", "work", "studies", "interests"],
+          "question_style": "Short questions and answers"
+        },
+        {
+          "part": 2,
+          "title": "Long Turn (Individual)",
+          "duration_minutes": "3-4",
+          "preparation_time_minutes": 1,
+          "speaking_time_minutes": "1-2",
+          "format": "Topic card with prompts",
+          "follow_up_questions": "1-2 rounding-off questions"
+        },
+        {
+          "part": 3,
+          "title": "Two-way Discussion",
+          "duration_minutes": "4-5",
+          "format": "Abstract discussion related to Part 2",
+          "question_style": "More complex, analytical questions"
+        }
+      ]
+    }
+  },
+  
+  "scoring": {
+    "overall_band_score": "Average of 4 section scores (rounded to nearest 0.5)",
+    "section_scores": {
+      "listening": "Band 0-9 based on 40 questions",
+      "reading": "Band 0-9 based on 40 questions",
+      "writing": "Band 0-9 average of Task 1 and Task 2",
+      "speaking": "Band 0-9 based on 4 criteria"
+    },
+    "writing_criteria": {
+      "task_1": ["Task Achievement", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"],
+      "task_2": ["Task Response", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"]
+    },
+    "speaking_criteria": ["Fluency and Coherence", "Lexical Resource", "Grammatical Range and Accuracy", "Pronunciation"]
+  },
+  
+  "assessment_workflow": {
+    "step_1": {
+      "action": "User purchases full mock test (2 tests for $99)",
+      "entitlement": "2 full mock test attempts",
+      "platform": "Mobile app (Apple/Google Play)"
+    },
+    "step_2": {
+      "action": "User starts test on mobile or web (via QR code)",
+      "session_creation": true,
+      "test_selection": "General Training Full Mock Test"
+    },
+    "step_3": {
+      "action": "Listening Section (40 min)",
+      "audio_playback": "4 audio recordings (played once)",
+      "answer_recording": "Real-time answer capture",
+      "auto_scoring": "Immediate after submission"
+    },
+    "step_4": {
+      "action": "Reading Section (60 min)",
+      "passage_display": "Social + Workplace + General interest texts",
+      "answer_recording": "Real-time answer capture",
+      "auto_scoring": "Immediate after submission"
+    },
+    "step_5": {
+      "action": "Writing Section (60 min)",
+      "task_1_display": "Letter writing prompt",
+      "task_2_display": "Essay prompt",
+      "word_counter": true,
+      "timer": true,
+      "ai_evaluation": "Gemini 2.5 Flash evaluation after submission"
+    },
+    "step_6": {
+      "action": "Speaking Test (11-14 min)",
+      "websocket_connection": "Gemini Live API",
+      "maya_examiner": "AI examiner conducts 3-part interview",
+      "audio_streaming": "Bidirectional audio",
+      "transcript_capture": true,
+      "ai_evaluation": "Gemini evaluation after completion"
+    },
+    "step_7": {
+      "action": "Results and Feedback",
+      "display": "Overall band score + 4 section scores",
+      "detailed_feedback": "Criteria-based feedback for Writing and Speaking",
+      "answers_review": "Correct answers shown for Listening and Reading"
+    }
+  },
+  
+  "data_requirements": {
+    "listening": {
+      "required": true,
+      "files_needed": [
+        "part1_audio.mp3 (everyday conversation)",
+        "part2_audio.mp3 (monologue)",
+        "part3_audio.mp3 (educational conversation)",
+        "part4_audio.mp3 (academic lecture)"
+      ],
+      "question_database": "40 questions with answer key",
+      "note": "Same audio files as Academic Listening"
+    },
+    "reading": {
+      "required": true,
+      "files_needed": [
+        "section1_texts.txt (2-3 short social texts, 600-900 words total)",
+        "section2_texts.txt (2 workplace texts, 600-900 words total)",
+        "section3_text.txt (1 longer general interest text, 750-950 words)"
+      ],
+      "question_database": "40 questions with answer key"
+    },
+    "writing": {
+      "required": true,
+      "task_1_prompt": "Letter writing scenario (formal/semi-formal/informal)",
+      "task_2_prompt": "Essay question on general interest topic",
+      "ai_evaluation": "Gemini 2.5 Flash with criteria-based scoring"
+    },
+    "speaking": {
+      "required": true,
+      "part_1_topics": "List of question sets for introduction/interview",
+      "part_2_cue_cards": "Topic cards with prompts",
+      "part_3_discussion_guides": "Follow-up question sets",
+      "ai_examiner": "Gemini Live API (Maya)",
+      "note": "Same as Academic Speaking"
+    }
+  },
+  
+  "metadata": {
+    "product_id": "com.ieltsaiprep.general.mocktest",
+    "price_usd": 99,
+    "assessments_per_purchase": 2,
+    "test_duration_total_minutes": 165,
+    "created_date": "2025-10-05",
+    "template_version": "1.0",
+    "ready_for_population": "Awaiting database files for Listening and Reading"
+  }
+}

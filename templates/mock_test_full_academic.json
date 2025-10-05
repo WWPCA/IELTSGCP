@@ -1,0 +1,194 @@
+{
+  "test_type": "full_mock_test_academic",
+  "test_format": "ielts_academic",
+  "total_duration_minutes": 165,
+  "sections_no_breaks": true,
+  "speaking_separate_scheduling": true,
+  
+  "test_structure": {
+    "written_exam": {
+      "sections_in_order": ["listening", "reading", "writing"],
+      "duration_minutes": 150,
+      "no_breaks": true,
+      "sections": [
+        {
+          "section": "listening",
+          "order": 1,
+          "duration_minutes": 40,
+          "template_file": "mock_test_listening.json",
+          "total_questions": 40,
+          "audio_required": true,
+          "audio_parts": 4,
+          "transfer_time_included": true
+        },
+        {
+          "section": "reading",
+          "order": 2,
+          "duration_minutes": 60,
+          "template_file": "mock_test_reading_academic.json",
+          "total_questions": 40,
+          "passages": 3,
+          "transfer_time_included": true
+        },
+        {
+          "section": "writing",
+          "order": 3,
+          "duration_minutes": 60,
+          "tasks": 2,
+          "task_1": {
+            "type": "academic_task1",
+            "description": "Describe visual data (graph, chart, table, diagram)",
+            "minimum_words": 150,
+            "recommended_time_minutes": 20,
+            "scoring_criteria": ["Task Achievement", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"]
+          },
+          "task_2": {
+            "type": "academic_task2",
+            "description": "Essay responding to argument, problem, or viewpoint",
+            "minimum_words": 250,
+            "recommended_time_minutes": 40,
+            "scoring_criteria": ["Task Response", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"]
+          }
+        }
+      ]
+    },
+    
+    "speaking_test": {
+      "scheduling": "Same day or within 7 days before/after written exam",
+      "duration_minutes": 11-14,
+      "format": "face_to_face_or_video",
+      "parts": [
+        {
+          "part": 1,
+          "title": "Introduction and Interview",
+          "duration_minutes": "4-5",
+          "topics": ["yourself", "home", "work", "studies", "interests"],
+          "question_style": "Short questions and answers"
+        },
+        {
+          "part": 2,
+          "title": "Long Turn (Individual)",
+          "duration_minutes": "3-4",
+          "preparation_time_minutes": 1,
+          "speaking_time_minutes": "1-2",
+          "format": "Topic card with prompts",
+          "follow_up_questions": "1-2 rounding-off questions"
+        },
+        {
+          "part": 3,
+          "title": "Two-way Discussion",
+          "duration_minutes": "4-5",
+          "format": "Abstract discussion related to Part 2",
+          "question_style": "More complex, analytical questions"
+        }
+      ]
+    }
+  },
+  
+  "scoring": {
+    "overall_band_score": "Average of 4 section scores (rounded to nearest 0.5)",
+    "section_scores": {
+      "listening": "Band 0-9 based on 40 questions",
+      "reading": "Band 0-9 based on 40 questions",
+      "writing": "Band 0-9 average of Task 1 and Task 2",
+      "speaking": "Band 0-9 based on 4 criteria"
+    },
+    "writing_criteria": {
+      "task_1": ["Task Achievement", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"],
+      "task_2": ["Task Response", "Coherence and Cohesion", "Lexical Resource", "Grammatical Range and Accuracy"]
+    },
+    "speaking_criteria": ["Fluency and Coherence", "Lexical Resource", "Grammatical Range and Accuracy", "Pronunciation"]
+  },
+  
+  "assessment_workflow": {
+    "step_1": {
+      "action": "User purchases full mock test (2 tests for $99)",
+      "entitlement": "2 full mock test attempts",
+      "platform": "Mobile app (Apple/Google Play)"
+    },
+    "step_2": {
+      "action": "User starts test on mobile or web (via QR code)",
+      "session_creation": true,
+      "test_selection": "Academic Full Mock Test"
+    },
+    "step_3": {
+      "action": "Listening Section (40 min)",
+      "audio_playback": "4 audio recordings (played once)",
+      "answer_recording": "Real-time answer capture",
+      "auto_scoring": "Immediate after submission"
+    },
+    "step_4": {
+      "action": "Reading Section (60 min)",
+      "passage_display": "3 academic passages",
+      "answer_recording": "Real-time answer capture",
+      "auto_scoring": "Immediate after submission"
+    },
+    "step_5": {
+      "action": "Writing Section (60 min)",
+      "task_1_display": "Graph/chart/table/diagram",
+      "task_2_display": "Essay prompt",
+      "word_counter": true,
+      "timer": true,
+      "ai_evaluation": "Gemini 2.5 Flash evaluation after submission"
+    },
+    "step_6": {
+      "action": "Speaking Test (11-14 min)",
+      "websocket_connection": "Gemini Live API",
+      "maya_examiner": "AI examiner conducts 3-part interview",
+      "audio_streaming": "Bidirectional audio",
+      "transcript_capture": true,
+      "ai_evaluation": "Gemini evaluation after completion"
+    },
+    "step_7": {
+      "action": "Results and Feedback",
+      "display": "Overall band score + 4 section scores",
+      "detailed_feedback": "Criteria-based feedback for Writing and Speaking",
+      "answers_review": "Correct answers shown for Listening and Reading"
+    }
+  },
+  
+  "data_requirements": {
+    "listening": {
+      "required": true,
+      "files_needed": [
+        "part1_audio.mp3 (everyday conversation)",
+        "part2_audio.mp3 (monologue)",
+        "part3_audio.mp3 (educational conversation)",
+        "part4_audio.mp3 (academic lecture)"
+      ],
+      "question_database": "40 questions with answer key"
+    },
+    "reading": {
+      "required": true,
+      "files_needed": [
+        "passage1.txt (700-900 words, easier academic text)",
+        "passage2.txt (700-900 words, moderate academic text)",
+        "passage3.txt (750-950 words, harder academic text)"
+      ],
+      "question_database": "40 questions with answer key"
+    },
+    "writing": {
+      "required": true,
+      "task_1_prompt": "Visual data (graph/chart/table/diagram) with description requirement",
+      "task_2_prompt": "Essay question on academic topic",
+      "ai_evaluation": "Gemini 2.5 Flash with criteria-based scoring"
+    },
+    "speaking": {
+      "required": true,
+      "part_1_topics": "List of question sets for introduction/interview",
+      "part_2_cue_cards": "Topic cards with prompts",
+      "part_3_discussion_guides": "Follow-up question sets",
+      "ai_examiner": "Gemini Live API (Maya)"
+    }
+  },
+  
+  "metadata": {
+    "product_id": "com.ieltsaiprep.academic.mocktest",
+    "price_usd": 99,
+    "assessments_per_purchase": 2,
+    "test_duration_total_minutes": 165,
+    "created_date": "2025-10-05",
+    "template_version": "1.0",
+    "ready_for_population": "Awaiting database files for Listening and Reading"
+  }
+}

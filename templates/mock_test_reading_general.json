@@ -1,0 +1,114 @@
+{
+  "test_type": "reading_general_training",
+  "format": "ielts_full_mock_test",
+  "duration_minutes": 60,
+  "total_questions": 40,
+  "instructions": "Read the texts and answer 40 questions. Texts progress from everyday topics to more complex general interest material. You have 60 minutes including transfer time.",
+  
+  "sections": [
+    {
+      "section_number": 1,
+      "title": "Social Survival",
+      "difficulty": "easier",
+      "question_range": "1-14",
+      "question_count": 14,
+      "text_count": "2-3 short texts",
+      "text_types": [
+        "notices",
+        "advertisements",
+        "timetables",
+        "schedules",
+        "information_leaflets"
+      ],
+      "word_count_range": "600-900",
+      "context": "Everyday situations in English-speaking countries",
+      "topics": ["accommodation", "facilities", "services", "social information"],
+      "question_types": [
+        "matching",
+        "true_false_not_given",
+        "multiple_choice",
+        "sentence_completion"
+      ],
+      "passages": []
+    },
+    {
+      "section_number": 2,
+      "title": "Workplace Survival",
+      "difficulty": "moderate",
+      "question_range": "15-27",
+      "question_count": 13,
+      "text_count": "2 texts",
+      "text_types": [
+        "job_descriptions",
+        "contracts",
+        "training_materials",
+        "staff_development_documents",
+        "company_policies"
+      ],
+      "word_count_range": "600-900",
+      "context": "Work-related situations",
+      "topics": ["employment", "workplace conditions", "staff training", "company procedures"],
+      "question_types": [
+        "matching_headings",
+        "yes_no_not_given",
+        "multiple_choice",
+        "summary_completion"
+      ],
+      "passages": []
+    },
+    {
+      "section_number": 3,
+      "title": "General Reading",
+      "difficulty": "harder",
+      "question_range": "28-40",
+      "question_count": 13,
+      "text_count": "1 longer text",
+      "text_types": [
+        "newspaper_article",
+        "magazine_feature",
+        "report",
+        "general_interest_text"
+      ],
+      "word_count_range": "750-950",
+      "context": "General interest topics",
+      "topics": ["culture", "travel", "health", "education", "social issues"],
+      "question_types": [
+        "matching_information",
+        "yes_no_not_given",
+        "multiple_choice",
+        "sentence_completion",
+        "summary_completion"
+      ],
+      "passages": []
+    }
+  ],
+  
+  "total_word_count_range": "2150-2750",
+  
+  "scoring": {
+    "total_marks": 40,
+    "band_conversion": {
+      "40": 9.0,
+      "39": 8.5,
+      "37-38": 8.0,
+      "36": 7.5,
+      "34-35": 7.0,
+      "32-33": 6.5,
+      "30-31": 6.0,
+      "27-29": 5.5,
+      "23-26": 5.0,
+      "19-22": 4.5,
+      "15-18": 4.0
+    }
+  },
+  
+  "metadata": {
+    "for_general_training_only": true,
+    "progression": "Easy (social) → Moderate (work) → Complex (general interest)",
+    "text_sources": "Real-world English language materials",
+    "spelling_matters": true,
+    "word_limit_rules": "Must follow word limits (e.g., NO MORE THAN TWO WORDS)",
+    "created_date": "2025-10-05",
+    "template_version": "1.0"
+  }
+}
