@@ -276,62 +276,6 @@ def assessment_products_page():
     """Redirect old route to new assessments page"""
     return redirect(url_for('assessments_page'))
 
-@app.route('/privacy-policy')
-def privacy_policy():
-    """Privacy Policy page"""
-    return """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Privacy Policy - IELTS GenAI Prep</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="/" style="color: #E33219; font-weight: bold;">IELTS GenAI Prep</a>
-            </div>
-        </nav>
-        <div class="container my-5">
-            <h1>Privacy Policy</h1>
-            <p class="text-muted">Last updated: October 2025</p>
-            <p>Your privacy is important to us. This privacy policy explains how IELTS GenAI Prep collects, uses, and protects your personal information.</p>
-            <p>For questions about this privacy policy, please contact us at support@ieltsgenaiprep.com</p>
-        </div>
-    </body>
-    </html>
-    """
-
-@app.route('/terms-of-service')
-def terms_of_service():
-    """Terms of Service page"""
-    return """
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Terms of Service - IELTS GenAI Prep</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <div class="container">
-                <a class="navbar-brand" href="/" style="color: #E33219; font-weight: bold;">IELTS GenAI Prep</a>
-            </div>
-        </nav>
-        <div class="container my-5">
-            <h1>Terms of Service</h1>
-            <p class="text-muted">Last updated: October 2025</p>
-            <p>By using IELTS GenAI Prep, you agree to these terms of service.</p>
-            <p>For questions about these terms, please contact us at support@ieltsgenaiprep.com</p>
-        </div>
-    </body>
-    </html>
-    """
-
 @app.route('/preview/writing-assessment')
 def preview_writing_assessment():
     """Preview the writing assessment interface without authentication"""
