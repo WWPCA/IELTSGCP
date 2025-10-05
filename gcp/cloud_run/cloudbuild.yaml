@@ -1,0 +1,57 @@
+# Cloud Build configuration for multi-region Cloud Run deployment
+steps:
+  # Build container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/ielts-genai-prep/app:$COMMIT_SHA'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/ielts-genai-prep/app:latest'
+      - '.'
+    dir: 'gcp/cloud_run'
+  
+  # Push to Artifact Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '--all-tags'
+      - '${_REGION}-docker.pkg.dev/$PROJECT_ID/ielts-genai-prep/app'
+  
+  # Deploy to Cloud Run (multi-region)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'gcloud'
+    args:
+      - 'run'
+      - 'deploy'
+      - 'ielts-genai-prep'
+      - '--image=${_REGION}-docker.pkg.dev/$PROJECT_ID/ielts-genai-prep/app:$COMMIT_SHA'
+      - '--regions=${_DEPLOY_REGIONS}'
+      - '--platform=managed'
+      - '--service-account=ielts-app-sa@$PROJECT_ID.iam.gserviceaccount.com'
+      - '--allow-unauthenticated'
+      - '--min-instances=${_MIN_INSTANCES}'
+      - '--max-instances=${_MAX_INSTANCES}'
+      - '--memory=${_MEMORY}'
+      - '--cpu=${_CPU}'
+      - '--timeout=60m'
+      - '--concurrency=80'
+      - '--port=5000'
+      - '--set-env-vars=GOOGLE_CLOUD_PROJECT=$PROJECT_ID'
+      - '--set-secrets=SESSION_SECRET=session-secret:latest,RECAPTCHA_V2_SECRET_KEY=recaptcha-secret:latest,APPLE_SHARED_SECRET=apple-shared-secret:latest,GOOGLE_SERVICE_ACCOUNT_JSON=google-service-account:latest,JWT_SECRET=jwt-secret:latest,QR_ENCRYPTION_KEY=qr-encryption-key:latest,SENDGRID_API_KEY=sendgrid-api-key:latest'
+
+substitutions:
+  _REGION: 'us-central1'
+  _DEPLOY_REGIONS: 'us-central1,europe-west1,asia-southeast1'
+  _MIN_INSTANCES: '1'
+  _MAX_INSTANCES: '10'
+  _MEMORY: '1Gi'
+  _CPU: '2'
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+
+images:
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/ielts-genai-prep/app:$COMMIT_SHA'
+  - '${_REGION}-docker.pkg.dev/$PROJECT_ID/ielts-genai-prep/app:latest'
