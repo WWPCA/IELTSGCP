@@ -15,7 +15,7 @@ resource "google_cloud_run_v2_service" "app" {
     service_account = google_service_account.app_service_account.email
     
     scaling {
-      min_instance_count = 1
+      min_instance_count = 0  # Scale to zero when idle - saves ~$720/month
       max_instance_count = 10
     }
     
