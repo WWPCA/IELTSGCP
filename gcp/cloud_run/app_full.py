@@ -4,6 +4,7 @@ Uses GCP Firestore for data storage, Gemini for AI assessments, SendGrid for ema
 """
 
 from flask import Flask, send_from_directory, render_template, request, jsonify, redirect, url_for, session, flash
+from flask_sock import Sock
 import json
 import uuid
 import time
@@ -12,6 +13,7 @@ import io
 import base64
 import secrets
 import hashlib
+import asyncio
 from datetime import datetime, timedelta
 import os
 import sys
@@ -34,6 +36,9 @@ app.secret_key = os.environ.get("SESSION_SECRET")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 app.jinja_env.globals['csrf_token'] = csrf_token
 app.jinja_env.globals['config'] = ProductionConfig()
+
+# Initialize WebSocket support
+sock = Sock(app)
 
 # Kill caching for development
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -1507,6 +1512,161 @@ def test_qr_flow():
 def static_files(filename):
     """Serve static files"""
     return send_from_directory('static', filename)
+
+# ===== GEMINI AI ENDPOINTS =====
+
+@sock.route('/ws/speaking/<assessment_id>')
+def speaking_websocket(ws, assessment_id):
+    """
+    WebSocket endpoint for Gemini Live speaking assessments
+    Provides bidirectional audio streaming with Maya AI examiner
+    """
+    print(f"[GEMINI] Speaking assessment WebSocket connected: {assessment_id}")
+    
+    if not gemini_live:
+        ws.send(json.dumps({'error': 'Gemini Live service unavailable'}))
+        return
+    
+    try:
+        # Get assessment type from query params
+        assessment_type = request.args.get('type', 'speaking')
+        user_id = request.args.get('user_id')
+        
+        if not user_id:
+            ws.send(json.dumps({'error': 'User ID required'}))
+            return
+        
+        # Storage for conversation transcript
+        transcript = []
+        
+        # Callback handlers
+        def on_text_response(text):
+            transcript.append({'speaker': 'maya', 'text': text, 'timestamp': datetime.utcnow().isoformat()})
+            ws.send(json.dumps({'type': 'transcript', 'speaker': 'maya', 'text': text}))
+        
+        def on_audio_response(audio_bytes):
+            # Send audio as base64 for browser playback
+            audio_b64 = base64.b64encode(audio_bytes).decode('utf-8')
+            ws.send(json.dumps({'type': 'audio', 'data': audio_b64}))
+        
+        def content_moderation(text):
+            # Implement content moderation logic here
+            # Return True if content is appropriate, False otherwise
+            return True
+        
+        # Start Gemini Live session
+        async def run_session():
+            session = await gemini_live.start_maya_conversation(
+                assessment_type=assessment_type,
+                on_text_response=on_text_response,
+                on_audio_response=on_audio_response,
+                content_moderation_callback=content_moderation
+            )
+            
+            # Handle incoming WebSocket messages
+            while True:
+                try:
+                    message = ws.receive(timeout=0.1)
+                    if message:
+                        data = json.loads(message)
+                        
+                        if data.get('type') == 'audio':
+                            # Receive audio from user and send to Gemini
+                            audio_b64 = data.get('data')
+                            audio_bytes = base64.b64decode(audio_b64)
+                            await session.send_audio(audio_bytes)
+                            
+                            transcript.append({'speaker': 'user', 'audio_length': len(audio_bytes), 'timestamp': datetime.utcnow().isoformat()})
+                        
+                        elif data.get('type') == 'text':
+                            # User text input
+                            text = data.get('text')
+                            await session.send_text(text)
+                            transcript.append({'speaker': 'user', 'text': text, 'timestamp': datetime.utcnow().isoformat()})
+                        
+                        elif data.get('type') == 'end':
+                            # End assessment
+                            break
+                
+                except Exception as e:
+                    if 'timeout' not in str(e).lower():
+                        print(f"[GEMINI] WebSocket error: {e}")
+                        break
+            
+            # Generate feedback
+            feedback = await gemini_live.generate_assessment_feedback(
+                transcript=json.dumps(transcript),
+                assessment_type=assessment_type
+            )
+            
+            ws.send(json.dumps({'type': 'feedback', 'data': feedback}))
+            
+            # Close session
+            await session.close()
+        
+        # Run async session in sync context
+        asyncio.run(run_session())
+    
+    except Exception as e:
+        print(f"[GEMINI] Speaking WebSocket error: {e}")
+        ws.send(json.dumps({'error': str(e)}))
+
+@app.route('/api/evaluate_writing', methods=['POST'])
+def evaluate_writing():
+    """
+    REST endpoint for Gemini Flash writing evaluation
+    Evaluates IELTS writing tasks and returns detailed feedback
+    """
+    try:
+        if not gemini_service:
+            return jsonify({'error': 'Gemini service unavailable'}), 503
+        
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['task_type', 'task_prompt', 'student_response', 'word_count', 'user_id', 'assessment_id']
+        for field in required_fields:
+            if field not in data:
+                return jsonify({'error': f'Missing required field: {field}'}), 400
+        
+        task_type = data['task_type']
+        task_prompt = data['task_prompt']
+        student_response = data['student_response']
+        word_count = data['word_count']
+        user_id = data['user_id']
+        assessment_id = data['assessment_id']
+        
+        print(f"[GEMINI] Evaluating writing for user {user_id}, assessment {assessment_id}")
+        
+        # Run async evaluation
+        async def evaluate():
+            return await gemini_service.evaluate_writing_task(
+                task_type=task_type,
+                task_prompt=task_prompt,
+                student_response=student_response,
+                word_count=word_count
+            )
+        
+        evaluation = asyncio.run(evaluate())
+        
+        # Add metadata
+        evaluation['assessment_id'] = assessment_id
+        evaluation['user_id'] = user_id
+        evaluation['submitted_at'] = datetime.utcnow().isoformat()
+        
+        print(f"[GEMINI] Writing evaluation completed - Overall Band: {evaluation.get('overall_band')}")
+        
+        return jsonify({
+            'success': True,
+            'evaluation': evaluation
+        })
+    
+    except Exception as e:
+        print(f"[GEMINI] Writing evaluation error: {e}")
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
