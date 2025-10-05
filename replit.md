@@ -131,7 +131,10 @@ Preferred communication style: Simple, everyday language.
 - Real-time content moderation for speaking assessments with graduated response system (mild guidance, redirection, or assessment termination for severe violations).
 
 **Payment Integration:**
-- **Mobile-Only Purchase Model:** All payments processed exclusively through Apple App Store and Google Play Store ($36 per assessment package).
+- **Mobile-Only Purchase Model:** All payments processed exclusively through Apple App Store and Google Play Store with three product tiers:
+  - **Writing Assessments:** $25 USD for 2 full assessments (Academic or General Training)
+  - **Speaking Assessments:** $25 USD for 2 full assessments (Academic or General Training)
+  - **Full-Length Mock Tests:** $99 USD for 2 complete mock tests including all 4 skills (Listening, Reading, Writing with audio recordings, Speaking)
 - **QR Code Bridge:** Seamless transition from mobile purchase to web platform access via QR code authentication.  
 - **No Web Payments:** Zero integration with web-based payment processors - maintaining strict mobile app store compliance.
 - **Repurchase Workflow:** Full support for users to repurchase assessments after completion or purchase additional attempts during active assessments, with automatic eligibility checking and purchase history tracking.

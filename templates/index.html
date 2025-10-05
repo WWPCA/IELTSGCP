@@ -174,8 +174,8 @@
 {% if not (current_user is defined and current_user.is_authenticated) %}
 <section class="pricing py-5 bg-light">
     <div class="container">
-        <h2 class="text-center mb-4">GenAI Assessed IELTS Modules</h2>
-        <p class="text-center mb-5">Our specialized GenAI technologies provide accurate assessment for IELTS preparation</p>
+        <h2 class="text-center mb-4">GenAI Assessed IELTS Products</h2>
+        <p class="text-center mb-5">Choose the perfect package for your IELTS preparation journey</p>
         
         <!-- TrueScore® Section -->
         <div class="genai-brand-section mb-5">
@@ -185,6 +185,7 @@
                 </div>
                 <h3 class="brand-title">TrueScore® Writing Assessment</h3>
                 <p class="brand-tagline">Professional GenAI assessment of IELTS writing tasks aligned with the official IELTS band descriptors on Task Achievement, Coherence and Cohesion, Lexical Resource, and Grammatical Range and Accuracy</p>
+                <div class="badge bg-success text-white fs-4 px-4 py-2 mt-2">USD $25 - 2 Full Assessments</div>
             </div>
             
             <div class="row equal-height-cards">
@@ -195,9 +196,13 @@
                             <h3 class="my-0 font-weight-bold">Academic Writing</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <h4 class="text-success fw-bold">$25 USD</h4>
+                                <p class="text-muted mb-0">2 Full Assessments</p>
+                            </div>
                             <div class="pricing-features mt-3 mb-4">
                                 <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 4 complete assessment sets of:</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2 complete assessment sets of:</li>
                                     <li class="mb-2 ms-4">Task 1: Chart & Graph analysis</li>
                                     <li class="mb-2 ms-4">Task 2: Academic essay writing</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> TrueScore® GenAI detailed feedback</li>
@@ -205,7 +210,7 @@
                             </div>
                             <div class="mt-auto d-grid">
                                 <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">
-                                    <i class="fas fa-rocket"></i> Get Started
+                                    <i class="fas fa-rocket"></i> Get Started - $25
                                 </a>
                             </div>
                         </div>
@@ -219,9 +224,13 @@
                             <h3 class="my-0 font-weight-bold">General Writing</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <h4 class="text-success fw-bold">$25 USD</h4>
+                                <p class="text-muted mb-0">2 Full Assessments</p>
+                            </div>
                             <div class="pricing-features mt-3 mb-4">
                                 <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 4 complete assessment sets of:</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2 complete assessment sets of:</li>
                                     <li class="mb-2 ms-4">Task 1: Formal & informal letters</li>
                                     <li class="mb-2 ms-4">Task 2: General essay writing</li>
                                     <li class="mb-2"><i class="fas fa-check text-success me-2"></i> TrueScore® GenAI detailed feedback</li>
@@ -229,7 +238,7 @@
                             </div>
                             <div class="mt-auto d-grid">
                                 <a href="{{ url_for('register') }}" class="btn btn-success btn-lg">
-                                    <i class="fas fa-rocket"></i> Get Started
+                                    <i class="fas fa-rocket"></i> Get Started - $25
                                 </a>
                             </div>
                         </div>
@@ -239,13 +248,14 @@
         </div>
         
         <!-- ClearScore® Section -->
-        <div class="genai-brand-section">
+        <div class="genai-brand-section mb-5">
             <div class="text-center mb-4">
                 <div class="brand-icon text-primary">
                     <i class="fas fa-microphone-alt"></i>
                 </div>
                 <h3 class="brand-title">ClearScore® Speaking Assessment</h3>
                 <p class="brand-tagline">Advanced GenAI speech analysis and feedback aligned with the official IELTS band assessment criteria on Fluency and Coherence, Lexical Resource, Grammatical Range and Accuracy, and Pronunciation</p>
+                <div class="badge bg-primary text-white fs-4 px-4 py-2 mt-2">USD $25 - 2 Full Assessments</div>
             </div>
             
             <div class="row equal-height-cards">
@@ -256,9 +266,13 @@
                             <h3 class="my-0 font-weight-bold">Academic Speaking</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <h4 class="text-primary fw-bold">$25 USD</h4>
+                                <p class="text-muted mb-0">2 Full Assessments</p>
+                            </div>
                             <div class="pricing-features mt-3 mb-4">
                                 <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 4 complete assessment sets of:</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2 complete assessment sets of:</li>
                                     <li class="mb-2 ms-4">Part 1: Introduction & interview</li>
                                     <li class="mb-2 ms-4">Part 2: Speaking on a topic</li>
                                     <li class="mb-2 ms-4">Part 3: Two-way discussion</li>
@@ -268,7 +282,7 @@
                             </div>
                             <div class="mt-auto d-grid">
                                 <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-rocket"></i> Get Started
+                                    <i class="fas fa-rocket"></i> Get Started - $25
                                 </a>
                             </div>
                         </div>
@@ -282,9 +296,13 @@
                             <h3 class="my-0 font-weight-bold">General Speaking</h3>
                         </div>
                         <div class="card-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <h4 class="text-primary fw-bold">$25 USD</h4>
+                                <p class="text-muted mb-0">2 Full Assessments</p>
+                            </div>
                             <div class="pricing-features mt-3 mb-4">
                                 <ul class="list-unstyled">
-                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 4 complete assessment sets of:</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2 complete assessment sets of:</li>
                                     <li class="mb-2 ms-4">Part 1: Introduction & interview</li>
                                     <li class="mb-2 ms-4">Part 2: Speaking on a topic</li>
                                     <li class="mb-2 ms-4">Part 3: Two-way discussion</li>
@@ -294,7 +312,83 @@
                             </div>
                             <div class="mt-auto d-grid">
                                 <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">
-                                    <i class="fas fa-rocket"></i> Get Started
+                                    <i class="fas fa-rocket"></i> Get Started - $25
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Full-Length Mock Tests Section -->
+        <div class="genai-brand-section">
+            <div class="text-center mb-4">
+                <div class="brand-icon text-warning">
+                    <i class="fas fa-clipboard-check"></i>
+                </div>
+                <h3 class="brand-title">Full-Length IELTS Mock Tests</h3>
+                <p class="brand-tagline">Complete practice tests with all four skills: Listening, Reading, Writing, and Speaking - Experience the real IELTS exam format</p>
+                <div class="badge bg-warning text-dark fs-4 px-4 py-2 mt-2">USD $99 - 2 Complete Mock Tests</div>
+            </div>
+            
+            <div class="row equal-height-cards">
+                <!-- Academic Mock Test -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card pricing-card border-warning">
+                        <div class="card-header bg-warning text-dark text-center">
+                            <h3 class="my-0 font-weight-bold">Academic Mock Test</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <h4 class="text-warning fw-bold">$99 USD</h4>
+                                <p class="text-muted mb-0">2 Complete Mock Tests</p>
+                            </div>
+                            <div class="pricing-features mt-3 mb-4">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2 full-length mock tests including:</li>
+                                    <li class="mb-2 ms-4">Listening (30 minutes + 10 min transfer)</li>
+                                    <li class="mb-2 ms-4">Reading (60 minutes)</li>
+                                    <li class="mb-2 ms-4">Writing (60 minutes - TrueScore®)</li>
+                                    <li class="mb-2 ms-4">Speaking (11-14 minutes - ClearScore®)</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Complete band score report</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Audio recordings included</li>
+                                </ul>
+                            </div>
+                            <div class="mt-auto d-grid">
+                                <a href="{{ url_for('register') }}" class="btn btn-warning btn-lg text-dark">
+                                    <i class="fas fa-rocket"></i> Get Started - $99
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- General Training Mock Test -->
+                <div class="col-lg-6 mb-4">
+                    <div class="card pricing-card border-warning">
+                        <div class="card-header bg-warning text-dark text-center">
+                            <h3 class="my-0 font-weight-bold">General Training Mock Test</h3>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="text-center mb-3">
+                                <h4 class="text-warning fw-bold">$99 USD</h4>
+                                <p class="text-muted mb-0">2 Complete Mock Tests</p>
+                            </div>
+                            <div class="pricing-features mt-3 mb-4">
+                                <ul class="list-unstyled">
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> 2 full-length mock tests including:</li>
+                                    <li class="mb-2 ms-4">Listening (30 minutes + 10 min transfer)</li>
+                                    <li class="mb-2 ms-4">Reading (60 minutes)</li>
+                                    <li class="mb-2 ms-4">Writing (60 minutes - TrueScore®)</li>
+                                    <li class="mb-2 ms-4">Speaking (11-14 minutes - ClearScore®)</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Complete band score report</li>
+                                    <li class="mb-2"><i class="fas fa-check text-success me-2"></i> Audio recordings included</li>
+                                </ul>
+                            </div>
+                            <div class="mt-auto d-grid">
+                                <a href="{{ url_for('register') }}" class="btn btn-warning btn-lg text-dark">
+                                    <i class="fas fa-rocket"></i> Get Started - $99
                                 </a>
                             </div>
                         </div>
