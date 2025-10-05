@@ -1600,6 +1600,16 @@ def test_qr_flow():
     """Serve QR authentication test page"""
     return send_from_directory('.', 'test_qr_authentication.html')
 
+@app.route('/robots.txt')
+def robots_txt():
+    """Serve robots.txt for AI SEO optimization"""
+    return send_from_directory('.', 'robots.txt')
+
+@app.route('/sitemap.xml')
+def sitemap_xml():
+    """Serve sitemap.xml for search engine and AI crawler discovery"""
+    return send_from_directory('.', 'sitemap.xml')
+
 @app.route('/static/<path:filename>')
 def static_files(filename):
     """Serve static files"""
