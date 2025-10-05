@@ -228,18 +228,13 @@ user_assessments = {
 
 @app.route('/')
 def home():
-    """Serve working template with purple background and 10 FAQs"""
+    """Serve homepage with updated pricing"""
     # Always use template system for proper functionality
     class AnonymousUser:
         is_authenticated = False
         email = None
-    # Serve the working template directly
-    try:
-        with open('working_template.html', 'r') as f:
-            content = f.read()
-        return content
-    except FileNotFoundError:
-        return render_template('comprehensive_preview.html', current_user=AnonymousUser())
+    # Serve the updated index.html template
+    return render_template('index.html', current_user=AnonymousUser())
 
 @app.route('/original-home')
 def original_home():
