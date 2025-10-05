@@ -1,12 +1,33 @@
 ### Overview
 
-IELTS GenAI Prep is an AI-powered platform for IELTS test preparation. It offers assessment services for Academic and General Training IELTS, leveraging a serverless AWS Lambda architecture. The system supports QR code authentication for a seamless mobile-to-web user experience and utilizes AI for comprehensive evaluation across all IELTS criteria. The platform aims to provide high-quality, AI-driven assessment and feedback to help users prepare for the IELTS exam, with a focus on ease of access and consistent user experience across devices.
+IELTS GenAI Prep is an AI-powered platform for IELTS test preparation. It offers assessment services for Academic and General Training IELTS. The platform is **migrating from AWS to Google Cloud Platform (GCP)**, transitioning from AWS Lambda to Cloud Run, DynamoDB to Firestore, and AWS Bedrock Nova to Google Gemini 2.5 Flash. The system supports QR code authentication for a seamless mobile-to-web user experience and utilizes AI for comprehensive evaluation across all IELTS criteria. The platform aims to provide high-quality, AI-driven assessment and feedback to help users prepare for the IELTS exam, with a focus on ease of access and consistent user experience across devices.
+
+### GCP Migration Status
+
+**Migration Phase:** Infrastructure Build Complete ✅
+- **Target Go-Live:** TBD (pending data migration and testing)
+- **Migration Guide:** See `gcp/GCP_MIGRATION_GUIDE.md`
+- **Migration Type:** Direct migration (no live users, full cutover)
+- **Cost Savings:** ~23% reduction (~$218/month)
 
 ### User Preferences
 
 Preferred communication style: Simple, everyday language.
 
 ### System Architecture
+
+**🚀 NEW: GCP Architecture (Target)**
+
+**Backend Infrastructure:**
+- **Cloud Run Multi-Region Deployment** - Flask app on Cloud Run with native WebSocket support across `us-central1`, `europe-west1`, and `asia-southeast1`.
+- **Global HTTPS Load Balancer** - Automatic traffic distribution with Cloud CDN, session affinity for WebSocket connections.
+- **Hybrid Compute Strategy:**
+  - **Cloud Run**: Main Flask application (full features, 60-minute timeout)
+  - **Cloud Functions**: Simple tasks (receipt validation, QR codes, session cleanup)
+- **Firestore Multi-Region Database** - `nam5` multi-region (US) with automatic replication, 99.999% SLA.
+- **No Cold Start Issues** - Minimum 1 instance per region ensures instant response.
+
+**🔧 LEGACY: AWS Architecture (Current - Will be Decommissioned)**
 
 **Backend Infrastructure:**
 - **Pure Lambda Handler Architecture** - Eliminated Flask + Gunicorn overhead for maximum serverless performance and minimal cold start latency.
@@ -21,11 +42,19 @@ Preferred communication style: Simple, everyday language.
 - QR Code Authentication for seamless transitions between mobile and web.
 
 **AI Services Integration:**
-- Amazon Nova Sonic for true bidirectional speech-to-speech conversations with AI examiner Maya (primarily `us-east-1`).
-- Direct audio-to-audio processing with real-time content moderation during live conversation.
+
+**🚀 NEW: Google Gemini (GCP)**
+- **Gemini 2.5 Flash Live API** for true bidirectional speech-to-speech conversations with AI examiner Maya.
+- Direct audio-to-audio processing (16-bit PCM, 16kHz input / 24kHz output) via WebSocket.
+- **Gemini 2.5 Flash** for text processing, writing assessment evaluation, and feedback generation.
+- Real-time content moderation using Google Cloud Natural Language API.
+- Advanced moderation with graduated response system (guidance → redirection → termination).
+- Native multilingual support with improved speech recognition.
+
+**🔧 LEGACY: AWS Bedrock (Current)**
+- Amazon Nova Sonic for bidirectional speech-to-speech conversations (primarily `us-east-1`).
 - Amazon Nova Micro for text processing and assessment evaluation.
 - Real-time streaming via WebSockets for speaking assessments.
-- Advanced content moderation with graduated response system (guidance → redirection → termination).
 
 **Key Components:**
 - **Authentication System:** Mobile-first registration and purchase, cross-platform login, 1-hour web session management, and App Store/Google Play receipt validation.
@@ -38,11 +67,22 @@ Preferred communication style: Simple, everyday language.
 - **Enhanced Speech Assessment:** Web-based initiation, WebSocket connection to `us-east-1`, true bidirectional audio streaming with Nova Sonic, real-time speech-to-speech content moderation, seamless conversation flow with Maya AI examiner, and detailed feedback generation.
 
 **Deployment Strategy:**
+
+**🚀 NEW: GCP Deployment**
+- **Multi-Region Cloud Run** with `us-central1` as primary and `europe-west1`, `asia-southeast1` as secondary.
+- **Firestore Multi-Region** (`nam5`) for automatic data replication across all US regions.
+- **Terraform Infrastructure as Code** for reproducible deployments.
+- **Cloud Build** for containerized deployments with multi-region rollout.
+- **Global Load Balancer** with health checks and automatic failover.
+- **Cloud DNS** for domain management (migrating from Route 53).
+- **Managed SSL Certificates** with auto-renewal.
+- **No Cold Starts** - Minimum instances ensure instant response (vs Lambda cold starts).
+
+**🔧 LEGACY: AWS Deployment (Current)**
 - Multi-Region Serverless Deployment with `us-east-1` as primary and `eu-west-1`, `ap-southeast-1` as secondary regions.
 - DynamoDB Global Tables for cross-region data replication.
 - Mobile App Distribution via Apple App Store and Google Play Store, with automated Capacitor build pipeline.
 - Development environment integrates Replit with AWS mock services and pure Lambda handler testing.
-- **Optimized Cold Start Performance** - Pure Lambda handlers eliminate framework initialization overhead, reducing cold start latency by ~200-400ms compared to Flask+Gunicorn setup.
 
 **CI/CD Pipeline:**
 - **Comprehensive Testing**: Integration tests with AWS LocalStack (DynamoDB, Bedrock, Secrets Manager)
@@ -73,25 +113,38 @@ Preferred communication style: Simple, everyday language.
 
 ### External Dependencies
 
-**AWS Services:**
+**🚀 NEW: GCP Services**
+- **Cloud Run:** Container-based compute with auto-scaling.
+- **Firestore:** Multi-region NoSQL database with automatic replication.
+- **Vertex AI:** Access to Gemini 2.5 Flash and Gemini Live API models.
+- **Cloud Functions:** Serverless functions for simple tasks.
+- **Secret Manager:** Encrypted secret storage with automatic replication.
+- **Cloud Build:** Container image building and deployment.
+- **Cloud Storage:** Object storage for static assets.
+- **Cloud CDN:** Content Delivery Network integrated with Load Balancer.
+- **Cloud DNS:** Managed DNS service (migrating from Route 53).
+- **Cloud Logging & Monitoring:** Observability and alerting.
+- **Cloud Natural Language API:** Content moderation and sentiment analysis.
+- **SendGrid (via API):** Email delivery service.
+
+**🔧 LEGACY: AWS Services (Current - Will be Decommissioned)**
 - **Lambda:** Serverless compute.
 - **DynamoDB Global Tables:** Data storage and replication.
-- **ElastiCache Redis:** Session storage and real-time data.
 - **Bedrock:** Access to Nova Sonic and Nova Micro models.
 - **API Gateway:** REST and WebSocket API management.
 - **SES:** Email services.
-- **Comprehend:** Content safety integration.
 - **CloudFront:** Content Delivery Network.
 - **Route 53:** DNS management.
-- **Certificate Manager:** SSL/TLS certificates.
 
-**Third-Party Integrations:**
+**Third-Party Integrations (Unchanged):**
 - **Apple App Store:** In-app purchase processing and receipt validation.
 - **Google Play Store:** Android purchase verification.
 - **Capacitor:** Mobile app framework for native device access.
 - **Google reCAPTCHA:** Bot detection and security.
 
 **Development Tools:**
-- **Serverless Framework:** Infrastructure as Code.
-- **SAM CLI:** Local Lambda development and testing.
-- **AWS CLI:** Resource management.
+- **🚀 NEW: Terraform** - Infrastructure as Code for GCP.
+- **🚀 NEW: gcloud CLI** - GCP resource management.
+- **Docker** - Container image building for Cloud Run.
+- **🔧 LEGACY: Serverless Framework** - AWS infrastructure (will be removed).
+- **🔧 LEGACY: AWS CLI** - AWS resource management (will be removed).
