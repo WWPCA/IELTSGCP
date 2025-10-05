@@ -35,6 +35,28 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- IELTS Assessment Structure Information -->
+  <url>
+    <loc>https://www.ieltsgenaiprep.com/assessment-structure</loc>
+    <lastmod>2025-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.ieltsgenaiprep.com/assessment-structure/academic</loc>
+    <lastmod>2025-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://www.ieltsgenaiprep.com/assessment-structure/general_training</loc>
+    <lastmod>2025-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Information Pages -->
   <url>
     <loc>https://www.ieltsgenaiprep.com/about</loc>
