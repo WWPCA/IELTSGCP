@@ -1,6 +1,6 @@
 """
-IELTS GenAI Prep - Production Flask Application
-Uses AWS DynamoDB for data storage with fallback to mock services for development
+IELTS GenAI Prep - GCP Cloud Run Production Application
+Uses GCP Firestore for data storage, Gemini for AI assessments, SendGrid for email
 """
 
 from flask import Flask, send_from_directory, render_template, request, jsonify, redirect, url_for, session, flash
@@ -14,7 +14,7 @@ import secrets
 import hashlib
 from datetime import datetime, timedelta
 import os
-import boto3
+import sys
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -52,23 +52,35 @@ def add_no_cache_headers(response):
         response.headers['Expires'] = '-1'
     return response
 
-# Initialize AWS DynamoDB connections with fallback to mock for development
+# Initialize GCP Firestore connections
 try:
-    # Try to use production DynamoDB
-    from dynamodb_dal import DynamoDBConnection, UserDAL
-    region = os.environ.get('AWS_REGION', 'us-east-1')
-    db_connection = DynamoDBConnection(region=region)
+    # Add parent directory to path for imports
+    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    sys.path.insert(0, parent_dir)
+    
+    from firestore_dal import FirestoreConnection, UserDAL
+    from gemini_live_service import GeminiLiveService
+    from gemini_service import GeminiService
+    
+    project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+    environment = os.environ.get('ENVIRONMENT', 'production')
+    db_connection = FirestoreConnection(project_id=project_id, environment=environment)
     user_dal = UserDAL(db_connection)
     
-    print(f"[PRODUCTION] Connected to DynamoDB in region: {region}")
+    # Initialize Gemini services
+    gemini_live = GeminiLiveService(project_id=project_id)
+    gemini_service = GeminiService(project_id=project_id)
+    
+    print(f"[GCP] Connected to Firestore - project: {project_id}, env: {environment}")
+    print(f"[GCP] Gemini services initialized")
     use_production = True
     
 except Exception as e:
-    print(f"[INFO] DynamoDB unavailable, using mock services: {e}")
-    # Fallback to mock services for development
-    from aws_mock_config import aws_mock
-    db_connection = aws_mock
+    print(f"[INFO] GCP services unavailable, using mock: {e}")
+    db_connection = None
     user_dal = None
+    gemini_live = None
+    gemini_service = None
     use_production = False
 
 # Always initialize mock storage variables (ensures they exist even if DynamoDB works)
@@ -622,7 +634,7 @@ def generate_reset_token(email: str) -> str:
     return token
 
 def send_password_reset_email(email: str, reset_token: str) -> bool:
-    """Send password reset email using AWS SES"""
+    """Send password reset email using SendGrid"""
     try:
         # Check if running in development mode
         if os.environ.get('REPLIT_ENVIRONMENT') == 'true':
@@ -632,13 +644,14 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             print(f"[DEV_MODE] Reset link: {reset_link}")
             return True
         
-        # Production mode - use AWS SES
-        ses_client = boto3.client(
-            'ses',
-            region_name=os.environ.get('AWS_REGION', 'us-east-1'),
-            aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY')
-        )
+        # Production mode - use SendGrid
+        from sendgrid import SendGridAPIClient
+        from sendgrid.helpers.mail import Mail
+        
+        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
+        if not sendgrid_api_key:
+            print("[ERROR] SENDGRID_API_KEY not configured")
+            return False
         
         # Build reset link
         base_url = os.environ.get('DOMAIN_URL', 'https://ieltsaiprep.com')
@@ -729,20 +742,19 @@ The IELTS GenAI Prep Team
 © 2025 IELTS GenAI Prep. All rights reserved.
         """
         
-        # Send email via AWS SES
-        response = ses_client.send_email(
-            Source='noreply@ieltsaiprep.com',
-            Destination={'ToAddresses': [email]},
-            Message={
-                'Subject': {'Data': subject, 'Charset': 'UTF-8'},
-                'Body': {
-                    'Html': {'Data': html_body, 'Charset': 'UTF-8'},
-                    'Text': {'Data': text_body, 'Charset': 'UTF-8'}
-                }
-            }
+        # Send email via SendGrid
+        message = Mail(
+            from_email='noreply@ieltsaiprep.com',
+            to_emails=email,
+            subject=subject,
+            html_content=html_body
         )
+        message.add_content(text_body, 'text/plain')
         
-        print(f"[SES] Password reset email sent to {email}: {response['MessageId']}")
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
+        
+        print(f"[SendGrid] Password reset email sent to {email}: Status {response.status_code}")
         return True
         
     except Exception as e:
