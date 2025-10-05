@@ -13,6 +13,22 @@ import os
 
 logger = logging.getLogger(__name__)
 
+# Product configuration - number of assessments per purchase
+# Updated pricing: 2 assessments per purchase (previously 4)
+PRODUCT_ASSESSMENTS = {
+    'com.ieltsaiprep.academic.writing': 2,
+    'com.ieltsaiprep.general.writing': 2,
+    'com.ieltsaiprep.academic.speaking': 2,
+    'com.ieltsaiprep.general.speaking': 2,
+    'com.ieltsaiprep.academic.mocktest': 2,
+    'com.ieltsaiprep.general.mocktest': 2,
+    # Legacy product IDs
+    'academic_writing': 2,
+    'general_writing': 2,
+    'academic_speaking': 2,
+    'general_speaking': 2,
+}
+
 
 class FirestoreConnection:
     """Manages Firestore connection with multi-region support"""
@@ -401,6 +417,9 @@ class EntitlementDAL:
         """Create entitlement from purchase"""
         entitlement_id = f"ent_{secrets.token_urlsafe(16)}"
         
+        # Get assessment count for this product (default to 2)
+        assessments_remaining = PRODUCT_ASSESSMENTS.get(product_id, 2)
+        
         entitlement = {
             'entitlement_id': entitlement_id,
             'user_id': user_id,
@@ -408,11 +427,15 @@ class EntitlementDAL:
             'platform': platform,
             'receipt_data': receipt_data,
             'status': 'active',
+            'assessments_total': assessments_remaining,
+            'assessments_remaining': assessments_remaining,
+            'assessments_used': 0,
             'created_at': datetime.utcnow(),
             'expires_at': None  # For consumable products
         }
         
         self.collection.document(entitlement_id).set(entitlement)
+        logger.info(f"Created entitlement {entitlement_id} for {user_id}: {product_id} with {assessments_remaining} assessments")
         return entitlement_id
     
     def get_user_entitlements(self, user_id: str) -> List[Dict[str, Any]]:
@@ -429,8 +452,44 @@ class EntitlementDAL:
             logger.error(f"Failed to get entitlements for user {user_id}: {e}")
             return []
     
+    def consume_assessment(self, entitlement_id: str) -> bool:
+        """Consume one assessment from entitlement"""
+        try:
+            doc = self.collection.document(entitlement_id).get()
+            if not doc.exists:
+                return False
+            
+            entitlement = doc.to_dict()
+            remaining = entitlement.get('assessments_remaining', 0)
+            
+            if remaining <= 0:
+                return False
+            
+            # Decrement remaining, increment used
+            new_remaining = remaining - 1
+            new_used = entitlement.get('assessments_used', 0) + 1
+            
+            updates = {
+                'assessments_remaining': new_remaining,
+                'assessments_used': new_used,
+                'last_used_at': datetime.utcnow()
+            }
+            
+            # Mark as fully consumed if no assessments remaining
+            if new_remaining == 0:
+                updates['status'] = 'consumed'
+                updates['consumed_at'] = datetime.utcnow()
+            
+            self.collection.document(entitlement_id).update(updates)
+            logger.info(f"Consumed assessment from {entitlement_id}: {new_used}/{entitlement.get('assessments_total', 2)} used")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Failed to consume assessment from {entitlement_id}: {e}")
+            return False
+    
     def consume_entitlement(self, entitlement_id: str) -> bool:
-        """Mark entitlement as consumed"""
+        """Mark entire entitlement as consumed (legacy compatibility)"""
         try:
             self.collection.document(entitlement_id).update({
                 'status': 'consumed',

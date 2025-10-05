@@ -181,10 +181,26 @@ def validate_google_receipt(purchase_token: str, product_id: str) -> Dict[str, A
 
 
 def store_entitlement(user_id: str, product_id: str, platform: str, receipt_info: Dict) -> str:
-    """Store validated entitlement in Firestore"""
+    """Store validated entitlement in Firestore with assessment count"""
     import secrets
     
+    # Product assessment count mapping (2 assessments per purchase)
+    product_assessments = {
+        'com.ieltsaiprep.academic.writing': 2,
+        'com.ieltsaiprep.general.writing': 2,
+        'com.ieltsaiprep.academic.speaking': 2,
+        'com.ieltsaiprep.general.speaking': 2,
+        'com.ieltsaiprep.academic.mocktest': 2,
+        'com.ieltsaiprep.general.mocktest': 2,
+        # Legacy product IDs
+        'academic_writing': 2,
+        'general_writing': 2,
+        'academic_speaking': 2,
+        'general_speaking': 2,
+    }
+    
     entitlement_id = f"ent_{secrets.token_urlsafe(16)}"
+    assessments_count = product_assessments.get(product_id, 2)
     
     entitlement_data = {
         'entitlement_id': entitlement_id,
@@ -193,6 +209,9 @@ def store_entitlement(user_id: str, product_id: str, platform: str, receipt_info
         'platform': platform,
         'receipt_data': receipt_info,
         'status': 'active',
+        'assessments_total': assessments_count,
+        'assessments_remaining': assessments_count,
+        'assessments_used': 0,
         'created_at': datetime.utcnow(),
         'consumed': False
     }
