@@ -546,13 +546,72 @@ def register():
                         <h2 class="mb-3">Registration Available in App Only</h2>
                         <p class="lead mb-4">Create your IELTS GenAI Prep account exclusively through our mobile app for the best experience.</p>
                         <div class="d-grid gap-2">
-                            <a href="/qr-auth" class="btn btn-primary btn-lg">
+                            <a href="/download" class="btn btn-primary btn-lg">
                                 <i class="fas fa-download me-2"></i>Download App & Register
                             </a>
                             <a href="/login" class="btn btn-outline-secondary">
                                 <i class="fas fa-sign-in-alt me-2"></i>Back to Login
                             </a>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    '''
+
+@app.route('/download')
+def download():
+    """App download page with links to app stores"""
+    return '''
+    <html>
+    <head>
+        <title>Download IELTS GenAI Prep App</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" rel="stylesheet">
+        <style>
+            .store-badge {
+                display: inline-block;
+                transition: transform 0.2s;
+            }
+            .store-badge:hover {
+                transform: scale(1.05);
+            }
+        </style>
+    </head>
+    <body class="bg-light">
+        <div class="container-fluid vh-100 d-flex align-items-center justify-content-center">
+            <div class="text-center">
+                <div class="card shadow-lg border-0" style="max-width: 600px;">
+                    <div class="card-body p-5">
+                        <i class="fas fa-mobile-alt fa-4x text-primary mb-4"></i>
+                        <h2 class="mb-3">Download IELTS GenAI Prep</h2>
+                        <p class="lead mb-4">Get started with AI-powered IELTS preparation. Download our mobile app from your preferred store.</p>
+                        
+                        <div class="d-flex flex-column gap-3 mb-4">
+                            <a href="https://apps.apple.com/app/ielts-genai-prep" target="_blank" class="store-badge">
+                                <img src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" 
+                                     alt="Download on the App Store" 
+                                     style="height: 60px;">
+                            </a>
+                            <a href="https://play.google.com/store/apps/details?id=com.ieltsgenaiprep" target="_blank" class="store-badge">
+                                <img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" 
+                                     alt="Get it on Google Play" 
+                                     style="height: 90px;">
+                            </a>
+                        </div>
+                        
+                        <div class="alert alert-info mb-4">
+                            <i class="fas fa-info-circle me-2"></i>
+                            <strong>Note:</strong> Registration and purchases are available exclusively through the mobile app.
+                        </div>
+                        
+                        <a href="/login" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-2"></i>Back to Login
+                        </a>
                     </div>
                 </div>
             </div>
