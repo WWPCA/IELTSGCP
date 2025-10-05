@@ -722,7 +722,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         reset_link = f"{base_url}/reset_password?token={reset_token}"
         username = email.split('@')[0].title()
         
-        subject = "IELTS GenAI Prep - Password Reset Request"
+        subject = "IELTS AI Prep - Password Reset Request"
         
         # Professional HTML email template matching new IELTS.org-inspired branding
         html_body = f"""
@@ -730,13 +730,13 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         <html>
         <head>
             <meta charset="UTF-8">
-            <title>Password Reset - IELTS GenAI Prep</title>
+            <title>Password Reset - IELTS AI Prep</title>
         </head>
         <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5;">
             <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
                 <!-- Header -->
                 <div style="background: #ffffff; text-align: center; padding: 30px 20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #E33219;">
-                    <h1 style="color: #E33219; margin: 0 0 10px 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">IELTS GenAI Prep</h1>
+                    <h1 style="color: #E33219; margin: 0 0 10px 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">IELTS AI Prep</h1>
                     <p style="color: #666; margin: 0; font-size: 14px;">Your Personalized Path to IELTS Success</p>
                 </div>
                 
@@ -746,7 +746,7 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
                     
                     <p style="margin-bottom: 20px; color: #333;">Hello {username},</p>
                     
-                    <p style="margin-bottom: 25px; color: #333;">We received a request to reset your password for your IELTS GenAI Prep account. 
+                    <p style="margin-bottom: 25px; color: #333;">We received a request to reset your password for your IELTS AI Prep account. 
                     If you made this request, please click the button below to reset your password:</p>
                     
                     <div style="text-align: center; margin: 35px 0;">
@@ -774,8 +774,8 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
                     
                     <div style="text-align: center; margin-top: 35px;">
                         <p style="margin-bottom: 5px; font-weight: 600; color: #1a1a1a;">Best regards,</p>
-                        <p style="margin-bottom: 15px; color: #333;">The IELTS GenAI Prep Team</p>
-                        <p style="font-size: 12px; color: #999;">© 2025 IELTS GenAI Prep. All rights reserved.</p>
+                        <p style="margin-bottom: 15px; color: #333;">The IELTS AI Prep Team</p>
+                        <p style="font-size: 12px; color: #999;">© 2025 IELTS AI Prep. All rights reserved.</p>
                     </div>
                 </div>
             </div>
@@ -785,11 +785,11 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
         
         # Text version for email clients that don't support HTML
         text_body = f"""
-IELTS GenAI Prep - Password Reset Request
+IELTS AI Prep - Password Reset Request
 
 Hello {username},
 
-We received a request to reset your password for your IELTS GenAI Prep account.
+We received a request to reset your password for your IELTS AI Prep account.
 
 If you made this request, please copy and paste the following link into your browser to reset your password:
 
@@ -800,9 +800,9 @@ This link will expire in 1 hour for security reasons.
 If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
 
 Best regards,
-The IELTS GenAI Prep Team
+The IELTS AI Prep Team
 
-© 2025 IELTS GenAI Prep. All rights reserved.
+© 2025 IELTS AI Prep. All rights reserved.
         """
         
         # Send email via SendGrid
