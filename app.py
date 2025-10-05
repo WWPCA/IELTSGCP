@@ -233,8 +233,13 @@ def home():
     class AnonymousUser:
         is_authenticated = False
         email = None
-    # Serve the updated index.html template
-    return render_template('index.html', current_user=AnonymousUser())
+    # Serve the working template with updated products
+    try:
+        with open('working_template.html', 'r') as f:
+            content = f.read()
+        return content
+    except FileNotFoundError:
+        return render_template('index.html', current_user=AnonymousUser())
 
 @app.route('/original-home')
 def original_home():
