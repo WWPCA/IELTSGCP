@@ -4,6 +4,7 @@ Uses GCP Firestore for data storage with fallback to mock services for developme
 """
 
 from flask import Flask, send_from_directory, render_template, request, jsonify, redirect, url_for, session, flash
+from flask_login import LoginManager, UserMixin, login_user, logout_user, login_required, current_user
 import json
 import uuid
 import time
@@ -33,6 +34,24 @@ app.secret_key = os.environ.get("SESSION_SECRET")
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 app.jinja_env.globals['csrf_token'] = csrf_token
 app.jinja_env.globals['config'] = ProductionConfig()
+
+# Initialize Flask-Login
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+# User class for Flask-Login
+class User(UserMixin):
+    def __init__(self, user_id, email=None):
+        self.id = user_id
+        self.email = email
+
+@login_manager.user_loader
+def load_user(user_id):
+    """Load user from session - minimal implementation for template compatibility"""
+    # Return None for now since we're using session-based auth
+    # This makes current_user available in templates but always anonymous
+    return None
 
 # Kill caching for development
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
