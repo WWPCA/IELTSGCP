@@ -1610,6 +1610,51 @@ def sitemap_xml():
     """Serve sitemap.xml for search engine and AI crawler discovery"""
     return send_from_directory('.', 'sitemap.xml')
 
+@app.route('/helpdesk-dashboard')
+def helpdesk_dashboard():
+    """
+    Helpdesk dashboard for viewing AI ticket analysis
+    Demo version - shows how the AI helpdesk system works
+    """
+    from helpdesk_service import analyze_ticket_with_ai
+    
+    # Sample tickets for demonstration
+    sample_tickets = [
+        {
+            'ticket_id': 'DEMO-001',
+            'user_email': 'user@example.com',
+            'subject': 'I want a refund for my assessment',
+            'body': 'I took the speaking test but got a lower score than I expected. I want my money back.',
+            'timestamp': datetime.utcnow().isoformat()
+        },
+        {
+            'ticket_id': 'DEMO-002',
+            'user_email': 'student@example.com',
+            'subject': 'Cannot login to my account',
+            'body': 'I keep trying to login but it says my password is wrong. I have tried resetting it but the email never arrives.',
+            'timestamp': datetime.utcnow().isoformat()
+        },
+        {
+            'ticket_id': 'DEMO-003',
+            'user_email': 'learner@example.com',
+            'subject': 'My purchase is not showing',
+            'body': 'I just bought the speaking assessment package from the app store but it is not appearing in my account.',
+            'timestamp': datetime.utcnow().isoformat()
+        }
+    ]
+    
+    # Analyze each ticket with AI
+    analyzed_tickets = []
+    for ticket in sample_tickets:
+        ai_response = analyze_ticket_with_ai(ticket['subject'], ticket['body'])
+        analyzed_tickets.append({
+            'ticket': ticket,
+            'ai_analysis': ai_response
+        })
+    
+    escalation_email = os.environ.get('HELPDESK_ESCALATION_EMAIL', 'worldwidepublishingco@gmail.com')
+    return render_template('helpdesk_dashboard.html', tickets=analyzed_tickets, escalation_email=escalation_email)
+
 @app.route('/static/<path:filename>')
 def static_files(filename):
     """Serve static files"""
