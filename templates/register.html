@@ -124,7 +124,7 @@
             <div class="form-section">
                 <div class="section-title">
                     <i class="fas fa-check-circle"></i>
-                    Legal Agreements
+                    Legal Agreements & AI Assessment Disclaimer
                 </div>
                 
                 <div class="form-check mb-3">
@@ -139,6 +139,39 @@
                     <label class="form-check-label" for="agree_terms">
                         I agree to the <a href="{{ url_for('terms_and_payment') }}" target="_blank">Terms of Service</a> and <a href="{{ url_for('privacy_policy') }}" target="_blank">Privacy Policy</a> *
                     </label>
+                </div>
+                
+                <!-- AI Assessment Disclaimers -->
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #E33219; margin: 20px 0;">
+                    <p style="margin: 0 0 10px 0; color: #856404; font-weight: 600;">⚠️ AI PRACTICE TOOL DISCLAIMER</p>
+                    
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="ai_practice_understanding" name="ai_practice_understanding" required>
+                        <label class="form-check-label" for="ai_practice_understanding" style="font-size: 0.9rem;">
+                            I understand this is an AI practice tool, NOT official IELTS assessment *
+                        </label>
+                    </div>
+                    
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="ai_scores_final" name="ai_scores_final" required>
+                        <label class="form-check-label" for="ai_scores_final" style="font-size: 0.9rem;">
+                            I accept that all AI scores and feedback are final and not subject to human review or appeal *
+                        </label>
+                    </div>
+                    
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="checkbox" id="no_score_disputes" name="no_score_disputes" required>
+                        <label class="form-check-label" for="no_score_disputes" style="font-size: 0.9rem;">
+                            I will not dispute scores based on disagreement with the assessment *
+                        </label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="waive_accuracy_claims" name="waive_accuracy_claims" required>
+                        <label class="form-check-label" for="waive_accuracy_claims" style="font-size: 0.9rem;">
+                            I waive claims related to score accuracy or correlation with official IELTS results *
+                        </label>
+                    </div>
                 </div>
             </div>
 
