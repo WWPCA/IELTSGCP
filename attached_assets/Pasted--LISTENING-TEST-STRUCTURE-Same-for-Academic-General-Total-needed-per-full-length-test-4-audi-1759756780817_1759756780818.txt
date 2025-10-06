@@ -1,0 +1,82 @@
+📻 LISTENING TEST STRUCTURE (Same for Academic & General)
+Total needed per full-length test: 4 audio files
+
+Audio File Requirements:
+Format: MP3 files
+Total duration: ~30 minutes of audio content
+Quality: Clear audio with mixed English accents (British, American, Australian)
+Playback: Single play-through only (no repeats in actual test)
+
+4 Section Breakdown:
+File Name	Section	Format	Context	Duration	Content
+listening_section1.mp3	Section 1	2-person conversation	Everyday social	~5-7 min	Travel arrangements, booking accommodation, everyday conversations
+listening_section2.mp3	Section 2	1-person monologue	Everyday social	~5-7 min	Speech about local facilities, presentations on general topics
+listening_section3.mp3	Section 3	2-4 person conversation	Educational/training	~5-7 min	University students discussing with tutor
+listening_section4.mp3	Section 4	1-person monologue	Academic	~5-7 min	Academic lecture on scholarly subject (most difficult)
+Questions: 10 questions per section (40 total)
+Difficulty: Progresses from easiest (Section 1) to hardest (Section 4)
+
+📖 READING TEST STRUCTURE
+Total needed: Different for Academic vs General Training
+
+ACADEMIC READING (3 files)
+Format: Text documents (PDF, TXT, or HTML)
+Total word count: 2,150–2,750 words
+Duration: 60 minutes
+
+File Name	Section	Content Type	Word Count	Questions
+reading_academic_passage1.txt	Section 1	Long passage (factual)	700-900 words	13-14 questions
+reading_academic_passage2.txt	Section 2	Long passage (descriptive)	700-900 words	13-14 questions
+reading_academic_passage3.txt	Section 3	Long passage (analytical)	750-950 words	12-13 questions
+Content source: Academic journals, textbooks, scholarly articles, newspapers
+Topics: Undergraduate/postgraduate level subjects
+
+GENERAL TRAINING READING (5-7 files)
+Format: Text documents (PDF, TXT, or HTML)
+Total word count: 2,150–2,750 words
+Duration: 60 minutes
+
+File Name	Section	Content Type	Word Count	Questions
+reading_general_section1_text1.txt	Section 1	Short text (notices, ads)	200-300 words	3-4 questions
+reading_general_section1_text2.txt	Section 1	Short text (timetables, info)	200-300 words	3-4 questions
+reading_general_section1_text3.txt	Section 1	Short text (everyday topics)	200-300 words	3-4 questions
+reading_general_section2_text1.txt	Section 2	Work context (job descriptions)	400-500 words	6-7 questions
+reading_general_section2_text2.txt	Section 2	Work context (training materials)	400-500 words	6-7 questions
+reading_general_section3.txt	Section 3	Long text (general interest article)	750-900 words	13-14 questions
+Content focus:
+
+Section 1: Everyday/social survival (notices, ads, timetables)
+Section 2: Workplace context (contracts, training)
+Section 3: General interest (newspaper/magazine style)
+📝 FILE NAMING CONVENTION
+For Test 1 (Academic):
+
+test1_academic_listening_section1.mp3
+test1_academic_listening_section2.mp3
+test1_academic_listening_section3.mp3
+test1_academic_listening_section4.mp3
+test1_academic_reading_passage1.txt
+test1_academic_reading_passage2.txt
+test1_academic_reading_passage3.txt
+For Test 1 (General Training):
+
+test1_general_listening_section1.mp3 (same as academic)
+test1_general_listening_section2.mp3 (same as academic)
+test1_general_listening_section3.mp3 (same as academic)
+test1_general_listening_section4.mp3 (same as academic)
+test1_general_reading_section1_text1.txt
+test1_general_reading_section1_text2.txt
+test1_general_reading_section1_text3.txt
+test1_general_reading_section2_text1.txt
+test1_general_reading_section2_text2.txt
+test1_general_reading_section3.txt
+SUMMARY: What You Need to Create
+For 2 full-length mock tests (your $99 product):
+
+✅ 8 listening audio files (4 per test × 2 tests) - Same for both Academic and General
+✅ 6 academic reading text files (3 per test × 2 tests)
+✅ 12 general training reading text files (6 per test × 2 tests)
+
+Total: 8 audio files + 18 text files
+
+Once you share these files with me, I'll integrate them into the full-length test templates! 🎯
