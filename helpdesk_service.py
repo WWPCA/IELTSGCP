@@ -11,6 +11,14 @@ from sendgrid.helpers.mail import Mail
 from datetime import datetime
 from ai_helpdesk_knowledge_base import get_ai_response_guidelines
 
+try:
+    from google import genai
+    from google.genai import types
+    GEMINI_AVAILABLE = True
+except ImportError:
+    GEMINI_AVAILABLE = False
+    print("[WARN] Google Gemini SDK not available - using fallback responses")
+
 
 def send_helpdesk_auto_reply(user_email: str, user_name: str = None) -> bool:
     """
@@ -287,12 +295,38 @@ IMPORTANT RULES:
 - For technical issues: Provide step-by-step troubleshooting
 - Escalate if: legal/compliance matters, complex complaints, uncertain about answer"""
 
-        # TODO: Call Gemini 2.5 Flash API here
-        # For now, return a template response
-        print(f"[AI_HELPDESK] Would analyze ticket with Gemini API")
-        print(f"[AI_HELPDESK] Subject: {ticket_subject}")
+        # Try Gemini AI first, fallback to rule-based if unavailable
+        if GEMINI_AVAILABLE:
+            try:
+                # Initialize Gemini client
+                project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+                if project_id:
+                    os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
+                    os.environ['GOOGLE_CLOUD_LOCATION'] = 'us-central1'
+                    client = genai.Client()
+                else:
+                    client = genai.Client(api_key=gemini_api_key)
+                
+                # Call Gemini 2.5 Flash API
+                response = client.models.generate_content(
+                    model='gemini-2.5-flash',
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        response_mime_type='application/json',
+                        temperature=0.7,
+                        max_output_tokens=1024
+                    )
+                )
+                
+                result = json.loads(response.text)
+                print(f"[AI_HELPDESK] Gemini analyzed ticket: {result.get('category', 'unknown')}")
+                return result
+                
+            except Exception as e:
+                print(f"[WARN] Gemini API call failed, using fallback: {str(e)}")
         
-        # Simple rule-based categorization for now
+        # Fallback: Simple rule-based categorization
+        print(f"[AI_HELPDESK] Using fallback rule-based analysis")
         subject_lower = ticket_subject.lower()
         body_lower = ticket_body.lower()
         
@@ -411,3 +445,137 @@ Let me address your inquiry..."""
     }
     
     return responses.get(category, "I've received your message and I'm here to help. Let me look into this for you.")
+
+
+def send_escalation_email(ticket_data: dict, ai_analysis: dict) -> bool:
+    """
+    Send escalation email to human support team when AI cannot handle ticket
+    
+    Args:
+        ticket_data: Original ticket information
+        ai_analysis: AI analysis results
+    
+    Returns:
+        bool: True if email sent successfully
+    """
+    try:
+        # Check if running in development mode
+        if os.environ.get('REPLIT_ENVIRONMENT') == 'true':
+            print(f"[DEV_MODE] Escalation email would be sent for ticket: {ticket_data.get('ticket_id')}")
+            return True
+        
+        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
+        escalation_email = os.environ.get('HELPDESK_ESCALATION_EMAIL')
+        
+        if not sendgrid_api_key or not escalation_email:
+            print("[ERROR] SendGrid or escalation email not configured")
+            return False
+        
+        ticket_id = ticket_data.get('ticket_id', 'UNKNOWN')
+        user_email = ticket_data.get('user_email', 'unknown@example.com')
+        subject = ticket_data.get('subject', 'No Subject')
+        body = ticket_data.get('body', 'No content')
+        category = ai_analysis.get('category', 'unknown')
+        escalation_reason = ai_analysis.get('escalation_reason', 'AI unable to handle')
+        
+        email_subject = f"[ESCALATION] IELTS AI Prep Support - {ticket_id}"
+        
+        html_body = f"""
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Support Escalation - {ticket_id}</title>
+        </head>
+        <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 800px; margin: 0 auto; padding: 20px;">
+            <div style="background: #E33219; color: white; padding: 20px; border-radius: 8px 8px 0 0;">
+                <h1 style="margin: 0; font-size: 24px;">⚠️ Support Ticket Escalation</h1>
+            </div>
+            
+            <div style="background: #f8f9fa; padding: 20px; border-radius: 0 0 8px 8px;">
+                <h2 style="color: #E33219; margin-top: 0;">Ticket Details</h2>
+                <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+                    <tr style="background: white;">
+                        <td style="padding: 10px; font-weight: bold; border: 1px solid #dee2e6;">Ticket ID:</td>
+                        <td style="padding: 10px; border: 1px solid #dee2e6;">{ticket_id}</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 10px; font-weight: bold; border: 1px solid #dee2e6;">User Email:</td>
+                        <td style="padding: 10px; border: 1px solid #dee2e6;">{user_email}</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 10px; font-weight: bold; border: 1px solid #dee2e6;">Category:</td>
+                        <td style="padding: 10px; border: 1px solid #dee2e6;">{category}</td>
+                    </tr>
+                    <tr style="background: white;">
+                        <td style="padding: 10px; font-weight: bold; border: 1px solid #dee2e6;">Timestamp:</td>
+                        <td style="padding: 10px; border: 1px solid #dee2e6;">{ticket_data.get('timestamp', 'N/A')}</td>
+                    </tr>
+                </table>
+                
+                <h3 style="color: #E33219;">Escalation Reason</h3>
+                <div style="background: #fff3cd; padding: 15px; border-left: 4px solid #E33219; margin-bottom: 20px;">
+                    <p style="margin: 0; color: #856404;"><strong>{escalation_reason}</strong></p>
+                </div>
+                
+                <h3 style="color: #E33219;">Original Message</h3>
+                <div style="background: white; padding: 15px; border: 1px solid #dee2e6; border-radius: 4px; margin-bottom: 20px;">
+                    <p style="margin: 0 0 10px 0;"><strong>Subject:</strong> {subject}</p>
+                    <p style="margin: 0; white-space: pre-wrap;">{body}</p>
+                </div>
+                
+                <h3 style="color: #E33219;">AI-Suggested Response (Review Before Sending)</h3>
+                <div style="background: white; padding: 15px; border: 1px solid #dee2e6; border-radius: 4px;">
+                    <p style="margin: 0; white-space: pre-wrap;">{ai_analysis.get('suggested_response', 'No response generated')}</p>
+                </div>
+                
+                <div style="margin-top: 30px; padding-top: 20px; border-top: 2px solid #dee2e6;">
+                    <p style="color: #666; font-size: 14px; margin: 0;">
+                        <strong>Action Required:</strong> Please review this ticket and respond to the user at {user_email} within 5-7 business days.
+                    </p>
+                </div>
+            </div>
+        </body>
+        </html>
+        """
+        
+        text_body = f"""
+SUPPORT TICKET ESCALATION
+
+Ticket ID: {ticket_id}
+User Email: {user_email}
+Category: {category}
+Timestamp: {ticket_data.get('timestamp', 'N/A')}
+
+ESCALATION REASON:
+{escalation_reason}
+
+ORIGINAL MESSAGE:
+Subject: {subject}
+
+{body}
+
+AI-SUGGESTED RESPONSE (Review before sending):
+{ai_analysis.get('suggested_response', 'No response generated')}
+
+---
+Action Required: Please review this ticket and respond to the user at {user_email} within 5-7 business days.
+        """
+        
+        message = Mail(
+            from_email='helpdesk@ieltsaiprep.com',
+            to_emails=escalation_email,
+            subject=email_subject,
+            html_content=html_body
+        )
+        message.add_content(text_body, 'text/plain')
+        
+        sg = SendGridAPIClient(sendgrid_api_key)
+        response = sg.send(message)
+        
+        print(f"[SendGrid] Escalation email sent for {ticket_id}: Status {response.status_code}")
+        return True
+        
+    except Exception as e:
+        print(f"[ERROR] Failed to send escalation email: {str(e)}")
+        return False
