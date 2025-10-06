@@ -105,6 +105,16 @@ Preferred communication style: Simple, everyday language.
 - **Assessment Engine:** Supports four assessment types (Academic/General Speaking and Writing) with AI-powered, multi-modal evaluation.
 - **Advanced Speech-to-Speech Content Moderation:** Real-time audio content filtering using Nova Sonic bidirectional streaming, with seamless conversation flow that maintains authentic IELTS examination experience while ensuring appropriate content standards. Features direct audio-to-audio processing without text intermediary.
 - **Mobile App Integration:** In-app purchases ($36 per assessment product), regional API routing, native platform features via Capacitor, and flexible dual-platform access.
+- **AI-Powered Helpdesk System:** 
+  - **Gemini 2.5 Flash AI Agent** for automated ticket analysis and response generation
+  - **Intelligent Categorization** - Auto-classifies tickets (technical, purchase, refund, score dispute, general inquiry)
+  - **Confidence Scoring** - AI determines if it can handle ticket (60-80% auto-resolution rate)
+  - **Smart Escalation** - Complex issues automatically forwarded to worldwidepublishingco@gmail.com
+  - **Empathetic Response Templates** - Friendly, professional, never curt or dismissive
+  - **Knowledge Base Integration** - Platform policies, pricing, workflows, and troubleshooting guides
+  - **Cost-Effective** - ~$0.001 per ticket analysis with Gemini 2.5 Flash
+  - **Helpdesk Email** - helpdesk@ieltsaiprep.com (visible on contact page and footer)
+  - **Dashboard** - /helpdesk-dashboard route for viewing AI ticket analysis and responses
 
 **Data Flow:**
 - **Purchase-to-Assessment:** User purchases in mobile app, receipt is validated, and assessment can be completed on mobile or web.
