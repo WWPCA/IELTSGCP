@@ -1629,12 +1629,40 @@ def sitemap_xml():
     """Serve sitemap.xml for search engine and AI crawler discovery"""
     return send_from_directory('.', 'sitemap.xml')
 
+@app.route('/helpdesk-login', methods=['GET', 'POST'])
+def helpdesk_login():
+    """Login page for helpdesk dashboard"""
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
+        
+        admin_email = 'worldwidepublishingco@gmail.com'
+        admin_password = os.environ.get('HELPDESK_ADMIN_PASSWORD')
+        
+        if email == admin_email and password == admin_password:
+            session['helpdesk_admin'] = True
+            return redirect(url_for('helpdesk_dashboard'))
+        else:
+            flash('Invalid credentials', 'danger')
+    
+    return render_template('helpdesk_login.html')
+
+@app.route('/helpdesk-logout')
+def helpdesk_logout():
+    """Logout from helpdesk dashboard"""
+    session.pop('helpdesk_admin', None)
+    return redirect(url_for('helpdesk_login'))
+
 @app.route('/helpdesk-dashboard')
 def helpdesk_dashboard():
     """
     Helpdesk dashboard for viewing AI ticket analysis
-    Demo version - shows how the AI helpdesk system works
+    Protected route - requires admin authentication
     """
+    # Check authentication
+    if not session.get('helpdesk_admin'):
+        return redirect(url_for('helpdesk_login'))
+    
     from helpdesk_service import analyze_ticket_with_ai
     
     # Sample tickets for demonstration
