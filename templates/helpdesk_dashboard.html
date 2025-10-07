@@ -146,7 +146,7 @@
         </div>
         <div class="stat-card">
             <div class="stat-value">{{ tickets|selectattr('ai_analysis.requires_human', 'equalto', false)|list|length }}</div>
-            <div class="stat-label">AI Handled</div>
+            <div class="stat-label">Auto-Resolved</div>
         </div>
         <div class="stat-card">
             <div class="stat-value">{{ tickets|selectattr('ai_analysis.requires_human', 'equalto', true)|list|length }}</div>
@@ -192,7 +192,7 @@
                     </span>
                     {% else %}
                     <span class="badge bg-success">
-                        <i class="fas fa-robot me-1"></i>AI Handled
+                        <i class="fas fa-check-circle me-1"></i>Auto-Resolved
                     </span>
                     {% endif %}
                 </div>
