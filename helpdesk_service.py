@@ -396,13 +396,7 @@ def _get_template_response(category: str, ticket_body: str) -> str:
 
 As per our Terms and Conditions (accepted at registration), all purchases are final and non-refundable. This policy was outlined before purchase completion.
 
-However, we can investigate if you experienced a technical failure:
-• System error preventing submission
-• Audio/text not recorded properly
-• Blank or incomplete feedback
-• Platform malfunction during assessment
-
-If you experienced a technical issue, please reply with specific details so I can escalate to our technical team.
+If you experienced a technical issue during your assessment, please provide specific details so we can investigate.
 
 Best regards,
 IELTS AI Prep Support""",
@@ -411,13 +405,7 @@ IELTS AI Prep Support""",
 
 All AI-generated scores are final. As stated in our Terms of Service (accepted at registration), we do not offer manual review, score reassessment, or score adjustments.
 
-However, we can investigate if you experienced a technical issue:
-• Audio cutting out or not recording
-• System errors or freezing
-• Incomplete or blank feedback
-• Platform malfunction during submission
-
-If you experienced a technical problem, please provide specific details so I can escalate to our technical team.
+If you experienced a technical issue during your assessment, please provide specific details so we can investigate.
 
 Best regards,
 IELTS AI Prep Support""",

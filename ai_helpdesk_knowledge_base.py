@@ -190,9 +190,9 @@ RESPONSE_TEMPLATES = {
     
     "technical_issue": "Thank you for reporting this technical issue.",
     
-    "refund_request_with_empathy": "As per our Terms and Conditions (accepted at registration), all purchases are final and non-refundable. However, we can investigate if you experienced a technical failure. Please provide specific details about any system errors or platform malfunctions.",
+    "refund_request_with_empathy": "As per our Terms and Conditions (accepted at registration), all purchases are final and non-refundable. If you experienced a technical issue during your assessment, please provide specific details so we can investigate.",
     
-    "score_dispute_with_empathy": "All AI-generated scores are final as stated in our Terms of Service. However, we can investigate if you experienced technical issues during your assessment (audio problems, system errors, etc.). Please provide specific details.",
+    "score_dispute_with_empathy": "All AI-generated scores are final as stated in our Terms of Service. If you experienced a technical issue during your assessment, please provide specific details so we can investigate.",
     
     "purchase_not_showing": "Receipt validation typically takes 1-2 minutes. Please refresh the page or logout/login. If the issue persists, reply with your receipt number and purchase email."
 }
