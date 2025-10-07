@@ -290,10 +290,19 @@ Respond in JSON format:
 IMPORTANT RULES:
 - Be warm, friendly, and empathetic - NEVER curt
 - Use simple, everyday language
-- For refunds: Show empathy, explain policy gently, offer technical support
-- For score disputes: Acknowledge frustration, explain AI limitations kindly, check for technical issues
-- For technical issues: Provide step-by-step troubleshooting
-- Escalate if: legal/compliance matters, complex complaints, uncertain about answer"""
+- For refunds WITHOUT technical issues: AI handles with policy response (requires_human=false)
+- For refunds WITH technical failures: Escalate for investigation (requires_human=true)
+- For score disputes WITHOUT technical issues: AI handles with policy response (requires_human=false)
+- For score disputes WITH technical failures: Escalate for investigation (requires_human=true)
+- For technical issues: Provide step-by-step troubleshooting (AI handles, requires_human=false)
+- Escalate ONLY if: legal/compliance matters, technical failures, complex complaints, uncertain about answer
+
+DECISION LOGIC:
+- Refund request + no technical issue = AI handles (requires_human=false)
+- Refund request + technical issue = Escalate (requires_human=true)
+- Score dispute + no technical issue = AI handles (requires_human=false)
+- Score dispute + technical issue = Escalate (requires_human=true)
+- Technical support = AI handles (requires_human=false)"""
 
         # Try Gemini AI first, fallback to rule-based if unavailable
         if GEMINI_AVAILABLE:
@@ -333,13 +342,17 @@ IMPORTANT RULES:
         if any(word in subject_lower + body_lower for word in ['refund', 'money back', 'cancel']):
             category = 'refund_request'
             confidence = 0.9
-            requires_human = True
-            escalation_reason = 'Refund requests require human review per policy'
+            # AI can handle with clear policy response - only escalate if technical failure mentioned
+            has_technical_issue = any(word in body_lower for word in ['error', 'crash', 'broken', 'not working', 'failed', 'malfunction', 'blank', 'incomplete'])
+            requires_human = has_technical_issue
+            escalation_reason = 'Possible technical failure - needs investigation' if has_technical_issue else ''
         elif any(word in subject_lower + body_lower for word in ['score', 'unfair', 'wrong', 'disagree']):
             category = 'score_dispute'
             confidence = 0.85
-            requires_human = True
-            escalation_reason = 'Score disputes may need technical investigation'
+            # AI can handle with policy response - only escalate if technical failure mentioned
+            has_technical_issue = any(word in body_lower for word in ['error', 'crash', 'broken', 'not working', 'failed', 'malfunction', 'blank', 'incomplete', 'froze', 'cut off'])
+            requires_human = has_technical_issue
+            escalation_reason = 'Possible technical failure during assessment - needs investigation' if has_technical_issue else ''
         elif any(word in subject_lower + body_lower for word in ['login', 'password', 'access', 'qr', 'technical', 'error', 'not working']):
             category = 'technical'
             confidence = 0.8
@@ -387,27 +400,31 @@ helpdesk@ieltsaiprep.com"""
 def _get_template_response(category: str, ticket_body: str) -> str:
     """Get appropriate template response based on ticket category"""
     responses = {
-        'refund_request': """I understand your frustration, and I genuinely want to help. Our policy states that all purchases are final and non-refundable, as outlined in our Terms of Service. 
+        'refund_request': """I understand your frustration, and I genuinely want to help. As per our Terms and Conditions, we maintain a strict no-refund policy for all purchases, which was clearly stated at the time of registration and before completing your purchase.
 
-However, if you experienced a technical failure during your assessment (such as system errors, audio not recording, or incomplete feedback), we can certainly look into that. Could you please describe what happened during your assessment?
-
-Technical issues we can help with:
-• System failure to process your submission
+This policy applies to all purchases unless you experienced a verified technical failure during your assessment. Technical failures that qualify for review include:
+• Complete system failure to process your submission
 • Audio/text not recorded due to platform malfunction
 • Blank feedback or incomplete scoring
+• Obvious system errors preventing proper assessment
 
-I'm here to ensure you get the support you deserve.""",
+If you experienced any of these technical issues, please reply with specific details about what happened, and I'll escalate this to our technical team for investigation. Otherwise, I'm here to help you make the most of your remaining assessments and support your IELTS preparation journey.
+
+Is there anything else I can help you with today?""",
         
         'score_dispute': """Thank you for sharing your concerns about your assessment results. I understand it can be disappointing when scores don't meet expectations, and I want to help clarify how our system works.
 
-Our AI assessment provides practice scores based on IELTS criteria. While these scores are final as generated by the AI system, I want to ensure you had a proper technical experience.
+Our AI assessment provides practice scores based on IELTS criteria, and all scores are final as generated by the AI system. As stated in our Terms of Service, we do not offer manual review, human reassessment, or score adjustments. This policy was clearly communicated at the time of registration.
 
-Were there any technical issues during your assessment, such as:
-• Audio problems or cutting out
-• System errors or freezing
-• Incomplete feedback display
+However, if you experienced any technical issues during your assessment that may have affected the quality of the evaluation, I want to investigate that immediately. Technical issues that warrant investigation include:
+• Audio problems (cutting out, not recording properly)
+• System errors or freezing during the assessment
+• Incomplete feedback or blank scoring
+• Platform malfunction preventing proper response submission
 
-If you experienced any technical difficulties, please let me know and I'll investigate right away.""",
+If you experienced any of these technical problems, please provide specific details, and I'll escalate this to our technical team. Otherwise, I encourage you to use your remaining assessments to continue improving your IELTS skills.
+
+How else can I support your preparation today?""",
         
         'technical': """I'm sorry to hear you're experiencing technical difficulties. Let's work together to resolve this.
 
