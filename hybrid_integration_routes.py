@@ -166,7 +166,7 @@ def start_speaking_assessment_route(app: Flask):
             
             # Format transcript for Nova Micro
             transcript_text = "\n".join([
-                f"{msg['role'].upper()}: {msg['content']}"
+                f"{msg.get('role', 'user').upper()}: {msg.get('content', msg.get('text', ''))}"
                 for msg in transcript
             ])
             
