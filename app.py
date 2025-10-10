@@ -1702,6 +1702,126 @@ def helpdesk_dashboard():
     escalation_email = os.environ.get('HELPDESK_ESCALATION_EMAIL', 'worldwidepublishingco@gmail.com')
     return render_template('helpdesk_dashboard.html', tickets=analyzed_tickets, escalation_email=escalation_email)
 
+# ===== GDPR Data Rights Routes =====
+
+@app.route('/gdpr/my-data')
+def gdpr_my_data():
+    """GDPR dashboard for data rights management"""
+    # Check if user is logged in
+    user_email = session.get('user_email')
+    if not user_email:
+        return redirect(url_for('login'))
+    
+    # Get user data
+    user_data = user_dal.get_user_by_email(user_email)
+    if not user_data:
+        flash('User not found', 'error')
+        return redirect(url_for('login'))
+    
+    return render_template('gdpr/my_data.html', user=user_data)
+
+@app.route('/gdpr/export-data', methods=['POST'])
+def gdpr_export_data():
+    """Export user data as JSON"""
+    user_email = session.get('user_email')
+    if not user_email:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Get user data
+    user_data = user_dal.get_user_by_email(user_email)
+    if not user_data:
+        return jsonify({'error': 'User not found'}), 404
+    
+    # Compile complete user data export (all personal data we hold)
+    export_data = {
+        'personal_information': {
+            'email': user_data.get('email'),
+            'username': user_data.get('username'),
+            'full_name': user_data.get('full_name'),
+            'user_id': user_data.get('user_id'),
+            'profile_picture': user_data.get('profile_picture'),
+            'bio': user_data.get('bio'),
+            'preferred_language': user_data.get('preferred_language')
+        },
+        'account_information': {
+            'join_date': user_data.get('join_date').isoformat() if user_data.get('join_date') else None,
+            'last_login': user_data.get('last_login').isoformat() if user_data.get('last_login') else None,
+            'is_active': user_data.get('is_active'),
+            'created_at': user_data.get('created_at').isoformat() if user_data.get('created_at') else None
+        },
+        'consent_preferences': user_data.get('preferences', {}),
+        'assessment_information': {
+            'assessment_package_status': user_data.get('assessment_package_status'),
+            'assessment_package_expiry': user_data.get('assessment_package_expiry').isoformat() if user_data.get('assessment_package_expiry') else None,
+            'subscription_status': user_data.get('subscription_status'),
+            'subscription_expiry': user_data.get('subscription_expiry').isoformat() if user_data.get('subscription_expiry') else None
+        },
+        'export_metadata': {
+            'export_date': datetime.utcnow().isoformat(),
+            'export_format': 'JSON',
+            'data_version': '1.0'
+        }
+    }
+    
+    return jsonify(export_data)
+
+@app.route('/gdpr/delete-account', methods=['POST'])
+def gdpr_delete_account():
+    """Delete user account and all data"""
+    user_email = session.get('user_email')
+    if not user_email:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Verify password for security
+    password = request.json.get('password')
+    if not password:
+        return jsonify({'error': 'Password required'}), 400
+    
+    # Get user and verify password
+    user_data = user_dal.get_user_by_email(user_email)
+    if not user_data:
+        return jsonify({'error': 'User not found'}), 404
+    
+    if not check_password_hash(user_data['password_hash'], password):
+        return jsonify({'error': 'Invalid password'}), 401
+    
+    # Delete user
+    success = user_dal.delete_user(user_email)
+    if not success:
+        return jsonify({'error': 'Failed to delete account'}), 500
+    
+    # Clear session
+    session.clear()
+    
+    return jsonify({'success': True, 'message': 'Account deleted successfully'})
+
+@app.route('/gdpr/update-consent', methods=['POST'])
+def gdpr_update_consent():
+    """Update user consent preferences"""
+    user_email = session.get('user_email')
+    if not user_email:
+        return jsonify({'error': 'Not authenticated'}), 401
+    
+    # Get consent preferences
+    marketing_consent = request.json.get('marketing_consent', False)
+    analytics_consent = request.json.get('analytics_consent', False)
+    
+    # Update user preferences
+    user_data = user_dal.get_user_by_email(user_email)
+    if not user_data:
+        return jsonify({'error': 'User not found'}), 404
+    
+    # Update preferences in Firestore
+    preferences = user_data.get('preferences', {})
+    preferences['marketing_consent'] = marketing_consent
+    preferences['analytics_consent'] = analytics_consent
+    preferences['consent_updated_at'] = datetime.utcnow().isoformat()
+    
+    doc_ref = user_dal.collection.document(user_email.lower())
+    doc_ref.update({'preferences': preferences})
+    
+    return jsonify({'success': True, 'message': 'Consent preferences updated'})
+
 @app.route('/static/<path:filename>')
 def static_files(filename):
     """Serve static files"""
