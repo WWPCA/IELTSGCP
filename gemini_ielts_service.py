@@ -54,10 +54,23 @@ class SpeakingAssessment(BaseModel):
     timestamp: str
 
 
-class WritingAssessment(BaseModel):
-    """IELTS Writing Assessment Result"""
+class WritingAssessmentTask1(BaseModel):
+    """IELTS Writing Task 1 Assessment Result"""
     overall_band: float = Field(..., ge=0, le=9)
     task_achievement: CriterionScore
+    coherence_cohesion: CriterionScore
+    lexical_resource: CriterionScore
+    grammatical_range: CriterionScore
+    detailed_feedback: str
+    word_count: int
+    assessment_id: str
+    timestamp: str
+
+
+class WritingAssessmentTask2(BaseModel):
+    """IELTS Writing Task 2 Assessment Result"""
+    overall_band: float = Field(..., ge=0, le=9)
+    task_response: CriterionScore
     coherence_cohesion: CriterionScore
     lexical_resource: CriterionScore
     grammatical_range: CriterionScore
@@ -281,13 +294,16 @@ Your response must be valid JSON matching this structure:
         try:
             prompt = self._build_writing_prompt(essay, task_number, assessment_type)
             
+            # Select appropriate schema based on task number
+            schema = WritingAssessmentTask1 if task_number == 1 else WritingAssessmentTask2
+            
             response = client.models.generate_content(
                 model=self.model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
                     temperature=0.3,  # Lower temperature for consistent grading
                     response_mime_type="application/json",
-                    response_schema=WritingAssessment
+                    response_schema=schema
                 )
             )
             
@@ -343,11 +359,11 @@ Your response must be valid JSON matching this structure:
     
     def _get_fallback_writing_result(self, task_number: int, assessment_id: Optional[str], word_count: int) -> Dict[str, Any]:
         """Fallback response if Gemini API fails"""
-        first_criterion = "task_achievement" if task_number == 1 else "task_response"
+        first_criterion_name = "task_achievement" if task_number == 1 else "task_response"
         
-        return {
+        result = {
             "overall_band": 6.5,
-            first_criterion: {
+            first_criterion_name: {
                 "score": 6.5,
                 "feedback": "Assessment system encountered an issue. Please try again.",
                 "strengths": ["Task addressed"],
@@ -376,6 +392,7 @@ Your response must be valid JSON matching this structure:
             "assessment_id": assessment_id or f"writing_t{task_number}_fallback_{datetime.utcnow().timestamp()}",
             "timestamp": datetime.utcnow().isoformat()
         }
+        return result
 
 
 # Singleton instance for easy import
