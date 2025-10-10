@@ -253,8 +253,8 @@ Your response must be valid JSON matching this structure:
         try:
             prompt = self._build_speaking_prompt(transcript, assessment_type)
             
-            # Wrap API call with timeout to prevent hangs
-            async def call_gemini():
+            # Run blocking Gemini call in thread pool with timeout (prevents hangs)
+            def call_gemini_blocking():
                 return client.models.generate_content(
                     model=self.model,
                     contents=prompt,
@@ -265,7 +265,10 @@ Your response must be valid JSON matching this structure:
                     )
                 )
             
-            response = await asyncio.wait_for(call_gemini(), timeout=self.timeout_seconds)
+            response = await asyncio.wait_for(
+                asyncio.to_thread(call_gemini_blocking),
+                timeout=self.timeout_seconds
+            )
             
             # Parse response
             result = json.loads(response.text)
@@ -313,8 +316,8 @@ Your response must be valid JSON matching this structure:
             # Select appropriate schema based on task number
             schema = WritingAssessmentTask1 if task_number == 1 else WritingAssessmentTask2
             
-            # Wrap API call with timeout to prevent hangs
-            async def call_gemini():
+            # Run blocking Gemini call in thread pool with timeout (prevents hangs)
+            def call_gemini_blocking():
                 return client.models.generate_content(
                     model=self.model,
                     contents=prompt,
@@ -325,7 +328,10 @@ Your response must be valid JSON matching this structure:
                     )
                 )
             
-            response = await asyncio.wait_for(call_gemini(), timeout=self.timeout_seconds)
+            response = await asyncio.wait_for(
+                asyncio.to_thread(call_gemini_blocking),
+                timeout=self.timeout_seconds
+            )
             
             # Parse response
             result = json.loads(response.text)
