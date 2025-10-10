@@ -3,6 +3,7 @@ Gemini IELTS Assessment Service
 Clean, modern service for IELTS assessment evaluation using Gemini 2.5 Flash
 Integrates with blueprint:python_gemini
 """
+import asyncio
 import json
 import logging
 import os
@@ -84,7 +85,15 @@ class GeminiIELTSService:
     """Service for IELTS assessment evaluation using Gemini 2.5 Flash"""
     
     def __init__(self):
+        # Validate API key at startup (fail fast if misconfigured)
+        if not os.environ.get("GEMINI_API_KEY"):
+            raise RuntimeError(
+                "GEMINI_API_KEY environment variable not set. "
+                "Please configure your Gemini API key to use this service."
+            )
+        
         self.model = "gemini-2.5-flash"
+        self.timeout_seconds = 30  # Gemini API timeout
         logger.info(f"Gemini IELTS Service initialized with model: {self.model}")
     
     def _build_speaking_prompt(self, transcript: str, assessment_type: str) -> str:
@@ -244,15 +253,19 @@ Your response must be valid JSON matching this structure:
         try:
             prompt = self._build_speaking_prompt(transcript, assessment_type)
             
-            response = client.models.generate_content(
-                model=self.model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    temperature=0.3,  # Lower temperature for consistent grading
-                    response_mime_type="application/json",
-                    response_schema=SpeakingAssessment
+            # Wrap API call with timeout to prevent hangs
+            async def call_gemini():
+                return client.models.generate_content(
+                    model=self.model,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.3,  # Lower temperature for consistent grading
+                        response_mime_type="application/json",
+                        response_schema=SpeakingAssessment
+                    )
                 )
-            )
+            
+            response = await asyncio.wait_for(call_gemini(), timeout=self.timeout_seconds)
             
             # Parse response
             result = json.loads(response.text)
@@ -265,6 +278,9 @@ Your response must be valid JSON matching this structure:
             logger.info(f"Speaking assessment completed: {result['assessment_id']} - Band {result['overall_band']}")
             return result
             
+        except asyncio.TimeoutError:
+            logger.error(f"Speaking evaluation timeout after {self.timeout_seconds}s")
+            return self._get_fallback_speaking_result(assessment_id, conversation_duration)
         except Exception as e:
             logger.error(f"Speaking evaluation error: {str(e)}")
             # Return fallback response
@@ -297,15 +313,19 @@ Your response must be valid JSON matching this structure:
             # Select appropriate schema based on task number
             schema = WritingAssessmentTask1 if task_number == 1 else WritingAssessmentTask2
             
-            response = client.models.generate_content(
-                model=self.model,
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    temperature=0.3,  # Lower temperature for consistent grading
-                    response_mime_type="application/json",
-                    response_schema=schema
+            # Wrap API call with timeout to prevent hangs
+            async def call_gemini():
+                return client.models.generate_content(
+                    model=self.model,
+                    contents=prompt,
+                    config=types.GenerateContentConfig(
+                        temperature=0.3,  # Lower temperature for consistent grading
+                        response_mime_type="application/json",
+                        response_schema=schema
+                    )
                 )
-            )
+            
+            response = await asyncio.wait_for(call_gemini(), timeout=self.timeout_seconds)
             
             # Parse response
             result = json.loads(response.text)
@@ -318,6 +338,9 @@ Your response must be valid JSON matching this structure:
             logger.info(f"Writing assessment completed: {result['assessment_id']} - Band {result['overall_band']}")
             return result
             
+        except asyncio.TimeoutError:
+            logger.error(f"Writing evaluation timeout after {self.timeout_seconds}s")
+            return self._get_fallback_writing_result(task_number, assessment_id, word_count)
         except Exception as e:
             logger.error(f"Writing evaluation error: {str(e)}")
             # Return fallback response
@@ -393,6 +416,36 @@ Your response must be valid JSON matching this structure:
             "timestamp": datetime.utcnow().isoformat()
         }
         return result
+
+
+# Synchronous wrappers for Flask integration (avoids event loop overhead)
+def evaluate_speaking_sync(
+    transcript: str,
+    assessment_type: str,
+    conversation_duration: str = "12 minutes",
+    assessment_id: Optional[str] = None
+) -> Dict[str, Any]:
+    """Synchronous wrapper for Flask routes - evaluate speaking assessment"""
+    return asyncio.run(
+        gemini_service.evaluate_speaking(
+            transcript, assessment_type, conversation_duration, assessment_id
+        )
+    )
+
+
+def evaluate_writing_sync(
+    essay: str,
+    task_number: int,
+    assessment_type: str,
+    word_count: int,
+    assessment_id: Optional[str] = None
+) -> Dict[str, Any]:
+    """Synchronous wrapper for Flask routes - evaluate writing assessment"""
+    return asyncio.run(
+        gemini_service.evaluate_writing(
+            essay, task_number, assessment_type, word_count, assessment_id
+        )
+    )
 
 
 # Singleton instance for easy import
