@@ -23,3 +23,5 @@ pytest
 flask-sock
 librosa
 soundfile
+google-genai
+sendgrid
