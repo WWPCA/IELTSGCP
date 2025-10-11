@@ -25,18 +25,28 @@ python tests/create_test_user.py delete --env test
 
 ### Test Credentials
 
-**For Automated Tests:**
-- Email: `gdpr_test@example.com`
-- Password: `GDPRTest123!`
+Test user credentials must be set as environment variables for security:
 
-**For Manual Testing:**
-- Email: `test@example.com`
-- Password: `TestPassword123`
+1. **Copy the environment template:**
+   ```bash
+   cp .env.example .env
+   ```
 
-OR
+2. **Edit `.env` and set secure test passwords**
 
-- Email: `manual@example.com`
-- Password: `ManualTest123!`
+3. **For CI/CD, add these as GitHub Secrets:**
+   - `GDPR_TEST_PASSWORD`
+   - `TEST_USER_PASSWORD`
+   - `MANUAL_TEST_PASSWORD`
+   - `GOOGLE_CLOUD_PROJECT`
+   - `GEMINI_API_KEY`
+
+The system creates three test accounts:
+- **GDPR Test User**: For automated GDPR compliance tests
+- **Test User**: For general automated testing
+- **Manual Test User**: For manual QA testing
+
+Note: Passwords are never stored in code for security reasons.
 
 ## Running GDPR Tests
 
@@ -83,8 +93,8 @@ python tests/create_test_user.py create --env development
 ### 2. Login and Test GDPR Features
 
 1. **Login**: Navigate to `/login`
-   - Email: `test@example.com`
-   - Password: `TestPassword123`
+   - Use the test credentials configured in your `.env` file
+   - Default email: `test@example.com` (configurable via TEST_USER_EMAIL)
 
 2. **Access GDPR Dashboard**: Navigate to `/gdpr/my-data`
    - ✅ Verify all personal data is displayed
@@ -153,6 +163,10 @@ jobs:
         pip install pytest pytest-cov
     
     - name: Create test users
+      env:
+        GDPR_TEST_PASSWORD: ${{ secrets.GDPR_TEST_PASSWORD }}
+        TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+        MANUAL_TEST_PASSWORD: ${{ secrets.MANUAL_TEST_PASSWORD }}
       run: python tests/create_test_user.py create --env test
     
     - name: Run GDPR tests
