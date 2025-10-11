@@ -3,13 +3,14 @@
 {% block styles %}
 {{ super() }}
 <style>
-    .clearscore-header {
-        background: linear-gradient(45deg, #007bff, #0056b3);
+    .ielts-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         padding: 1.5rem;
         border-radius: 15px;
         text-align: center;
         margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
     }
     
     .examiner-interface {
@@ -82,15 +83,42 @@
         transition: width 0.1s ease;
         border-radius: 20px;
     }
+    
+    .particle-globe-container {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+        border-radius: 15px;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+    
+    #mayaGlobe {
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(26, 26, 46, 0.8) 0%, rgba(15, 52, 96, 0.9) 100%);
+        box-shadow: 0 0 50px rgba(100, 200, 255, 0.3);
+    }
+    
+    .globe-status {
+        color: #667eea;
+        font-weight: 500;
+    }
 </style>
+{% endblock %}
+
+{% block head %}
+{{ super() }}
+<!-- THREE.js for particle globe visualization -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <!-- ClearScore Header -->
-    <div class="elaris-header">
+    <!-- IELTS AI Prep Header -->
+    <div class="ielts-header">
         <h2><i class="fas fa-microphone-alt me-2"></i>Assessment {{ assessment_number }} - {{ assessment_type.replace('_', ' ').title() }}</h2>
-        <p class="mb-0">Powered by ClearScore® GenAI Technology - The world's only AI IELTS speaking examiner</p>
+        <p class="mb-0">IELTS AI Prep™ - Advanced AI-Powered IELTS Speaking Assessment</p>
     </div>
 
     <!-- Progress Indicator -->
@@ -133,9 +161,17 @@
                 <div class="question-display" id="questionDisplay">
                     <div class="d-flex align-items-center mb-2">
                         <i class="fas fa-comment-dots text-primary me-2"></i>
-                        <strong>Examiner:</strong>
+                        <strong>Maya - AI Examiner:</strong>
                     </div>
                     <p id="currentQuestion">Good morning/afternoon. My name is Maya, and I'll be your examiner today. Let's start with some questions about yourself. Can you tell me your name and where you're from?</p>
+                </div>
+
+                <!-- Particle Globe Visualization for Maya -->
+                <div class="particle-globe-container mb-3" id="mayaGlobeContainer">
+                    <canvas id="mayaGlobe" width="300" height="200"></canvas>
+                    <div class="globe-status text-center mt-2">
+                        <small class="text-muted" id="globeStatus">Maya is listening...</small>
+                    </div>
                 </div>
 
                 <!-- Audio Visualizer -->
@@ -328,9 +364,10 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         try {
-            timerDisplay.textContent = 'ClearScore® is speaking...';
+            timerDisplay.textContent = 'Maya is speaking...';
             playQuestionBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Playing...';
             playQuestionBtn.disabled = true;
+            updateGlobeStatus('speaking');
             
             const response = await fetch('/api/generate_speech', {
                 method: 'POST',
@@ -349,7 +386,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 audio.onloadeddata = () => {
                     audio.play().then(() => {
-                        console.log('ClearScore® speaking question with British accent');
+                        console.log('Maya is speaking the question');
+                        startAudioVisualization();
                     }).catch(err => {
                         console.error('Audio playback failed:', err);
                         timerDisplay.textContent = 'Audio playback failed. Click record to begin your answer.';
@@ -409,6 +447,153 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize
     playQuestion();
+    
+    // THREE.js Particle Globe for Maya
+    let scene, camera, renderer, particles;
+    let audioContext, analyser, dataArray;
+    let globeAnimationId;
+    
+    function initParticleGlobe() {
+        const canvas = document.getElementById('mayaGlobe');
+        if (!canvas || typeof THREE === 'undefined') return;
+        
+        // Scene setup
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, 1.5, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({
+            canvas: canvas,
+            alpha: true,
+            antialias: true
+        });
+        
+        renderer.setSize(300, 200);
+        camera.position.z = 150;
+        
+        // Create particles
+        const geometry = new THREE.BufferGeometry();
+        const positions = [];
+        const colors = [];
+        const particleCount = 500;
+        
+        for (let i = 0; i < particleCount; i++) {
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+            const radius = 50 + Math.random() * 20;
+            
+            const x = radius * Math.sin(phi) * Math.cos(theta);
+            const y = radius * Math.sin(phi) * Math.sin(theta);
+            const z = radius * Math.cos(phi);
+            
+            positions.push(x, y, z);
+            
+            // Purple-blue gradient colors
+            colors.push(
+                0.4 + Math.random() * 0.3,  // R
+                0.5 + Math.random() * 0.3,  // G  
+                0.9 + Math.random() * 0.1   // B
+            );
+        }
+        
+        geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+        
+        const material = new THREE.PointsMaterial({
+            size: 2,
+            vertexColors: true,
+            transparent: true,
+            opacity: 0.8,
+            blending: THREE.AdditiveBlending
+        });
+        
+        particles = new THREE.Points(geometry, material);
+        scene.add(particles);
+        
+        animateGlobe();
+    }
+    
+    function animateGlobe() {
+        globeAnimationId = requestAnimationFrame(animateGlobe);
+        
+        if (particles) {
+            particles.rotation.y += 0.005;
+            particles.rotation.x += 0.002;
+            
+            // Add pulsing effect when Maya speaks
+            const globeStatus = document.getElementById('globeStatus');
+            if (globeStatus && globeStatus.textContent.includes('speaking')) {
+                const scale = 1 + Math.sin(Date.now() * 0.002) * 0.1;
+                particles.scale.set(scale, scale, scale);
+            }
+        }
+        
+        renderer.render(scene, camera);
+    }
+    
+    function updateGlobeStatus(status) {
+        const statusElement = document.getElementById('globeStatus');
+        if (!statusElement) return;
+        
+        switch(status) {
+            case 'listening':
+                statusElement.textContent = 'Maya is listening...';
+                statusElement.style.color = '#667eea';
+                break;
+            case 'speaking':
+                statusElement.textContent = 'Maya is speaking...';
+                statusElement.style.color = '#764ba2';
+                break;
+            case 'processing':
+                statusElement.textContent = 'Processing your response...';
+                statusElement.style.color = '#ffc107';
+                break;
+            case 'waiting':
+                statusElement.textContent = 'Ready for your answer';
+                statusElement.style.color = '#28a745';
+                break;
+        }
+    }
+    
+    function startAudioVisualization() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 64;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+        }
+        
+        // Create audio visualization effect on particles
+        if (particles) {
+            const positions = particles.geometry.attributes.position.array;
+            const originalPositions = [...positions];
+            
+            function updateVisualization() {
+                if (!analyser) return;
+                
+                analyser.getByteFrequencyData(dataArray);
+                
+                for (let i = 0; i < positions.length; i += 3) {
+                    const frequencyIndex = Math.floor((i / 3) % dataArray.length);
+                    const frequency = dataArray[frequencyIndex] || 0;
+                    const scale = 1 + (frequency / 255) * 0.5;
+                    
+                    positions[i] = originalPositions[i] * scale;
+                    positions[i + 1] = originalPositions[i + 1] * scale;
+                    positions[i + 2] = originalPositions[i + 2] * scale;
+                }
+                
+                particles.geometry.attributes.position.needsUpdate = true;
+                
+                if (document.getElementById('globeStatus').textContent.includes('speaking')) {
+                    requestAnimationFrame(updateVisualization);
+                }
+            }
+            
+            updateVisualization();
+        }
+    }
+    
+    // Initialize globe on page load
+    initParticleGlobe();
 });
 </script>
 {% endblock %}

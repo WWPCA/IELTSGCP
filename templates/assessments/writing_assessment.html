@@ -5,13 +5,14 @@
 {% block styles %}
 {{ super() }}
 <style>
-    .truescore-header {
-        background: linear-gradient(45deg, #28a745, #20c997);
+    .ielts-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;
         padding: 1.5rem;
         border-radius: 15px;
         text-align: center;
         margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
     }
     
     .writing-interface {
@@ -165,10 +166,10 @@
 
 {% block content %}
 <div class="container mt-4">
-    <!-- TrueScore Header -->
-    <div class="truescore-header">
+    <!-- IELTS AI Prep Header -->
+    <div class="ielts-header">
         <h2><i class="fas fa-pen-nib me-2"></i>Assessment {{ assessment_number }} - {{ assessment_type.replace('_', ' ').title() }}</h2>
-        <p class="mb-0">Powered by TrueScore® GenAI Technology - The world's only AI IELTS writing examiner</p>
+        <p class="mb-0">IELTS AI Prep™ - Advanced AI-Powered IELTS Writing Assessment</p>
     </div>
 
     <!-- Simple Task Navigation -->
