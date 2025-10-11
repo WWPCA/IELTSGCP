@@ -103,7 +103,7 @@ def delete_test_users(environment='test'):
     
     for user_info in TEST_USERS:
         try:
-            user_dal.delete_user_by_email(user_info['email'])
+            user_dal.delete_user(user_info['email'])
             print(f"✅ Deleted user: {user_info['email']}")
             deleted_count += 1
         except Exception as e:
