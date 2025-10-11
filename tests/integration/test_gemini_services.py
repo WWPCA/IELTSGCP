@@ -8,7 +8,10 @@ from gcp.gemini_live_service import GeminiLiveService
 
 
 @pytest.mark.integration
-@pytest.mark.skipif(not os.getenv('GEMINI_API_KEY'), reason="GEMINI_API_KEY not set")
+@pytest.mark.skipif(
+    not os.getenv('GEMINI_API_KEY') or not os.getenv('GOOGLE_CLOUD_PROJECT'),
+    reason="GEMINI_API_KEY or GOOGLE_CLOUD_PROJECT not set - skipping integration tests"
+)
 class TestGeminiServiceIntegration:
     """Integration tests for GeminiService with real API"""
     
@@ -118,7 +121,10 @@ In conclusion, both early and delayed formal education have merits. A moderate a
 
 
 @pytest.mark.integration
-@pytest.mark.skipif(not os.getenv('GEMINI_API_KEY'), reason="GEMINI_API_KEY not set")
+@pytest.mark.skipif(
+    not os.getenv('GEMINI_API_KEY') or not os.getenv('GOOGLE_CLOUD_PROJECT'),
+    reason="GEMINI_API_KEY or GOOGLE_CLOUD_PROJECT not set - skipping integration tests"
+)
 class TestGeminiLiveServiceIntegration:
     """Integration tests for GeminiLiveService with real API"""
     

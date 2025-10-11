@@ -12,8 +12,16 @@ from datetime import datetime
 import secrets
 
 # Google Generative AI SDK
-from google import genai
-from google.genai.types import LiveConnectConfig, Modality, Blob
+try:
+    from google import genai
+    from google.genai.types import LiveConnectConfig, Modality, Blob
+except ImportError:
+    # Fallback for testing environments
+    genai = None
+    LiveConnectConfig = None
+    Modality = None
+    Blob = None
+
 import librosa
 import soundfile as sf
 import io
@@ -28,18 +36,26 @@ class GeminiLiveService:
         self.project_id = project_id or os.environ.get('GOOGLE_CLOUD_PROJECT')
         self.region = region
         
+        if not self.project_id:
+            raise ValueError("GOOGLE_CLOUD_PROJECT must be set either as parameter or environment variable")
+        
+        if not genai:
+            raise ImportError("google-genai package is not installed or not available")
+        
         # Configure for Vertex AI
         os.environ['GOOGLE_CLOUD_PROJECT'] = self.project_id
         os.environ['GOOGLE_CLOUD_LOCATION'] = self.region
         os.environ['GOOGLE_GENAI_USE_VERTEXAI'] = 'True'
         
         # Initialize Gemini client
-        self.client = genai.Client()
-        
-        # Model: gemini-2.5-flash-native-audio for best speech quality
-        self.model_id = 'gemini-2.5-flash-native-audio-preview-09-2025'
-        
-        logger.info(f"Gemini Live client initialized - project: {self.project_id}, region: {self.region}")
+        try:
+            self.client = genai.Client()
+            # Model: gemini-2.5-flash-native-audio for best speech quality
+            self.model_id = 'gemini-2.5-flash-native-audio-preview-09-2025'
+            logger.info(f"Gemini Live client initialized - project: {self.project_id}, region: {self.region}")
+        except Exception as e:
+            logger.error(f"Failed to initialize Gemini Live client: {e}")
+            raise
     
     def get_maya_system_prompt(self, assessment_type: str = 'speaking') -> str:
         """Get system prompt for Maya IELTS examiner with detailed IELTS rubrics"""
