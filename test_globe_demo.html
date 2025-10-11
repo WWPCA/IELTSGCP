@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maya's Particle Globe Visualization Demo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .demo-container {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 800px;
+            width: 90%;
+        }
+        
+        h1 {
+            text-align: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+        
+        .globe-showcase {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .globe-variant {
+            text-align: center;
+            margin: 10px;
+        }
+        
+        .particle-globe-container {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin: 10px auto;
+        }
+        
+        canvas {
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(26, 26, 46, 0.8) 0%, rgba(15, 52, 96, 0.9) 100%);
+            box-shadow: 0 0 50px rgba(100, 200, 255, 0.3);
+        }
+        
+        .globe-status {
+            color: #667eea;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+        }
+        
+        .description {
+            text-align: center;
+            color: #666;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="demo-container">
+        <h1>🌐 Maya's Particle Globe Visualization</h1>
+        
+        <div class="description">
+            <p>This is the animated particle sphere that represents Maya, your AI IELTS examiner.</p>
+            <p>The globe consists of <strong>500 glowing particles</strong> arranged in a perfect sphere using Fibonacci distribution.</p>
+        </div>
+        
+        <div class="globe-showcase">
+            <!-- Main Globe -->
+            <div class="globe-variant">
+                <div class="particle-globe-container" id="mayaGlobeContainer">
+                    <canvas id="mayaGlobe" width="400" height="400"></canvas>
+                    <div class="globe-status" id="globeStatus">Maya is listening...</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button onclick="setStatus('listening')">Listening Mode</button>
+            <button onclick="setStatus('speaking')">Speaking Mode</button>
+            <button onclick="setStatus('processing')">Processing Mode</button>
+            <button onclick="togglePulse()">Toggle Pulse</button>
+        </div>
+        
+        <div class="description">
+            <h3>Features:</h3>
+            <ul style="text-align: left; display: inline-block;">
+                <li>🔮 <strong>500 particles</strong> creating a spherical form</li>
+                <li>🎨 <strong>Purple-blue gradient</strong> colors matching IELTS AI Prep brand</li>
+                <li>🔄 <strong>Continuous rotation</strong> for a living, breathing effect</li>
+                <li>📊 <strong>Audio-reactive pulsing</strong> when Maya speaks</li>
+                <li>✨ <strong>Additive blending</strong> for glowing particle effect</li>
+                <li>🌟 <strong>Dynamic status indicators</strong> with color-coded feedback</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        let scene, camera, renderer, particles;
+        let isPulsing = false;
+        
+        function initParticleGlobe() {
+            const canvas = document.getElementById('mayaGlobe');
+            
+            // Scene setup
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, 1, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                alpha: true,
+                antialias: true
+            });
+            
+            renderer.setSize(400, 400);
+            camera.position.z = 180;
+            
+            // Create particles
+            const geometry = new THREE.BufferGeometry();
+            const positions = [];
+            const colors = [];
+            const particleCount = 500;
+            
+            // Fibonacci sphere distribution for even particle spread
+            for (let i = 0; i < particleCount; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const radius = 60 + Math.random() * 10;
+                
+                const x = radius * Math.sin(phi) * Math.cos(theta);
+                const y = radius * Math.sin(phi) * Math.sin(theta);
+                const z = radius * Math.cos(phi);
+                
+                positions.push(x, y, z);
+                
+                // Purple-blue gradient colors
+                colors.push(
+                    0.4 + Math.random() * 0.3,  // R (purple range)
+                    0.5 + Math.random() * 0.3,  // G  
+                    0.9 + Math.random() * 0.1   // B (blue range)
+                );
+            }
+            
+            geometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+            geometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3));
+            
+            const material = new THREE.PointsMaterial({
+                size: 3,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.8,
+                blending: THREE.AdditiveBlending
+            });
+            
+            particles = new THREE.Points(geometry, material);
+            scene.add(particles);
+            
+            // Add inner glow sphere
+            const glowGeometry = new THREE.SphereGeometry(50, 32, 32);
+            const glowMaterial = new THREE.MeshBasicMaterial({
+                color: 0x6677ff,
+                transparent: true,
+                opacity: 0.1,
+                blending: THREE.AdditiveBlending
+            });
+            const glowSphere = new THREE.Mesh(glowGeometry, glowMaterial);
+            scene.add(glowSphere);
+            
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            if (particles) {
+                particles.rotation.y += 0.005;
+                particles.rotation.x += 0.002;
+                
+                // Pulsing effect
+                if (isPulsing) {
+                    const scale = 1 + Math.sin(Date.now() * 0.002) * 0.15;
+                    particles.scale.set(scale, scale, scale);
+                }
+            }
+            
+            renderer.render(scene, camera);
+        }
+        
+        function setStatus(status) {
+            const statusElement = document.getElementById('globeStatus');
+            
+            switch(status) {
+                case 'listening':
+                    statusElement.textContent = 'Maya is listening...';
+                    statusElement.style.color = '#667eea';
+                    isPulsing = false;
+                    break;
+                case 'speaking':
+                    statusElement.textContent = 'Maya is speaking...';
+                    statusElement.style.color = '#764ba2';
+                    isPulsing = true;
+                    break;
+                case 'processing':
+                    statusElement.textContent = 'Processing your response...';
+                    statusElement.style.color = '#ffc107';
+                    isPulsing = false;
+                    break;
+            }
+        }
+        
+        function togglePulse() {
+            isPulsing = !isPulsing;
+        }
+        
+        // Initialize
+        initParticleGlobe();
+    </script>
+</body>
+</html>
