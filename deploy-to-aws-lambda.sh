@@ -34,19 +34,16 @@ cp bedrock_service.py deployment/
 cp -r templates deployment/ 2>/dev/null || echo "   No templates directory"
 cp -r static deployment/ 2>/dev/null || echo "   No static directory"
 
-# Create requirements.txt for Lambda
+# Create requirements.txt for Lambda (minimal - boto3 already in Lambda)
 cat > deployment/requirements.txt << 'EOF'
-boto3>=1.28.0
-bcrypt>=4.0.0
-qrcode>=7.4.0
-Pillow>=10.0.0
-flask>=2.3.0
-flask-cors>=4.0.0
-requests>=2.31.0
+aws-wsgi
+flask
+werkzeug
+flask-cors
 flask-login
 pyjwt
-mangum
-werkzeug
+bcrypt
+qrcode
 EOF
 
 # Step 2: Install dependencies
@@ -64,38 +61,48 @@ echo "   Dependencies installed"
 # Step 3: Create deployment package
 echo ""
 echo "📦 Step 3: Creating deployment ZIP..."
+# Create ZIP from within deployment directory so files are at root level
+zip -r ../$DEPLOYMENT_PACKAGE . -q -x "*.pyc" "*__pycache__*" "*.git*"
 cd ..
-zip -r $DEPLOYMENT_PACKAGE deployment/ -q -x "*.pyc" "*__pycache__*" "*.git*"
 
 PACKAGE_SIZE=$(du -h $DEPLOYMENT_PACKAGE | cut -f1)
 echo "   Package size: $PACKAGE_SIZE"
 
-# Step 4: Upload to Lambda
+# Step 4: Upload to S3 first (package too large for direct upload)
 echo ""
-echo "🚀 Step 4: Deploying to AWS Lambda..."
+echo "📤 Step 4: Uploading to S3..."
+S3_BUCKET="ielts-genai-prep-deployments-116981806044"
+S3_KEY="lambda/${LAMBDA_FUNCTION_NAME}-$(date +%Y%m%d-%H%M%S).zip"
+
+# Upload to S3
+aws s3 cp $DEPLOYMENT_PACKAGE s3://$S3_BUCKET/$S3_KEY --region $AWS_REGION
+echo "   Uploaded to s3://$S3_BUCKET/$S3_KEY"
+
+# Step 5: Update Lambda from S3
+echo ""
+echo "🚀 Step 5: Deploying to AWS Lambda from S3..."
 aws lambda update-function-code \
     --function-name $LAMBDA_FUNCTION_NAME \
-    --zip-file fileb://$DEPLOYMENT_PACKAGE \
+    --s3-bucket $S3_BUCKET \
+    --s3-key $S3_KEY \
     --region $AWS_REGION \
     --output json > /tmp/lambda-update-result.json
 
 if [ $? -eq 0 ]; then
     echo "✅ Lambda function updated successfully!"
-    echo "   Function ARN: $(jq -r '.FunctionArn' /tmp/lambda-update-result.json)"
-    echo "   Last Modified: $(jq -r '.LastModified' /tmp/lambda-update-result.json)"
 else
     echo "❌ Failed to update Lambda function"
     exit 1
 fi
 
-# Step 5: Wait for Lambda to be ready
+# Step 6: Wait for Lambda to be ready
 echo ""
-echo "⏳ Step 5: Waiting for Lambda to be ready..."
+echo "⏳ Step 6: Waiting for Lambda to be ready..."
 sleep 5
 
 # Update environment variables (skip AWS_REGION as it's reserved)
 echo ""
-echo "🔧 Step 6: Updating Lambda environment variables..."
+echo "🔧 Step 7: Updating Lambda environment variables..."
 aws lambda update-function-configuration \
     --function-name $LAMBDA_FUNCTION_NAME \
     --environment "Variables={
@@ -107,9 +114,9 @@ aws lambda update-function-configuration \
 
 echo "   Environment variables updated"
 
-# Step 7: Invalidate CloudFront cache
+# Step 8: Invalidate CloudFront cache
 echo ""
-echo "🔄 Step 7: Invalidating CloudFront cache..."
+echo "🔄 Step 8: Invalidating CloudFront cache..."
 INVALIDATION_OUTPUT=$(aws cloudfront create-invalidation \
     --distribution-id $CLOUDFRONT_DISTRIBUTION_ID \
     --paths "/*" \
