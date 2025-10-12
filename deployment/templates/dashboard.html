@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="alert alert-success">
+                <h4>Welcome to Your Dashboard!</h4>
+                <p>You are successfully logged in as: <strong>{{ user_email }}</strong></p>
+            </div>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>IELTS GenAI Prep Dashboard</h3>
+                </div>
+                <div class="card-body">
+                    <p>Your secure authentication system is now working!</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5>Security Features Active:</h5>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Environment-based secret key</li>
+                                <li><i class="fas fa-check text-success"></i> Server-side reCAPTCHA validation</li>
+                                <li><i class="fas fa-check text-success"></i> Database-backed sessions</li>
+                                <li><i class="fas fa-check text-success"></i> AWS SES email integration</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5>Available Actions:</h5>
+                            <div class="d-grid gap-2">
+                                <a href="/logout" class="btn btn-outline-primary">
+                                    <i class="fas fa-sign-out-alt"></i> Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

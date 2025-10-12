@@ -1,0 +1,466 @@
+{% extends "layout.html" %}
+
+{% block body_class %}bg-white assessment-page{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+    /* Typography System */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+    }
+    
+    h1, h2, h3, h4, h5, h6, .navbar-brand, .btn, .card-header {
+        font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        letter-spacing: -0.02em;
+    }
+    
+    h1 { font-weight: 700; letter-spacing: -0.03em; }
+    h2 { font-weight: 700; letter-spacing: -0.02em; }
+    h3 { font-weight: 600; }
+    
+    .lead {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        line-height: 1.7;
+    }
+    
+    .ielts-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 15px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .writing-interface {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 0;
+        margin-bottom: 2rem;
+        min-height: 600px;
+    }
+    
+    .exam-layout {
+        display: flex;
+        height: 600px;
+        border-radius: 5px;
+        overflow: hidden;
+    }
+    
+    .question-panel {
+        flex: 0 0 45%;
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        border-right: 3px solid #28a745;
+        padding: 2rem;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .logo-area {
+        text-align: center;
+        margin-bottom: 2rem;
+        padding-bottom: 1rem;
+        border-bottom: 2px solid #28a745;
+    }
+    
+    .ielts-logo {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #28a745;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+    
+    .response-panel {
+        flex: 1;
+        background: white;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .response-header {
+        background: #28a745;
+        color: white;
+        padding: 1rem;
+        margin: -2rem -2rem 1rem -2rem;
+        text-align: center;
+        font-weight: bold;
+    }
+    
+    .task-display {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        font-size: 14px;
+    }
+    
+    .writing-area {
+        background: white;
+        border: 1px solid #dee2e6;
+        padding: 0;
+        margin: 1rem 0;
+    }
+    
+    
+    .timer-display {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        margin: 1rem 0;
+    }
+    
+    .task-tabs {
+        margin-bottom: 2rem;
+    }
+    
+    .task-tab {
+        background: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 0.5rem;
+        border: 2px solid #dee2e6;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .task-tab.active {
+        border-color: #28a745;
+        background: #f8fff9;
+    }
+    
+    .task-tab:hover {
+        border-color: #28a745;
+    }
+    
+    .writing-textarea {
+        width: 100%;
+        min-height: 400px;
+        border: none;
+        padding: 1rem;
+        font-family: 'Arial', sans-serif;
+        font-size: 13px;
+        line-height: 1.5;
+        resize: none;
+        outline: none;
+    }
+    
+    .word-counter {
+        background: #f8f9fa;
+        border-top: 1px solid #dee2e6;
+        padding: 0.5rem 1rem;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+        .exam-layout {
+            flex-direction: column;
+            height: auto;
+        }
+        
+        .question-panel {
+            flex: none;
+            height: auto;
+            border-right: none;
+            border-bottom: 3px solid #28a745;
+        }
+        
+        .response-panel {
+            min-height: 400px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- IELTS AI Prep Header -->
+    <div class="ielts-header">
+        <h2><i class="fas fa-pen-nib me-2"></i>Assessment {{ assessment_number }} - {{ assessment_type.replace('_', ' ').title() }}</h2>
+        <p class="mb-0">IELTS AI Prep™ - Advanced AI-Powered IELTS Writing Assessment</p>
+    </div>
+
+    <!-- Simple Task Navigation -->
+    <div class="row mb-3">
+        <div class="col-md-12">
+            <div class="btn-group w-100" role="group">
+                <button type="button" class="btn btn-outline-primary active" id="task1Btn" onclick="switchTask(1)">
+                    Writing Task 1
+                </button>
+                <button type="button" class="btn btn-outline-primary" id="task2Btn" onclick="switchTask(2)">
+                    Writing Task 2
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Timer Display -->
+    <div class="timer-display" id="timerDisplay">
+        Total Time: 60:00 | Current Task: 00:00
+    </div>
+
+    <!-- Main Writing Interface - Divided Screen Format -->
+    <div class="writing-interface">
+        <div class="exam-layout">
+            <!-- Left Panel - Logo + Question -->
+            <div class="question-panel">
+                <!-- IELTS Logo Area -->
+                <div class="logo-area">
+                    <div class="ielts-logo">
+                        <i class="fas fa-pen-nib"></i>
+                        IELTS AI Prep
+                    </div>
+                    <div class="text-muted small mt-1">Official Exam Format</div>
+                </div>
+
+                <!-- Task Content -->
+                <div class="flex-grow-1">
+                    <!-- Task 1 Content -->
+                    <div id="task1QuestionContent">
+                        <div class="task-display">
+                            <strong>Writing Task 1</strong><br>
+                            <small class="text-muted">Spend about 20 minutes on this task</small>
+                            <hr>
+                            {% if 'academic' in assessment_type %}
+                            <p>The chart below shows the percentage of households in owned and rented accommodation in England and Wales between 1918 and 2011.</p>
+                            
+                            <div class="alert alert-info">
+                                <strong>Instructions:</strong><br>
+                                Summarise the information by selecting and reporting the main features, and make comparisons where relevant.
+                            </div>
+                            
+                            <div class="badge bg-primary">Write at least 150 words</div>
+                            {% else %}
+                            <p>You recently bought a piece of equipment for your kitchen but it did not work. You phoned the shop but no action was taken.</p>
+                            
+                            <div class="alert alert-info">
+                                <strong>Write a letter to the shop manager. In your letter:</strong>
+                                <ul class="mt-2">
+                                    <li>describe the problem with the equipment</li>
+                                    <li>explain what happened when you phoned the shop</li>
+                                    <li>say what you would like the manager to do</li>
+                                </ul>
+                            </div>
+                            
+                            <div class="badge bg-primary">Write at least 150 words</div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Task 2 Content -->
+                    <div id="task2QuestionContent" style="display: none;">
+                        <div class="task-display">
+                            <strong>Writing Task 2</strong><br>
+                            <small class="text-muted">Spend about 40 minutes on this task</small>
+                            <hr>
+                            <p>Some people think that universities should provide graduates with the knowledge and skills needed in the workplace. Others think that the true function of a university is to give access to knowledge for its own sake, regardless of whether the course is useful to an employer.</p>
+                            
+                            <div class="alert alert-info">
+                                <strong>Question:</strong><br>
+                                What, in your opinion, should be the main function of a university?<br><br>
+                                Give reasons for your answer and include any relevant examples from your own knowledge or experience.
+                            </div>
+                            
+                            <div class="badge bg-primary">Write at least 250 words</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Timer in Question Panel -->
+                <div class="mt-auto pt-3 border-top">
+                    <div class="timer-display" id="timerDisplay">
+                        Total Time: 60:00 | Current Task: 00:00
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Response Area -->
+            <div class="response-panel">
+                <div class="response-header">
+                    <i class="fas fa-edit me-2"></i>
+                    <span id="currentTaskHeader">Task 1 Response</span>
+                </div>
+
+                <!-- Task 1 Response -->
+                <div id="task1ResponseContent" class="flex-grow-1">
+                    <textarea class="writing-textarea" id="task1Text" placeholder="Type your Task 1 response here..."></textarea>
+                    <div class="word-counter">
+                        <i class="fas fa-calculator me-2"></i>Words: <span id="task1WordCount">0</span>
+                        <span class="ms-3 text-muted" id="task1Status">150 words needed</span>
+                    </div>
+                </div>
+
+                <!-- Task 2 Response -->
+                <div id="task2ResponseContent" style="display: none;" class="flex-grow-1">
+                    <textarea class="writing-textarea" id="task2Text" placeholder="Type your Task 2 response here..."></textarea>
+                    <div class="word-counter">
+                        <i class="fas fa-calculator me-2"></i>Words: <span id="task2WordCount">0</span>
+                        <span class="ms-3 text-muted" id="task2Status">250 words needed</span>
+                    </div>
+                </div>
+
+                <!-- Control Buttons -->
+                <div class="mt-auto pt-3 border-top">
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" id="submitBtn">
+                            <i class="fas fa-paper-plane me-2"></i>Submit for Nova Micro Assessment
+                        </button>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-outline-secondary flex-fill" id="saveProgressBtn">
+                                <i class="fas fa-save me-2"></i>Save Progress
+                            </button>
+                            <button class="btn btn-outline-danger flex-fill" id="exitBtn">
+                                <i class="fas fa-times me-2"></i>Exit Assessment
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let totalSeconds = 0;
+    let taskStartTime = 0;
+    let currentTask = 1;
+    let timer = null;
+    
+    const timerDisplay = document.getElementById('timerDisplay');
+    const task1Text = document.getElementById('task1Text');
+    const task2Text = document.getElementById('task2Text');
+    const task1WordCount = document.getElementById('task1WordCount');
+    const task2WordCount = document.getElementById('task2WordCount');
+    const task1Status = document.getElementById('task1Status');
+    const task2Status = document.getElementById('task2Status');
+    const submitBtn = document.getElementById('submitBtn');
+    const saveProgressBtn = document.getElementById('saveProgressBtn');
+    const exitBtn = document.getElementById('exitBtn');
+    
+    // Start timer
+    function startTimer() {
+        timer = setInterval(() => {
+            totalSeconds++;
+            const currentTaskSeconds = totalSeconds - taskStartTime;
+            
+            const totalMinutes = Math.floor(totalSeconds / 60);
+            const totalRemainingSeconds = totalSeconds % 60;
+            const taskMinutes = Math.floor(currentTaskSeconds / 60);
+            const taskRemainingSeconds = currentTaskSeconds % 60;
+            
+            timerDisplay.textContent = `Total Time: ${totalMinutes.toString().padStart(2, '0')}:${totalRemainingSeconds.toString().padStart(2, '0')} | Current Task: ${taskMinutes.toString().padStart(2, '0')}:${taskRemainingSeconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+    
+    // Word counting function
+    function countWords(text) {
+        return text.trim().split(/\s+/).filter(word => word.length > 0).length;
+    }
+    
+    // Update word count and status
+    function updateWordCount(taskNum) {
+        const textarea = taskNum === 1 ? task1Text : task2Text;
+        const countElement = taskNum === 1 ? task1WordCount : task2WordCount;
+        const statusElement = taskNum === 1 ? task1Status : task2Status;
+        const minWords = taskNum === 1 ? 150 : 250;
+        
+        const wordCount = countWords(textarea.value);
+        countElement.textContent = wordCount;
+        
+        if (wordCount >= minWords) {
+            statusElement.textContent = 'Requirements met';
+            statusElement.className = 'text-success';
+        } else {
+            statusElement.textContent = `${minWords - wordCount} words needed`;
+            statusElement.className = 'text-warning';
+        }
+    }
+    
+    // Task switching function
+    window.switchTask = function(taskNum) {
+        if (taskNum === currentTask) return;
+        
+        currentTask = taskNum;
+        taskStartTime = totalSeconds;
+        
+        // Update UI
+        document.getElementById('task1Btn').classList.toggle('active', taskNum === 1);
+        document.getElementById('task2Btn').classList.toggle('active', taskNum === 2);
+        
+        // Switch question panel content
+        document.getElementById('task1QuestionContent').style.display = taskNum === 1 ? 'block' : 'none';
+        document.getElementById('task2QuestionContent').style.display = taskNum === 2 ? 'block' : 'none';
+        
+        // Switch response panel content
+        document.getElementById('task1ResponseContent').style.display = taskNum === 1 ? 'flex' : 'none';
+        document.getElementById('task2ResponseContent').style.display = taskNum === 2 ? 'flex' : 'none';
+        
+        // Update header
+        document.getElementById('currentTaskHeader').textContent = `Task ${taskNum} Response`;
+    };
+    
+    // Event listeners for word counting
+    task1Text.addEventListener('input', () => updateWordCount(1));
+    task2Text.addEventListener('input', () => updateWordCount(2));
+    
+    // Save progress
+    saveProgressBtn.addEventListener('click', function() {
+        // In a real implementation, this would save to the server
+        alert('Progress saved! You can return to complete this assessment later.');
+    });
+    
+    // Submit assessment
+    submitBtn.addEventListener('click', function() {
+        const task1Words = countWords(task1Text.value);
+        const task2Words = countWords(task2Text.value);
+        
+        if (task1Words < 150 || task2Words < 250) {
+            if (!confirm('You have not met the minimum word requirements. Are you sure you want to submit?')) {
+                return;
+            }
+        }
+        
+        clearInterval(timer);
+        
+        // In a real implementation, this would submit to TrueScore® for assessment
+        alert('Assessment submitted successfully! Your writing will be evaluated by TrueScore® AI and results will be available in your profile within minutes.');
+        window.location.href = '/profile';
+    });
+    
+    // Exit assessment
+    exitBtn.addEventListener('click', function() {
+        if (confirm('Are you sure you want to exit? Your progress will be lost unless you save it first.')) {
+            clearInterval(timer);
+            window.location.href = '/profile';
+        }
+    });
+    
+    // Initialize
+    startTimer();
+    updateWordCount(1);
+    updateWordCount(2);
+    
+    // Auto-save every 2 minutes
+    setInterval(() => {
+        console.log('Auto-saving progress...');
+        // In a real implementation, this would auto-save to the server
+    }, 120000);
+});
+</script>
+{% endblock %}

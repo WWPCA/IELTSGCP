@@ -54,8 +54,10 @@ echo ""
 echo "📚 Step 2: Installing dependencies..."
 cd deployment/
 
-# Install Python packages
-pip install -r requirements.txt -t . --upgrade --quiet
+# Install Python packages (force no user mode)
+pip install -r requirements.txt -t . --upgrade --quiet --no-user 2>/dev/null || \
+python -m pip install -r requirements.txt -t . --upgrade --quiet --no-user 2>/dev/null || \
+pip3 install -r requirements.txt -t . --upgrade --quiet --no-user
 
 echo "   Dependencies installed"
 
@@ -91,18 +93,17 @@ echo ""
 echo "⏳ Step 5: Waiting for Lambda to be ready..."
 sleep 5
 
-# Update environment variables
+# Update environment variables (skip AWS_REGION as it's reserved)
 echo ""
 echo "🔧 Step 6: Updating Lambda environment variables..."
 aws lambda update-function-configuration \
     --function-name $LAMBDA_FUNCTION_NAME \
     --environment "Variables={
-        AWS_REGION=$AWS_REGION,
         ENVIRONMENT=production,
         SESSION_SECRET=${SESSION_SECRET:-$(openssl rand -hex 32)}
     }" \
     --region $AWS_REGION \
-    --output json > /dev/null
+    --output json > /dev/null 2>&1
 
 echo "   Environment variables updated"
 

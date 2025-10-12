@@ -1,0 +1,365 @@
+{% extends "layout.html" %}
+
+{% block title %}Complete Feature Preview - IELTS AI Prep{% endblock %}
+
+{% block styles %}
+<style>
+.feature-section {
+    margin: 3rem 0;
+    padding: 2rem 0;
+    border-bottom: 1px solid #e9ecef;
+}
+.feature-section:last-child {
+    border-bottom: none;
+}
+.feature-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    margin-bottom: 2rem;
+}
+.qr-preview-container {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 30px;
+    margin: 20px 0;
+    border: 2px dashed #007bff;
+    text-align: center;
+}
+.mobile-registration-preview {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 12px;
+    padding: 2rem;
+    color: white;
+    margin: 20px 0;
+}
+.auth-flow-demo {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin: 20px 0;
+}
+.auth-card {
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary">Complete Template Features Preview</h1>
+                <p class="lead">All 5 requested features demonstrated in one comprehensive view</p>
+            </div>
+
+            <!-- Feature 1: AI SEO Optimization -->
+            <section class="feature-section">
+                <div class="feature-header">
+                    <h2><i class="fas fa-search-plus me-2"></i>1. AI SEO Optimization</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h4>✅ Meta Tags Implemented:</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <strong>Title:</strong> IELTS AI Prep - AI-Powered Assessment Platform
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Description:</strong> IELTS AI Prep - Your comprehensive IELTS assessment preparation platform
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Viewport:</strong> Mobile-optimized responsive design
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Canonical URL:</strong> {{ request.url }}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>✅ Advanced SEO Features:</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <strong>Open Graph:</strong> Social media optimization
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Twitter Cards:</strong> Enhanced Twitter sharing
+                            </li>
+                            <li class="list-group-item">
+                                <strong>JSON-LD:</strong> Structured data for Organization & FAQs
+                            </li>
+                            <li class="list-group-item">
+                                <strong>CSP Headers:</strong> Security-optimized content policy
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature 2: FAQ Section -->
+            <section class="feature-section">
+                <div class="feature-header">
+                    <h2><i class="fas fa-question-circle me-2"></i>2. Comprehensive FAQ Section</h2>
+                </div>
+                <div class="accordion" id="previewFAQ">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faqHeading1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                                Which IELTS test should I take - Academic or General Training?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1" data-bs-parent="#previewFAQ">
+                            <div class="accordion-body">
+                                <p>The test you choose depends on your purpose:</p>
+                                <ul>
+                                    <li><strong>IELTS Academic:</strong> For university admission or professional registration.</li>
+                                    <li><strong>IELTS General Training:</strong> For work experience, training programs, or migration to English-speaking countries.</li>
+                                </ul>
+                                <p>Always check with your receiving organization (university, employer, immigration authority) to confirm which test they require.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faqHeading2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                                How is the IELTS test scored and what do the band scores mean?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse2" class="accordion-collapse collapse" aria-labelledby="faqHeading2" data-bs-parent="#previewFAQ">
+                            <div class="accordion-body">
+                                <p>IELTS results are reported on a 9-band scale:</p>
+                                <ul>
+                                    <li><strong>Band 9:</strong> Expert user</li>
+                                    <li><strong>Band 8:</strong> Very good user</li>
+                                    <li><strong>Band 7:</strong> Good user</li>
+                                    <li><strong>Band 6:</strong> Competent user</li>
+                                    <li><strong>Band 5:</strong> Modest user</li>
+                                </ul>
+                                <p>You receive individual scores for Listening, Reading, Writing, and Speaking. These are averaged to give your Overall Band Score.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="faqHeading3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                                How long are IELTS results valid and when should I take the test?
+                            </button>
+                        </h2>
+                        <div id="faqCollapse3" class="accordion-collapse collapse" aria-labelledby="faqHeading3" data-bs-parent="#previewFAQ">
+                            <div class="accordion-body">
+                                <p>IELTS results are officially valid for 2 years from the date of the test.</p>
+                                <p>However, some organizations may have their own policies regarding the validity period. For example, some universities or immigration authorities might require a more recent test result if your English proficiency is critical for your intended purpose.</p>
+                                <p>Always check with your receiving organization for their specific requirements.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature 3: Mobile-First Login & Registration -->
+            <section class="feature-section">
+                <div class="feature-header">
+                    <h2><i class="fas fa-mobile-alt me-2"></i>3. Mobile-First Login & Registration</h2>
+                </div>
+                <div class="auth-flow-demo">
+                    <div class="auth-card">
+                        <i class="fas fa-sign-in-alt fa-3x text-primary mb-3"></i>
+                        <h4>Mobile-Optimized Login</h4>
+                        <p>Responsive design with reCAPTCHA security</p>
+                        <a href="{{ url_for('login') }}" class="btn btn-primary btn-sm">View Login Page</a>
+                    </div>
+                    <div class="auth-card">
+                        <i class="fas fa-user-plus fa-3x text-success mb-3"></i>
+                        <h4>Mobile-First Registration</h4>
+                        <p>GDPR-compliant with progressive validation</p>
+                        <a href="{{ url_for('register') }}" class="btn btn-success btn-sm">View Registration</a>
+                    </div>
+                    <div class="auth-card">
+                        <i class="fas fa-key fa-3x text-warning mb-3"></i>
+                        <h4>Password Recovery</h4>
+                        <p>Secure reset workflow with email verification</p>
+                        <a href="{{ url_for('forgot_password') }}" class="btn btn-warning btn-sm">View Reset Form</a>
+                    </div>
+                </div>
+                
+                <div class="mobile-registration-preview">
+                    <h4><i class="fas fa-check-circle me-2"></i>Mobile-First Features Included:</h4>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>✅ Responsive grid layout</li>
+                                <li>✅ Touch-optimized form controls</li>
+                                <li>✅ Progressive validation</li>
+                                <li>✅ GDPR compliance checkboxes</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-unstyled">
+                                <li>✅ reCAPTCHA v2 integration</li>
+                                <li>✅ Error handling & feedback</li>
+                                <li>✅ Accessibility features</li>
+                                <li>✅ Mobile navigation optimized</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature 4: QR Code Authentication System -->
+            <section class="feature-section">
+                <div class="feature-header">
+                    <h2><i class="fas fa-qrcode me-2"></i>4. QR Code Authentication System</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="qr-preview-container">
+                            <i class="fas fa-qrcode fa-5x text-primary mb-3"></i>
+                            <h4>QR Authentication Ready</h4>
+                            <p>Complete mobile authentication workflow with QR code generation, token management, and session handling</p>
+                            <a href="/qr-login" class="btn btn-primary">
+                                <i class="fas fa-mobile-alt me-2"></i>Launch QR Auth Page
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h4>✅ QR System Features:</h4>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Dynamic QR code generation
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Token-based authentication
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Real-time polling for auth status
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Automatic expiration (10 min)
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Mobile app integration ready
+                            </li>
+                            <li class="list-group-item">
+                                <i class="fas fa-check text-success me-2"></i>
+                                Secure session management
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Feature 5: Forgot Password Backend Workflow -->
+            <section class="feature-section">
+                <div class="feature-header">
+                    <h2><i class="fas fa-unlock-alt me-2"></i>5. Forgot Password Backend Workflow</h2>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-warning text-dark">
+                                <h5><i class="fas fa-envelope me-2"></i>Step 1: Request Reset</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>User submits email through secure form with CSRF protection</p>
+                                <ul class="small">
+                                    <li>Email validation</li>
+                                    <li>Rate limiting</li>
+                                    <li>User lookup</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5><i class="fas fa-link me-2"></i>Step 2: Token Generation</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Secure reset token created and sent via email</p>
+                                <ul class="small">
+                                    <li>Cryptographically secure token</li>
+                                    <li>Time-limited expiration</li>
+                                    <li>Single-use enforcement</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-success text-white">
+                                <h5><i class="fas fa-check-circle me-2"></i>Step 3: Password Reset</h5>
+                            </div>
+                            <div class="card-body">
+                                <p>Secure password update with validation</p>
+                                <ul class="small">
+                                    <li>Token verification</li>
+                                    <li>Password strength validation</li>
+                                    <li>Hash update & session cleanup</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-3 text-center">
+                    <a href="{{ url_for('forgot_password') }}" class="btn btn-outline-primary me-3">
+                        <i class="fas fa-key me-2"></i>Test Forgot Password Form
+                    </a>
+                    <span class="text-muted">Backend API endpoints: /api/forgot-password, /api/reset-password</span>
+                </div>
+            </section>
+
+            <!-- Summary -->
+            <section class="text-center py-5 bg-light rounded">
+                <h2 class="text-success mb-3">✅ All 5 Features Successfully Implemented</h2>
+                <p class="lead">This comprehensive preview demonstrates all requested template features working together</p>
+                <div class="row mt-4">
+                    <div class="col-md-2 mb-3">
+                        <div class="badge bg-primary p-3 w-100">
+                            <i class="fas fa-search-plus d-block mb-2"></i>
+                            AI SEO
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="badge bg-success p-3 w-100">
+                            <i class="fas fa-question-circle d-block mb-2"></i>
+                            FAQ Section
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="badge bg-info p-3 w-100">
+                            <i class="fas fa-mobile-alt d-block mb-2"></i>
+                            Mobile Login
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="badge bg-warning p-3 w-100">
+                            <i class="fas fa-qrcode d-block mb-2"></i>
+                            QR Auth
+                        </div>
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div class="badge bg-secondary p-3 w-100">
+                            <i class="fas fa-unlock-alt d-block mb-2"></i>
+                            Password Reset
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
