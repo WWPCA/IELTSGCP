@@ -352,7 +352,7 @@ def login():
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8">
                     <div class="text-center mb-4">
-                        <h1 class="fw-bold text-primary mb-3">Welcome to IELTS AI Prep</h1>
+                        <h1 class="fw-bold mb-3" style="color: #333;">Welcome to IELTS AI Prep</h1>
                         <p class="lead text-muted">Choose how you'd like to access your account</p>
                     </div>
 
@@ -380,17 +380,17 @@ def login():
 
                         <!-- New Users - Register -->
                         <div class="col-md-6">
-                            <div class="card h-100 shadow-sm" style="border: 2px solid #27ae60;">
-                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);">
+                            <div class="card h-100 shadow-sm" style="border: 2px solid #666;">
+                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #666 0%, #888 100%);">
                                     <i class="fas fa-user-plus fa-2x mb-2"></i>
                                     <h4 class="mb-0">New to IELTS AI Prep?</h4>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="card-text mb-4">Create your account through our mobile app to get started with AI-powered IELTS assessments.</p>
-                                    <div class="alert mb-3" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724;">
+                                    <div class="alert mb-3" style="background-color: #f8f9fa; border-color: #dee2e6; color: #495057;">
                                         <small><i class="fas fa-info-circle me-2"></i>Registration is only available through our mobile app</small>
                                     </div>
-                                    <a href="/download" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; border: none;">
+                                    <a href="/download" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #666 0%, #888 100%); color: white; border: none;">
                                         <i class="fas fa-download me-2"></i>Download App & Register
                                     </a>
                                 </div>
@@ -558,7 +558,7 @@ def login():
             qrPlaceholder.innerHTML = '<div class="spinner-border" style="color: #E33219;" role="status"><span class="visually-hidden">Generating QR Code...</span></div>';
             
             setTimeout(() => {
-                qrPlaceholder.innerHTML = '<i class="fas fa-qrcode fa-4x mb-2" style="color: #27ae60;"></i><p class="small fw-bold" style="color: #27ae60;">QR Code Ready!</p><p class="small text-muted">Scan this with your mobile app</p>';
+                qrPlaceholder.innerHTML = '<i class="fas fa-qrcode fa-4x mb-2" style="color: #E33219;"></i><p class="small fw-bold" style="color: #E33219;">QR Code Ready!</p><p class="small text-muted">Scan this with your mobile app</p>';
             }, 1500);
         }
         </script>
