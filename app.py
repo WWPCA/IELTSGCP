@@ -15,6 +15,9 @@ import secrets
 import hashlib
 from datetime import datetime, timedelta
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -1887,6 +1890,130 @@ def gdpr_delete_account():
     session.clear()
     
     return jsonify({'success': True, 'message': 'Account deleted successfully'})
+
+# ============================================================================
+# AI ASSESSMENT ENDPOINTS
+# ============================================================================
+
+@app.route('/api/writing/evaluate', methods=['POST'])
+def evaluate_writing():
+    """Evaluate IELTS writing task using AWS Bedrock Nova Micro"""
+    if not bedrock_service:
+        return jsonify({'error': 'AI service not available'}), 503
+    
+    try:
+        data = request.get_json()
+        essay_text = data.get('essay_text')
+        prompt = data.get('prompt', 'Describe the given information')
+        assessment_type = data.get('assessment_type', 'academic_task2')
+        user_email = session.get('user_email', 'anonymous')
+        
+        if not essay_text:
+            return jsonify({'error': 'Essay text is required'}), 400
+        
+        # Evaluate with Nova Micro
+        result = bedrock_service.evaluate_writing_with_nova_micro(
+            essay_text=essay_text,
+            prompt=prompt,
+            assessment_type=assessment_type
+        )
+        
+        # Save to DynamoDB if user is logged in and assessment DAL is available
+        if user_email != 'anonymous' and assessment_dal:
+            result['user_email'] = user_email
+            result['assessment_type'] = assessment_type
+            assessment_dal.save_assessment(result)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Writing evaluation error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/reading/evaluate', methods=['POST'])
+def evaluate_reading():
+    """Evaluate IELTS reading comprehension using AWS Bedrock Nova Micro"""
+    if not bedrock_service:
+        return jsonify({'error': 'AI service not available'}), 503
+    
+    try:
+        data = request.get_json()
+        user_answers = data.get('user_answers', [])
+        answer_key = data.get('answer_key', [])
+        passages = data.get('passages', [])
+        assessment_type = data.get('assessment_type', 'academic_reading')
+        user_email = session.get('user_email', 'anonymous')
+        
+        if not user_answers or not answer_key:
+            return jsonify({'error': 'User answers and answer key are required'}), 400
+        
+        # Evaluate with Nova Micro
+        result = bedrock_service.evaluate_reading_with_nova_micro(
+            user_answers=user_answers,
+            answer_key=answer_key,
+            passages=passages,
+            assessment_type=assessment_type
+        )
+        
+        # Save to DynamoDB if user is logged in
+        if user_email != 'anonymous' and assessment_dal:
+            result['user_email'] = user_email
+            assessment_dal.save_assessment(result)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Reading evaluation error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/listening/evaluate', methods=['POST'])
+def evaluate_listening():
+    """Evaluate IELTS listening comprehension using AWS Bedrock Nova Micro"""
+    if not bedrock_service:
+        return jsonify({'error': 'AI service not available'}), 503
+    
+    try:
+        data = request.get_json()
+        user_answers = data.get('user_answers', [])
+        answer_key = data.get('answer_key', [])
+        transcript = data.get('transcript', '')
+        assessment_type = data.get('assessment_type', 'academic_listening')
+        user_email = session.get('user_email', 'anonymous')
+        
+        if not user_answers or not answer_key:
+            return jsonify({'error': 'User answers and answer key are required'}), 400
+        
+        # Evaluate with Nova Micro
+        result = bedrock_service.evaluate_listening_with_nova_micro(
+            user_answers=user_answers,
+            answer_key=answer_key,
+            transcript=transcript,
+            assessment_type=assessment_type
+        )
+        
+        # Save to DynamoDB if user is logged in
+        if user_email != 'anonymous' and assessment_dal:
+            result['user_email'] = user_email
+            assessment_dal.save_assessment(result)
+        
+        return jsonify(result)
+        
+    except Exception as e:
+        logger.error(f"Listening evaluation error: {e}")
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/api/speaking/start', methods=['POST'])
+def start_speaking_assessment():
+    """Start IELTS speaking assessment with Gemini Smart Selection"""
+    # For now, return a placeholder response
+    # Full implementation would use the Gemini Smart Selection service
+    return jsonify({
+        'status': 'ready',
+        'websocket_url': '/api/speaking/stream',
+        'assessment_id': str(uuid.uuid4()),
+        'model': 'gemini-flash-lite',
+        'message': 'Speaking assessment ready. Connect via WebSocket for real-time conversation.'
+    })
 
 @app.route('/gdpr/update-consent', methods=['POST'])
 def gdpr_update_consent():
