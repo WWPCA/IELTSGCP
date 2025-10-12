@@ -182,6 +182,13 @@
   text-align: center;
 }
 
+/* Accessibility: Ensure sufficient color contrast */
+.card-header a,
+.card-header a:hover {
+  color: white !important;
+  text-decoration: underline;
+}
+
 .card-header h3,
 .card-header h4,
 .card-header h5 {
