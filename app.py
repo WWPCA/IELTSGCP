@@ -1,5 +1,5 @@
 """
-IELTS GenAI Prep - Production Flask Application  
+IELTS AI Prep - Production Flask Application  
 Uses GCP Firestore for data storage with fallback to mock services for development
 """
 
@@ -324,7 +324,7 @@ def preview_writing_assessment():
             <h1>🎯 Writing Assessment Preview</h1>
             <p>The divided screen template is ready! It includes:</p>
             <ul>
-                <li>✅ <strong>Left Panel (45%)</strong>: IELTS GenAI Prep logo + question display</li>
+                <li>✅ <strong>Left Panel (45%)</strong>: IELTS AI Prep logo + question display</li>
                 <li>✅ <strong>Right Panel (55%)</strong>: Response writing area</li>
                 <li>✅ <strong>Real IELTS exam format</strong> with professional styling</li>
                 <li>✅ <strong>Mobile responsive</strong> design</li>
@@ -360,18 +360,18 @@ def login():
                     <div class="row g-4 mb-5">
                         <!-- Existing Users - Login -->
                         <div class="col-md-6">
-                            <div class="card h-100 shadow-sm" style="border: 2px solid #3498db;">
-                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
+                            <div class="card h-100 shadow-sm" style="border: 2px solid #E33219;">
+                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%);">
                                     <i class="fas fa-sign-in-alt fa-2x mb-2"></i>
                                     <h4 class="mb-0">Already Have an Account?</h4>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="card-text mb-4">Log in to access your assessments, view progress, and continue your IELTS preparation journey.</p>
-                                    <button class="btn btn-lg w-100" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; border: none;" onclick="showLogin()">
+                                    <button class="btn btn-lg w-100" style="background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%); color: white; border: none;" onclick="showLogin()">
                                         <i class="fas fa-envelope me-2"></i>Login with Email
                                     </button>
                                     <hr class="my-3">
-                                    <button class="btn btn-lg w-100" style="color: #3498db; border: 2px solid #3498db; background: white;" onclick="showQR()">
+                                    <button class="btn btn-lg w-100" style="color: #E33219; border: 2px solid #E33219; background: white;" onclick="showQR()">
                                         <i class="fas fa-qrcode me-2"></i>Quick Login with QR
                                     </button>
                                 </div>
@@ -406,7 +406,7 @@ def login():
                                 <!-- Navigation Tabs -->
                                 <ul class="nav nav-pills justify-content-center mb-4" id="loginTabs" role="tablist">
                                     <li class="nav-item" role="presentation">
-                                        <button class="nav-link active" id="email-tab" data-bs-toggle="pill" data-bs-target="#email-login" type="button" role="tab">
+                                        <button class="nav-link active" id="email-tab" data-bs-toggle="pill" data-bs-target="#email-login" type="button" role="tab" style="background-color: #E33219; color: white;">
                                             <i class="fas fa-envelope me-2"></i>Email Login
                                         </button>
                                     </li>
@@ -448,14 +448,14 @@ def login():
                                                 <label class="form-check-label" for="rememberMe">Keep me logged in</label>
                                             </div>
                                             <div class="d-grid mb-3">
-                                                <button type="submit" class="btn btn-lg" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; border: none;">
+                                                <button type="submit" class="btn btn-lg" style="background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%); color: white; border: none;">
                                                     <i class="fas fa-sign-in-alt me-2"></i>Sign In to My Account
                                                 </button>
                                             </div>
                                         </form>
                                         
                                         <div class="text-center">
-                                            <a href="/forgot_password" class="text-decoration-none">
+                                            <a href="/forgot_password" class="text-decoration-none" style="color: #E33219;">
                                                 <i class="fas fa-key me-1"></i>Forgot your password?
                                             </a>
                                         </div>
@@ -467,27 +467,27 @@ def login():
                                             <h3 class="mb-3">Quick Login with QR Code</h3>
                                             <p class="text-muted mb-4">Use your mobile app to scan and login instantly - perfect for quick access!</p>
                                             
-                                            <div class="alert alert-info">
+                                            <div class="alert" style="background-color: #fff5f5; border: 1px solid #E33219; color: #721c24;">
                                                 <i class="fas fa-mobile-alt me-2"></i>
                                                 <strong>Instructions:</strong> Open your IELTS AI Prep mobile app and use the QR scanner to login automatically
                                             </div>
                                             
                                             <div class="qr-container bg-light rounded p-4 mb-4">
-                                                <div class="qr-code mx-auto mb-3" style="width: 200px; height: 200px; border: 2px dashed #3498db; display: flex; align-items: center; justify-content: center; background: white; border-radius: 10px;">
+                                                <div class="qr-code mx-auto mb-3" style="width: 200px; height: 200px; border: 2px dashed #E33219; display: flex; align-items: center; justify-content: center; background: white; border-radius: 10px;">
                                                     <div id="qr-placeholder">
-                                                        <i class="fas fa-qrcode fa-4x mb-2" style="color: #3498db;"></i>
+                                                        <i class="fas fa-qrcode fa-4x mb-2" style="color: #E33219;"></i>
                                                         <p class="small text-muted">Click below to generate QR code</p>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-lg" style="color: #3498db; border: 2px solid #3498db; background: white;" onclick="generateQR()">
+                                                <button class="btn btn-lg" style="color: #E33219; border: 2px solid #E33219; background: white;" onclick="generateQR()">
                                                     <i class="fas fa-qrcode me-2"></i>Generate Login QR Code
                                                 </button>
                                             </div>
                                             
-                                            <div class="alert alert-warning">
+                                            <div class="alert" style="background-color: #fff8e1; border: 1px solid #ffc107; color: #856404;">
                                                 <h6><i class="fas fa-mobile-alt me-2"></i>Don't have our mobile app yet?</h6>
                                                 <p class="mb-2 small">Download our app to register your account and enjoy the full mobile experience!</p>
-                                                <a href="/download" class="btn btn-warning">
+                                                <a href="/download" class="btn" style="background-color: #ffc107; color: #333; border: none;">
                                                     <i class="fas fa-download me-2"></i>Get the Mobile App
                                                 </a>
                                             </div>
@@ -507,6 +507,22 @@ def login():
             </div>
         </div>
         
+        <style>
+        .nav-pills .nav-link {
+            color: #E33219;
+            background-color: transparent;
+            border: 1px solid #E33219;
+        }
+        .nav-pills .nav-link.active {
+            background-color: #E33219 !important;
+            color: white !important;
+            border-color: #E33219 !important;
+        }
+        .nav-pills .nav-link:hover {
+            background-color: #fff5f5;
+            color: #E33219;
+        }
+        </style>
         <script>
         function showLogin() {
             document.getElementById('login-forms').style.display = 'block';
@@ -539,10 +555,10 @@ def login():
         
         function generateQR() {
             const qrPlaceholder = document.getElementById('qr-placeholder');
-            qrPlaceholder.innerHTML = '<div class="spinner-border text-primary" role="status"><span class="visually-hidden">Generating QR Code...</span></div>';
+            qrPlaceholder.innerHTML = '<div class="spinner-border" style="color: #E33219;" role="status"><span class="visually-hidden">Generating QR Code...</span></div>';
             
             setTimeout(() => {
-                qrPlaceholder.innerHTML = '<i class="fas fa-qrcode fa-4x text-success mb-2"></i><p class="small text-success fw-bold">QR Code Ready!</p><p class="small text-muted">Scan this with your mobile app</p>';
+                qrPlaceholder.innerHTML = '<i class="fas fa-qrcode fa-4x mb-2" style="color: #27ae60;"></i><p class="small fw-bold" style="color: #27ae60;">QR Code Ready!</p><p class="small text-muted">Scan this with your mobile app</p>';
             }, 1500);
         }
         </script>
@@ -569,7 +585,7 @@ def register():
     return '''
     <html>
     <head>
-        <title>Registration - IELTS GenAI Prep</title>
+        <title>Registration - IELTS AI Prep</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -582,7 +598,7 @@ def register():
                     <div class="card-body p-5">
                         <i class="fas fa-mobile-alt fa-4x text-primary mb-4"></i>
                         <h2 class="mb-3">Registration Available in App Only</h2>
-                        <p class="lead mb-4">Create your IELTS GenAI Prep account exclusively through our mobile app for the best experience.</p>
+                        <p class="lead mb-4">Create your IELTS AI Prep account exclusively through our mobile app for the best experience.</p>
                         <div class="d-grid gap-2">
                             <a href="/download" class="btn btn-primary btn-lg">
                                 <i class="fas fa-download me-2"></i>Download App & Register
@@ -605,7 +621,7 @@ def download():
     return '''
     <html>
     <head>
-        <title>Download IELTS GenAI Prep App</title>
+        <title>Download IELTS AI Prep App</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -626,7 +642,7 @@ def download():
                 <div class="card shadow-lg border-0" style="max-width: 600px;">
                     <div class="card-body p-5">
                         <i class="fas fa-mobile-alt fa-4x text-primary mb-4"></i>
-                        <h2 class="mb-3">Download IELTS GenAI Prep</h2>
+                        <h2 class="mb-3">Download IELTS AI Prep</h2>
                         <p class="lead mb-4">Get started with AI-powered IELTS preparation. Download our mobile app from your preferred store.</p>
                         
                         <div class="d-flex flex-column gap-3 mb-4">
