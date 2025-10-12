@@ -360,18 +360,18 @@ def login():
                     <div class="row g-4 mb-5">
                         <!-- Existing Users - Login -->
                         <div class="col-md-6">
-                            <div class="card h-100 border-primary shadow-sm">
-                                <div class="card-header bg-primary text-white text-center">
+                            <div class="card h-100 shadow-sm" style="border: 2px solid #3498db;">
+                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);">
                                     <i class="fas fa-sign-in-alt fa-2x mb-2"></i>
                                     <h4 class="mb-0">Already Have an Account?</h4>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="card-text mb-4">Log in to access your assessments, view progress, and continue your IELTS preparation journey.</p>
-                                    <button class="btn btn-primary btn-lg w-100" onclick="showLogin()">
+                                    <button class="btn btn-lg w-100" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; border: none;" onclick="showLogin()">
                                         <i class="fas fa-envelope me-2"></i>Login with Email
                                     </button>
                                     <hr class="my-3">
-                                    <button class="btn btn-outline-primary btn-lg w-100" onclick="showQR()">
+                                    <button class="btn btn-lg w-100" style="color: #3498db; border: 2px solid #3498db; background: white;" onclick="showQR()">
                                         <i class="fas fa-qrcode me-2"></i>Quick Login with QR
                                     </button>
                                 </div>
@@ -380,17 +380,17 @@ def login():
 
                         <!-- New Users - Register -->
                         <div class="col-md-6">
-                            <div class="card h-100 border-success shadow-sm">
-                                <div class="card-header bg-success text-white text-center">
+                            <div class="card h-100 shadow-sm" style="border: 2px solid #27ae60;">
+                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);">
                                     <i class="fas fa-user-plus fa-2x mb-2"></i>
                                     <h4 class="mb-0">New to IELTS AI Prep?</h4>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="card-text mb-4">Create your account through our mobile app to get started with AI-powered IELTS assessments.</p>
-                                    <div class="alert alert-info mb-3">
+                                    <div class="alert mb-3" style="background-color: #d4edda; border-color: #c3e6cb; color: #155724;">
                                         <small><i class="fas fa-info-circle me-2"></i>Registration is only available through our mobile app</small>
                                     </div>
-                                    <a href="/download" class="btn btn-success btn-lg w-100">
+                                    <a href="/download" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%); color: white; border: none;">
                                         <i class="fas fa-download me-2"></i>Download App & Register
                                     </a>
                                 </div>
@@ -448,7 +448,7 @@ def login():
                                                 <label class="form-check-label" for="rememberMe">Keep me logged in</label>
                                             </div>
                                             <div class="d-grid mb-3">
-                                                <button type="submit" class="btn btn-primary btn-lg">
+                                                <button type="submit" class="btn btn-lg" style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; border: none;">
                                                     <i class="fas fa-sign-in-alt me-2"></i>Sign In to My Account
                                                 </button>
                                             </div>
@@ -469,17 +469,17 @@ def login():
                                             
                                             <div class="alert alert-info">
                                                 <i class="fas fa-mobile-alt me-2"></i>
-                                                <strong>Instructions:</strong> Open your IELTS GenAI Prep mobile app and use the QR scanner to login automatically
+                                                <strong>Instructions:</strong> Open your IELTS AI Prep mobile app and use the QR scanner to login automatically
                                             </div>
                                             
                                             <div class="qr-container bg-light rounded p-4 mb-4">
-                                                <div class="qr-code mx-auto mb-3" style="width: 200px; height: 200px; border: 2px dashed #007bff; display: flex; align-items: center; justify-content: center; background: white; border-radius: 10px;">
+                                                <div class="qr-code mx-auto mb-3" style="width: 200px; height: 200px; border: 2px dashed #3498db; display: flex; align-items: center; justify-content: center; background: white; border-radius: 10px;">
                                                     <div id="qr-placeholder">
-                                                        <i class="fas fa-qrcode fa-4x text-primary mb-2"></i>
+                                                        <i class="fas fa-qrcode fa-4x mb-2" style="color: #3498db;"></i>
                                                         <p class="small text-muted">Click below to generate QR code</p>
                                                     </div>
                                                 </div>
-                                                <button class="btn btn-outline-primary btn-lg" onclick="generateQR()">
+                                                <button class="btn btn-lg" style="color: #3498db; border: 2px solid #3498db; background: white;" onclick="generateQR()">
                                                     <i class="fas fa-qrcode me-2"></i>Generate Login QR Code
                                                 </button>
                                             </div>
