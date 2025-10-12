@@ -1,0 +1,10 @@
+{
+  "icon": {
+    "source": "app_icon_master.png",
+    "foreground": "app_icon_master.png",
+    "background": "#FFFFFF"
+  },
+  "splash": {
+    "backgroundColor": "#3498db"
+  }
+}
