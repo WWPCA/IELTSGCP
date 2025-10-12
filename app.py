@@ -348,11 +348,11 @@ def login():
         
         # Inject redesigned login page with clear instructions
         login_section = '''
-        <div class="container py-5">
+        <div class="container" style="padding-top: 140px; padding-bottom: 50px;">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-10 col-lg-8">
                     <div class="text-center mb-4">
-                        <h1 class="fw-bold mb-3" style="color: #333;">Welcome to IELTS AI Prep</h1>
+                        <h1 class="fw-bold mb-3" style="color: #333; margin-top: 0;">Welcome to IELTS AI Prep</h1>
                         <p class="lead text-muted">Choose how you'd like to access your account</p>
                     </div>
 
