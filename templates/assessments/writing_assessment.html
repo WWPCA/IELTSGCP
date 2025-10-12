@@ -4,7 +4,30 @@
 
 {% block styles %}
 {{ super() }}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Work+Sans:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
+    /* Typography System */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        font-weight: 400;
+        letter-spacing: -0.01em;
+    }
+    
+    h1, h2, h3, h4, h5, h6, .navbar-brand, .btn, .card-header {
+        font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        letter-spacing: -0.02em;
+    }
+    
+    h1 { font-weight: 700; letter-spacing: -0.03em; }
+    h2 { font-weight: 700; letter-spacing: -0.02em; }
+    h3 { font-weight: 600; }
+    
+    .lead {
+        font-family: 'Inter', sans-serif;
+        font-weight: 400;
+        line-height: 1.7;
+    }
+    
     .ielts-header {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         color: white;

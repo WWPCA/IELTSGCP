@@ -320,7 +320,7 @@ def preview_writing_assessment():
         return content
     except FileNotFoundError:
         return """
-        <div style="padding: 20px; font-family: Arial;">
+        <div style="padding: 20px; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
             <h1>🎯 Writing Assessment Preview</h1>
             <p>The divided screen template is ready! It includes:</p>
             <ul>
@@ -704,7 +704,7 @@ def icon_preview():
         except FileNotFoundError:
             return '''
             <html>
-            <body style="font-family: Arial; padding: 40px; text-align: center;">
+            <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px; text-align: center;">
                 <h1>Icon Preview Not Found</h1>
                 <p>The icon preview file could not be loaded.</p>
                 <a href="/" style="color: #3498db;">Return to Home</a>
@@ -747,7 +747,7 @@ def terms_and_payment():
         return '''
         <html>
         <head><title>Terms of Service</title></head>
-        <body style="font-family: Arial; padding: 40px;">
+        <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px;">
             <h1>Terms of Service</h1>
             <p><strong>ALL PURCHASES ARE FINAL AND NON-REFUNDABLE.</strong></p>
             <a href="/">Back to Home</a>
@@ -1156,7 +1156,7 @@ def assessment_start(assessment_type, assessment_number):
     
     return f"""
     <html><head><title>Assessment Started</title></head>
-    <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
+    <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px; background: #f5f5f5;">
         <div style="background: white; padding: 30px; border-radius: 10px; max-width: 600px; margin: 0 auto;">
             <h2>Assessment {assessment_number} Started</h2>
             <p><strong>Type:</strong> {assessment_type.replace('_', ' ').title()}</p>
@@ -1322,7 +1322,7 @@ def assessment_list(assessment_type):
         # Fallback success page if template has issues
         return f"""
         <html><head><title>Assessment Access</title></head>
-        <body style="font-family: Arial; padding: 40px; background: #f5f5f5;">
+        <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; padding: 40px; background: #f5f5f5;">
             <div style="background: white; padding: 30px; border-radius: 10px; max-width: 500px; margin: 0 auto;">
                 <h2>✅ Authentication Successful</h2>
                 <p><strong>User:</strong> {user_email}</p>
