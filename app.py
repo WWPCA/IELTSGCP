@@ -677,19 +677,24 @@ def contact():
 def icon_preview():
     """Serve the new brand icon preview page"""
     try:
-        with open('icon_preview.html', 'r') as f:
+        with open('icon_preview_updated.html', 'r') as f:
             content = f.read()
         return content
     except FileNotFoundError:
-        return '''
-        <html>
-        <body style="font-family: Arial; padding: 40px; text-align: center;">
-            <h1>Icon Preview Not Found</h1>
-            <p>The icon preview file could not be loaded.</p>
-            <a href="/" style="color: #3498db;">Return to Home</a>
-        </body>
-        </html>
-        '''
+        try:
+            with open('icon_preview.html', 'r') as f:
+                content = f.read()
+            return content
+        except FileNotFoundError:
+            return '''
+            <html>
+            <body style="font-family: Arial; padding: 40px; text-align: center;">
+                <h1>Icon Preview Not Found</h1>
+                <p>The icon preview file could not be loaded.</p>
+                <a href="/" style="color: #3498db;">Return to Home</a>
+            </body>
+            </html>
+            '''
 
 @app.route('/new_brand_icon.svg')
 def serve_brand_icon():
@@ -699,6 +704,15 @@ def serve_brand_icon():
             svg_content = f.read()
         from flask import Response
         return Response(svg_content, mimetype='image/svg+xml')
+    except FileNotFoundError:
+        return "Icon not found", 404
+
+@app.route('/user_icon.jpeg')
+def serve_user_icon():
+    """Serve the user-provided app icon"""
+    try:
+        from flask import send_file
+        return send_file('attached_assets/IMG_0059_1760268985803.jpeg', mimetype='image/jpeg')
     except FileNotFoundError:
         return "Icon not found", 404
 
