@@ -1,8 +1,0 @@
-aws-wsgi
-flask
-werkzeug
-flask-cors
-flask-login
-pyjwt
-bcrypt
-qrcode
