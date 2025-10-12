@@ -673,6 +673,35 @@ def contact():
         
     return render_template('contact.html', current_user=AnonymousUser())
 
+@app.route('/icon-preview')
+def icon_preview():
+    """Serve the new brand icon preview page"""
+    try:
+        with open('icon_preview.html', 'r') as f:
+            content = f.read()
+        return content
+    except FileNotFoundError:
+        return '''
+        <html>
+        <body style="font-family: Arial; padding: 40px; text-align: center;">
+            <h1>Icon Preview Not Found</h1>
+            <p>The icon preview file could not be loaded.</p>
+            <a href="/" style="color: #3498db;">Return to Home</a>
+        </body>
+        </html>
+        '''
+
+@app.route('/new_brand_icon.svg')
+def serve_brand_icon():
+    """Serve the new brand icon SVG file"""
+    try:
+        with open('new_brand_icon.svg', 'r') as f:
+            svg_content = f.read()
+        from flask import Response
+        return Response(svg_content, mimetype='image/svg+xml')
+    except FileNotFoundError:
+        return "Icon not found", 404
+
 @app.route('/terms_and_payment')
 @app.route('/terms-and-payment')  # Alias with dashes
 @app.route('/terms-of-service')  # Alias for app store compliance
