@@ -25,3 +25,5 @@ librosa
 soundfile
 google-genai
 sendgrid
+mangum
+sift-stack-py
