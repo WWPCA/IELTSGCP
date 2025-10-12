@@ -70,31 +70,42 @@ def add_no_cache_headers(response):
         response.headers['Expires'] = '-1'
     return response
 
-# Initialize GCP Firestore connections with fallback to mock for development
+# Initialize AWS DynamoDB connections
 try:
-    # Try to use production Firestore
-    import sys
-    sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'gcp'))
-    from firestore_dal import FirestoreConnection, UserDAL
+    # Use real AWS DynamoDB
+    from dynamodb_dal import DynamoDBConnection, UserDAL, SessionDAL, AssessmentDAL, QRTokenDAL
+    from bedrock_service import BedrockService
     
-    project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
     environment = os.environ.get('ENVIRONMENT', 'production')
-    db_connection = FirestoreConnection(project_id=project_id, environment=environment)
+    db_connection = DynamoDBConnection(environment=environment)
     user_dal = UserDAL(db_connection)
+    session_dal = SessionDAL(db_connection)
+    assessment_dal = AssessmentDAL(db_connection)
+    qr_token_dal = QRTokenDAL(db_connection)
+    bedrock_service = BedrockService()
     
-    print(f"[PRODUCTION] Connected to Firestore - project: {project_id}, env: {environment}")
+    print(f"[PRODUCTION] Connected to AWS DynamoDB - region: {db_connection.region}, env: {environment}")
+    print(f"[PRODUCTION] AWS Bedrock service initialized")
     use_production = True
     
 except Exception as e:
-    print(f"[INFO] Firestore unavailable, using mock services: {e}")
+    print(f"[WARNING] AWS services initialization error: {e}")
     # Fallback to mock services for development
     try:
         from aws_mock_config import aws_mock
         db_connection = aws_mock
         user_dal = None
+        session_dal = None
+        assessment_dal = None
+        qr_token_dal = None
+        bedrock_service = None
     except ImportError:
         db_connection = None
         user_dal = None
+        session_dal = None
+        assessment_dal = None
+        qr_token_dal = None
+        bedrock_service = None
     use_production = False
 
 # Always initialize mock storage variables (ensures they exist even if DynamoDB works)
@@ -110,6 +121,24 @@ try:
     print("[INFO] Mobile API endpoints registered at /api/v1/*")
 except ImportError:
     print("[INFO] Mobile API blueprint not available")
+
+# Initialize Gemini Smart Selection for Speaking
+try:
+    from gemini_live_audio_service_smart import create_smart_selection_service
+    from hybrid_integration_routes_smart import create_hybrid_routes_smart
+    
+    gemini_smart_service = create_smart_selection_service(
+        project_id=os.environ.get('GOOGLE_CLOUD_PROJECT'),
+        region='us-central1'
+    )
+    
+    # Register hybrid routes for speaking assessments
+    hybrid_blueprint = create_hybrid_routes_smart(gemini_smart_service, assessment_dal)
+    app.register_blueprint(hybrid_blueprint)
+    print("[INFO] Gemini Smart Selection for speaking initialized")
+except ImportError as e:
+    print(f"[INFO] Gemini Smart Selection not available: {e}")
+    gemini_smart_service = None
 
 # Import receipt validation for endpoints (lazy initialization)
 receipt_service = None

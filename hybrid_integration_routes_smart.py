@@ -348,30 +348,30 @@ def writing_assessment_routes(app: Flask):
 # COST ANALYTICS ENDPOINT
 # ============================================================================
 
-@app.route('/api/analytics/costs', methods=['GET'])
-def get_cost_analytics():
-    """Get cost analytics for Smart Selection vs alternatives"""
-    
-    # Get parameters
-    assessments = int(request.args.get('assessments', 1000))
-    
-    # Calculate costs
-    smart_basic = calculate_smart_selection_cost(14, complexity_triggered=False)
-    smart_complex = calculate_smart_selection_cost(14, complexity_triggered=True)
-    
-    # Average (30% complexity rate)
-    smart_average = smart_basic['total'] * 0.7 + smart_complex['total'] * 0.3
-    
-    # All Flash cost
-    all_flash = 14 * 0.0042  # $0.0588
-    
-    # All Flash-Lite cost
-    all_lite = 14 * 0.00075  # $0.0105
-    
-    # Nova Micro for writing
-    nova_micro = 0.000105
-    
-    return jsonify({
+    @hybrid_routes_smart.route('/api/analytics/costs', methods=['GET'])
+    def get_cost_analytics():
+        """Get cost analytics for Smart Selection vs alternatives"""
+        
+        # Get parameters
+        assessments = int(request.args.get('assessments', 1000))
+        
+        # Calculate costs
+        smart_basic = calculate_smart_selection_cost(14, complexity_triggered=False)
+        smart_complex = calculate_smart_selection_cost(14, complexity_triggered=True)
+        
+        # Average (30% complexity rate)
+        smart_average = smart_basic['total'] * 0.7 + smart_complex['total'] * 0.3
+        
+        # All Flash cost
+        all_flash = 14 * 0.0042  # $0.0588
+        
+        # All Flash-Lite cost
+        all_lite = 14 * 0.00075  # $0.0105
+        
+        # Nova Micro for writing
+        nova_micro = 0.000105
+        
+        return jsonify({
         'per_assessment': {
             'smart_selection_speaking': f"${smart_average:.4f}",
             'all_flash_speaking': f"${all_flash:.4f}",
