@@ -380,17 +380,17 @@ def login():
 
                         <!-- New Users - Register -->
                         <div class="col-md-6">
-                            <div class="card h-100 shadow-sm" style="border: 2px solid #666;">
-                                <div class="card-header text-white text-center" style="background: linear-gradient(135deg, #666 0%, #888 100%);">
+                            <div class="card h-100 shadow-sm" style="border: 2px solid #8B1A10;">
+                                <div class="card-header text-white text-center" style="background: #8B1A10;">
                                     <i class="fas fa-user-plus fa-2x mb-2"></i>
                                     <h4 class="mb-0">New to IELTS AI Prep?</h4>
                                 </div>
                                 <div class="card-body text-center">
                                     <p class="card-text mb-4">Create your account through our mobile app to get started with AI-powered IELTS assessments.</p>
-                                    <div class="alert mb-3" style="background-color: #f8f9fa; border-color: #dee2e6; color: #495057;">
+                                    <div class="alert mb-3" style="background-color: #f9f1f1; border-color: #8B1A10; color: #8B1A10;">
                                         <small><i class="fas fa-info-circle me-2"></i>Registration is only available through our mobile app</small>
                                     </div>
-                                    <a href="/download" class="btn btn-lg w-100" style="background: linear-gradient(135deg, #666 0%, #888 100%); color: white; border: none;">
+                                    <a href="/download" class="btn btn-lg w-100" style="background: #8B1A10; color: white; border: none;">
                                         <i class="fas fa-download me-2"></i>Download App & Register
                                     </a>
                                 </div>
