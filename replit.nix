@@ -1,5 +1,6 @@
 {pkgs}: {
   deps = [
+    pkgs.imagemagick
     pkgs.zip
     pkgs.awscli
     pkgs.unzip
