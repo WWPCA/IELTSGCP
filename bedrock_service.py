@@ -99,18 +99,24 @@ Provide your evaluation in the following JSON format:
                     "messages": [
                         {
                             "role": "user",
-                            "content": evaluation_prompt
+                            "content": [{"text": evaluation_prompt}]
                         }
                     ],
-                    "max_tokens": 1000,
-                    "temperature": 0.3,  # Lower temperature for consistent scoring
-                    "top_p": 0.9
+                    "inferenceConfig": {
+                        "maxTokens": 1000,
+                        "temperature": 0.3  # Lower temperature for consistent scoring
+                    }
                 })
             )
             
             # Parse response
             response_body = json.loads(response['body'].read())
-            content = response_body.get('content', [{}])[0].get('text', '{}')
+            
+            # Nova Micro returns output.message.content structure
+            if 'output' in response_body and 'message' in response_body['output']:
+                content = response_body['output']['message']['content'][0]['text']
+            else:
+                content = '{}'
             
             # Parse the JSON response
             try:
@@ -193,12 +199,13 @@ Provide evaluation in this JSON format:
                     "messages": [
                         {
                             "role": "user",
-                            "content": evaluation_prompt
+                            "content": [{"text": evaluation_prompt}]
                         }
                     ],
-                    "max_tokens": 1500,
-                    "temperature": 0.1,  # Very low for objective scoring
-                    "top_p": 0.9
+                    "inferenceConfig": {
+                        "maxTokens": 1500,
+                        "temperature": 0.1  # Very low for objective scoring
+                    }
                 })
             )
             
