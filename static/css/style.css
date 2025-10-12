@@ -1,4 +1,4 @@
-/* IELTS AI Prep - Main Stylesheet */
+/* IELTS GenAI Prep - Main Stylesheet */
 
 :root {
   --primary-color: #2c3e50;
@@ -38,7 +38,7 @@
 }
 
 body {
-  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
   line-height: 1.6;
   color: var(--text-color);
   background-color: #f9f9f9;
