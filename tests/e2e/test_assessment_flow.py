@@ -1,6 +1,7 @@
 """
 End-to-end tests for complete assessment workflows
 """
+import os
 import pytest
 from playwright.sync_api import Page, expect
 
@@ -14,9 +15,11 @@ class TestWritingAssessmentFlow:
         # Navigate to login page
         page.goto("http://localhost:5000/login")
         
-        # Login
-        page.fill('input[name="email"]', 'test@example.com')
-        page.fill('input[name="password"]', 'TestPassword123!')
+        # Login with test credentials from environment
+        test_email = os.environ.get('TEST_USER_EMAIL', 'test@example.com')
+        test_password = os.environ.get('TEST_USER_PASSWORD', 'DefaultTestPass123!')
+        page.fill('input[name="email"]', test_email)
+        page.fill('input[name="password"]', test_password)
         page.click('button[type="submit"]')
         
         # Wait for redirect to dashboard
@@ -64,9 +67,11 @@ class TestSpeakingAssessmentFlow:
         # Navigate to login page
         page.goto("http://localhost:5000/login")
         
-        # Login
-        page.fill('input[name="email"]', 'test@example.com')
-        page.fill('input[name="password"]', 'TestPassword123!')
+        # Login with test credentials from environment
+        test_email = os.environ.get('TEST_USER_EMAIL', 'test@example.com')
+        test_password = os.environ.get('TEST_USER_PASSWORD', 'DefaultTestPass123!')
+        page.fill('input[name="email"]', test_email)
+        page.fill('input[name="password"]', test_password)
         page.click('button[type="submit"]')
         
         # Navigate to speaking assessment

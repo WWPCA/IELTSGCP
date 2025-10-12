@@ -5,15 +5,16 @@ Tests all GDPR data rights functionality including access, export, consent, and 
 
 import pytest
 import json
+import os
 from flask import session
 from datetime import datetime
 from werkzeug.security import check_password_hash
 
-# Test user credentials
+# Test user credentials from environment variables
 TEST_USER = {
-    'email': 'gdpr_test@example.com',
-    'username': 'gdprtest',
-    'password': 'GDPRTest123!',
+    'email': os.environ.get('GDPR_TEST_EMAIL', 'gdpr_test@example.com'),
+    'username': os.environ.get('GDPR_TEST_USERNAME', 'gdprtest'),
+    'password': os.environ.get('GDPR_TEST_PASSWORD', 'DefaultTestPass123!'),
     'full_name': 'GDPR Test User'
 }
 
