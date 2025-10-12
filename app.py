@@ -294,9 +294,9 @@ def index():
         
     return render_template('index.html', current_user=AnonymousUser())
 
-@app.route('/assessments')
-def assessments_page():
-    """Assessment products page"""
+@app.route('/practice-modules')
+def practice_modules_page():
+    """Practice Modules page (formerly assessments)"""
     # Provide anonymous user context for template compatibility
     class AnonymousUser:
         is_authenticated = False
@@ -304,10 +304,15 @@ def assessments_page():
         
     return render_template('assessments.html', current_user=AnonymousUser())
 
+@app.route('/assessments')
+def assessments_redirect():
+    """301 redirect from old assessments URL to new practice-modules URL for SEO"""
+    return redirect(url_for('practice_modules_page'), code=301)
+
 @app.route('/assessment-products')
 def assessment_products_page():
-    """Redirect old route to new assessments page"""
-    return redirect(url_for('assessments_page'))
+    """Redirect old route to new practice modules page"""
+    return redirect(url_for('practice_modules_page'), code=301)
 
 @app.route('/preview/writing-assessment')
 def preview_writing_assessment():
