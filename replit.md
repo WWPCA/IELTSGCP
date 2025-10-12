@@ -1,6 +1,6 @@
 ### Overview
 
-IELTS GenAI Prep is an AI-powered platform designed for IELTS test preparation. It offers comprehensive assessment services for both Academic and General Training IELTS exams. The platform utilizes a cost-optimized hybrid architecture, combining AWS Bedrock Nova Micro for text assessment and Google Gemini 2.5 Flash Live API for audio conversations, ensuring high-quality, AI-driven evaluation across all IELTS criteria. Key features include QR code authentication for a seamless mobile-to-web user experience and AI for detailed feedback generation. The project aims to provide accessible and consistent IELTS preparation, leveraging AI to enhance the learning experience.
+IELTS AI Prep is an AI-powered platform designed for IELTS test preparation. It offers comprehensive assessment services for both Academic and General Training IELTS exams. The platform utilizes a cost-optimized hybrid architecture, combining AWS Bedrock Nova Micro for text assessment and Google Gemini 2.5 Flash Live API for audio conversations, ensuring high-quality, AI-driven evaluation across all IELTS criteria. Key features include QR code authentication for a seamless mobile-to-web user experience and AI for detailed feedback generation. The project aims to provide accessible and consistent IELTS preparation, leveraging AI to enhance the learning experience.
 
 ### User Preferences
 
@@ -37,8 +37,10 @@ The platform is migrating to a **GCP-centric architecture** featuring:
 
 **UI/UX Decisions:**
 -   Professional, clean interface with simplified user messaging.
--   Responsive design with Bootstrap styling, purple gradient backgrounds, and modern card layouts.
+-   Responsive design with Bootstrap styling, blue gradient backgrounds (#2c3e50 to #3498db), and modern card layouts.
 -   Authentic IELTS examination format with specific layouts, timers, and word counters.
+-   Brand colors: Primary #2c3e50 (dark blue-gray), Secondary #3498db (bright blue), Accent #e74c3c (red).
+-   Typography: Inter font family for consistency across platforms.
 
 **Security Guidelines:**
 -   Environment variables for sensitive configurations.
