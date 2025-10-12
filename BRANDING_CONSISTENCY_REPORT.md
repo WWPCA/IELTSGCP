@@ -74,22 +74,21 @@ A comprehensive review of branding across website and mobile platforms reveals s
 
 ---
 
-## 🟡 FUNCTIONAL INCONSISTENCIES
+## ✅ INTENDED USER JOURNEY (Working as Designed)
 
-### Authentication Flow
-- **Web**: Traditional email/password + JSON API
-- **Mobile**: QR code + purchase flow only
-- **Missing**: Unified authentication experience
+### Authentication & Payment Flow
+**Designed Architecture**:
+1. **Mobile Apps**: Exclusive gateway for registration and payment
+   - Users register via iOS/Android apps
+   - Payment processed through App Store/Play Store
+   - Creates login credentials for web access
+   
+2. **Website**: Test delivery platform
+   - Users log in with mobile-created credentials
+   - Access purchased assessments
+   - Complete tests in optimal web environment
 
-### Assessment Access
-- **Web**: Direct navigation to assessments
-- **Mobile**: Purchase-gated via app stores
-- **Inconsistent**: Entry points and user journey
-
-### Payment Integration
-- **Web**: No payment capability
-- **Mobile**: App Store/Play Store only
-- **Gap**: Web users cannot purchase
+**This is the correct design** - Mobile apps handle commerce, web delivers the testing experience.
 
 ---
 
@@ -128,9 +127,9 @@ A comprehensive review of branding across website and mobile platforms reveals s
 7. [ ] Align form elements
 8. [ ] Update error/success messages
 
-### Phase 3: Functional Alignment (Priority 3)
-9. [ ] Document unified authentication flow
-10. [ ] Align assessment entry points
+### Phase 3: Documentation & Navigation (Priority 3)
+9. [ ] Document the mobile-to-web user journey clearly
+10. [ ] Ensure consistent messaging about registration process
 11. [ ] Create consistent navigation patterns
 12. [ ] Standardize error handling
 
@@ -184,8 +183,8 @@ After implementation, verify:
 3. **Add logo to headers** - Use the unified icon as logo mark
 
 ### Medium Term (This Month)
-4. **Unify authentication** - Create consistent login experience
-5. **Align mobile/web features** - Ensure feature parity
+4. **Clear user journey messaging** - Ensure all platforms explain the mobile-first registration
+5. **Consistent communication** - Clear messaging about app store registration requirement
 6. **Accessibility fixes** - Address contrast and ARIA issues
 
 ### Long Term (This Quarter)
