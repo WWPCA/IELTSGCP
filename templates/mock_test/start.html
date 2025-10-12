@@ -1,0 +1,194 @@
+{% extends "layout.html" %}
+
+{% block body_class %}bg-white{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .mock-test-header {
+        background: linear-gradient(45deg, #6f42c1, #7952b3);
+        color: white;
+        padding: 3rem 0;
+        margin-bottom: 3rem;
+        border-radius: 15px;
+    }
+    
+    .test-info-card {
+        background: white;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 2rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s ease;
+    }
+    
+    .test-info-card:hover {
+        border-color: #6f42c1;
+        box-shadow: 0 4px 15px rgba(111, 66, 193, 0.2);
+    }
+    
+    .section-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #6f42c1, #7952b3);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .duration-badge {
+        background: #f8f9fa;
+        border: 1px solid #dee2e6;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: bold;
+        color: #6f42c1;
+    }
+    
+    .start-btn {
+        background: linear-gradient(45deg, #6f42c1, #7952b3);
+        border: none;
+        padding: 1rem 3rem;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        transition: all 0.3s ease;
+    }
+    
+    .start-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3);
+    }
+    
+    .important-notice {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        border-radius: 5px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="mock-test-header text-center">
+        <h1 class="display-4 mb-3">IELTS Full Mock Test</h1>
+        <p class="lead mb-0">{{ test_type|replace('_', ' ')|title }}</p>
+    </div>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <div class="important-notice">
+                <h4><i class="fas fa-exclamation-triangle me-2"></i> Test Format & Instructions</h4>
+                <ul class="mb-0">
+                    <li><strong>Total Duration:</strong> Approximately 2 hours 45 minutes</li>
+                    <li><strong>Sections:</strong> Listening, Reading, Writing (continuous), Speaking (separate)</li>
+                    <li><strong>No Breaks:</strong> Listening, Reading, and Writing sections are completed without breaks</li>
+                    <li><strong>Once Started:</strong> The test must be completed in one session</li>
+                    <li><strong>Results:</strong> Available immediately after completion</li>
+                </ul>
+            </div>
+            
+            <div class="row">
+                <!-- Listening Section -->
+                <div class="col-md-6 mb-3">
+                    <div class="test-info-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-headphones"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Listening</h3>
+                        <p class="text-center mb-3">
+                            <span class="duration-badge">40 minutes</span>
+                        </p>
+                        <ul>
+                            <li>4 audio recordings</li>
+                            <li>40 questions</li>
+                            <li>30 min listening + 10 min transfer</li>
+                            <li>Audio played ONCE only</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Reading Section -->
+                <div class="col-md-6 mb-3">
+                    <div class="test-info-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-book-open"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Reading</h3>
+                        <p class="text-center mb-3">
+                            <span class="duration-badge">60 minutes</span>
+                        </p>
+                        <ul>
+                            <li>3 passages/texts</li>
+                            <li>40 questions</li>
+                            <li>Includes transfer time</li>
+                            <li>{{ 'Academic texts' if 'academic' in test_type else 'Social & workplace texts' }}</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Writing Section -->
+                <div class="col-md-6 mb-3">
+                    <div class="test-info-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Writing</h3>
+                        <p class="text-center mb-3">
+                            <span class="duration-badge">60 minutes</span>
+                        </p>
+                        <ul>
+                            <li>2 tasks</li>
+                            <li>Task 1: {{ '150 words (graph/chart)' if 'academic' in test_type else '150 words (letter)' }}</li>
+                            <li>Task 2: 250 words (essay)</li>
+                            <li>AI-evaluated by Gemini</li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <!-- Speaking Section -->
+                <div class="col-md-6 mb-3">
+                    <div class="test-info-card">
+                        <div class="section-icon mx-auto">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <h3 class="text-center mb-3">Speaking</h3>
+                        <p class="text-center mb-3">
+                            <span class="duration-badge">11-14 minutes</span>
+                        </p>
+                        <ul>
+                            <li>3-part interview</li>
+                            <li>AI examiner (Maya)</li>
+                            <li>Real-time conversation</li>
+                            <li>Criteria-based scoring</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="alert alert-info mt-4">
+                <h5><i class="fas fa-info-circle me-2"></i> Test Progress</h5>
+                <p class="mb-0">You'll complete the sections in order: <strong>Listening → Reading → Writing → Speaking</strong>. Your progress will be saved, and you can see your results immediately after completion.</p>
+            </div>
+            
+            <div class="text-center mt-5">
+                <form action="{{ url_for('start_mock_test') }}" method="POST">
+                    <input type="hidden" name="test_type" value="{{ test_type }}">
+                    <input type="hidden" name="assessment_id" value="{{ assessment_id }}">
+                    <button type="submit" class="start-btn">
+                        <i class="fas fa-play-circle me-2"></i> Start Full Mock Test
+                    </button>
+                </form>
+                <p class="text-muted mt-3">Make sure you have a quiet environment and 3 hours available</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

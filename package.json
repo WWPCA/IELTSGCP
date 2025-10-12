@@ -19,8 +19,6 @@
     "@capacitor/network": "^7.0.1",
     "@capacitor/splash-screen": "^7.0.1",
     "@capacitor/status-bar": "^7.0.1",
-    "@capacitor/toast": "^7.0.1",
-    "serverless": "^4.19.1",
-    "serverless-python-requirements": "^6.1.2"
+    "@capacitor/toast": "^7.0.1"
   }
 }

@@ -1,0 +1,202 @@
+{% extends "layout.html" %}
+
+{% block body_class %}bg-white{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .transition-container {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .transition-card {
+        background: white;
+        border: 2px solid #dee2e6;
+        border-radius: 15px;
+        padding: 3rem;
+        text-align: center;
+        max-width: 600px;
+        box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+    
+    .section-completed-icon {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #28a745, #20c997);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 2rem auto;
+        animation: scaleIn 0.5s ease-in-out;
+    }
+    
+    .section-next-icon {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(45deg, #6f42c1, #7952b3);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1.5rem auto;
+    }
+    
+    @keyframes scaleIn {
+        from {
+            transform: scale(0);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+    
+    .progress-summary {
+        background: #f8f9fa;
+        border-radius: 10px;
+        padding: 1.5rem;
+        margin: 2rem 0;
+    }
+    
+    .progress-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.75rem;
+        border-bottom: 1px solid #dee2e6;
+    }
+    
+    .progress-item:last-child {
+        border-bottom: none;
+    }
+    
+    .status-completed {
+        color: #28a745;
+        font-weight: bold;
+    }
+    
+    .status-current {
+        color: #6f42c1;
+        font-weight: bold;
+    }
+    
+    .status-pending {
+        color: #6c757d;
+    }
+    
+    .continue-btn {
+        background: linear-gradient(45deg, #6f42c1, #7952b3);
+        border: none;
+        padding: 1rem 3rem;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        color: white;
+        font-weight: bold;
+        margin-top: 2rem;
+        transition: all 0.3s ease;
+    }
+    
+    .continue-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(111, 66, 193, 0.3);
+    }
+    
+    .break-notice {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1.5rem;
+        border-radius: 5px;
+        margin-top: 2rem;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="transition-container">
+    <div class="transition-card">
+        {% if completed_section %}
+        <div class="section-completed-icon">
+            <i class="fas fa-check"></i>
+        </div>
+        <h1 class="mb-3">{{ completed_section|title }} Section Complete!</h1>
+        <p class="lead text-muted mb-4">Great work! You've finished the {{ completed_section }} section.</p>
+        {% endif %}
+        
+        {% if next_section %}
+        <div class="section-next-icon">
+            {% if next_section == 'reading' %}
+                <i class="fas fa-book-open"></i>
+            {% elif next_section == 'writing' %}
+                <i class="fas fa-pen"></i>
+            {% elif next_section == 'speaking' %}
+                <i class="fas fa-microphone"></i>
+            {% endif %}
+        </div>
+        <h2 class="mb-3">Up Next: {{ next_section|title }}</h2>
+        {% endif %}
+        
+        <div class="progress-summary">
+            <h5 class="mb-3">Test Progress</h5>
+            <div class="progress-item">
+                <span>🎧 Listening</span>
+                <span class="{{ 'status-completed' if listening_status == 'completed' else 'status-pending' }}">
+                    {{ listening_status|title }}
+                </span>
+            </div>
+            <div class="progress-item">
+                <span>📖 Reading</span>
+                <span class="{{ 'status-completed' if reading_status == 'completed' else ('status-current' if reading_status == 'current' else 'status-pending') }}">
+                    {{ reading_status|title }}
+                </span>
+            </div>
+            <div class="progress-item">
+                <span>✍️ Writing</span>
+                <span class="{{ 'status-completed' if writing_status == 'completed' else ('status-current' if writing_status == 'current' else 'status-pending') }}">
+                    {{ writing_status|title }}
+                </span>
+            </div>
+            <div class="progress-item">
+                <span>🗣️ Speaking</span>
+                <span class="{{ 'status-completed' if speaking_status == 'completed' else ('status-current' if speaking_status == 'current' else 'status-pending') }}">
+                    {{ speaking_status|title }}
+                </span>
+            </div>
+        </div>
+        
+        {% if next_section %}
+        <div class="break-notice">
+            <p class="mb-2"><i class="fas fa-info-circle me-2"></i><strong>Take a short break if needed (maximum 5 minutes)</strong></p>
+            <p class="mb-0 small text-muted">The {{ next_section }} section will begin when you click Continue below.</p>
+        </div>
+        
+        <form action="{{ url_for('continue_mock_test') }}" method="POST">
+            <input type="hidden" name="assessment_id" value="{{ assessment_id }}">
+            <input type="hidden" name="next_section" value="{{ next_section }}">
+            <button type="submit" class="continue-btn">
+                <i class="fas fa-arrow-right me-2"></i> Continue to {{ next_section|title }}
+            </button>
+        </form>
+        {% else %}
+        <div class="alert alert-success mt-4">
+            <h4><i class="fas fa-trophy me-2"></i> Test Complete!</h4>
+            <p class="mb-0">Congratulations! You've completed all sections of the full mock test. View your results now.</p>
+        </div>
+        
+        <form action="{{ url_for('view_mock_test_results') }}" method="POST">
+            <input type="hidden" name="assessment_id" value="{{ assessment_id }}">
+            <button type="submit" class="continue-btn">
+                <i class="fas fa-chart-line me-2"></i> View Results
+            </button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

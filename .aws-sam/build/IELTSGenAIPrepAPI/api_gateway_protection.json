@@ -1,5 +1,0 @@
-{
-  "protection_type": "ip_based",
-  "implementation_date": "2025-07-09",
-  "purpose": "Block direct API Gateway access while preserving domain functionality"
-}

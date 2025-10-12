@@ -1,6 +1,6 @@
 {
   "appStore": {
-    "appName": "IELTS GenAI Prep",
+    "appName": "IELTS AI Prep",
     "bundleId": "com.ieltsgenaiprep.app",
     "version": "1.0.0",
     "build": "1",
@@ -10,49 +10,48 @@
     "pricing": "Free with In-App Purchases",
     "keywords": "IELTS, English test, speaking practice, writing assessment, AI tutor, test preparation, academic English, immigration, study abroad, language learning",
     "description": {
-      "short": "World's ONLY AI-powered IELTS assessment platform with TrueScore® and ClearScore® technology.",
-      "full": "🎯 IELTS GenAI Prep - World's ONLY AI-Powered IELTS Assessment Platform\n\nPrepare for IELTS with cutting-edge AI technology featuring TrueScore® and ClearScore® assessments.\n\n🤖 REVOLUTIONARY AI TECHNOLOGY\n• Amazon Nova Sonic: Real-time AI conversation for speaking practice\n• Amazon Nova Micro: Advanced text analysis for writing evaluation\n• Instant feedback with official IELTS criteria alignment\n\n📝 TRUESCORE® WRITING ASSESSMENT\n• Academic and General Training Writing Tasks\n• Comprehensive feedback on all 4 IELTS criteria\n• Detailed improvement suggestions\n• 4 unique assessments per purchase\n\n🎤 CLEARSCORE® SPEAKING ASSESSMENT\n• Interactive AI conversations with virtual examiner\n• Real-time speech analysis and scoring\n• Part 1, 2, and 3 speaking test simulation\n• 4 unique speaking scenarios per purchase\n\n✨ KEY FEATURES\n• Mobile-first design for on-the-go practice\n• Cross-platform access (mobile + desktop)\n• Secure purchase through App Store\n• Permanent access to completed assessments\n• Global availability with multi-region support\n\n💡 PERFECT FOR\n• IELTS test preparation\n• Academic English improvement\n• Professional English development\n• Immigration requirements preparation\n\n🏆 ASSESSMENT PACKAGES\nEach $36 package includes 4 unique, high-quality assessments with personalized AI feedback.\n\nDownload now and experience the future of IELTS preparation!"
+      "short": "World's ONLY AI-powered IELTS assessment platform with comprehensive, personalized feedback using official IELTS criteria.",
+      "full": "🎯 IELTS AI Prep - World's ONLY AI-Powered IELTS Assessment Platform\n\nPrepare for IELTS with cutting-edge Google Gemini AI technology featuring comprehensive assessments with personalized improvement plans.\n\n🤖 REVOLUTIONARY AI TECHNOLOGY\n• Google Gemini 2.5 Flash Live API: Real-time bidirectional AI conversations for speaking practice\n• Google Gemini 2.5 Flash: Advanced text analysis for writing evaluation\n• Instant feedback aligned with official IELTS band descriptors (Band 3-9)\n• Personalized improvement plans with timelines to reach your target band\n\n📝 WRITING ASSESSMENT\n• Academic and General Training Writing Tasks\n• Comprehensive feedback on all 4 IELTS criteria:\n  - Task Achievement/Response\n  - Coherence and Cohesion\n  - Lexical Resource\n  - Grammatical Range and Accuracy\n• Specific quotes and sample improvements from your responses\n• Detailed study schedule and practice activities\n• 2 full assessments per purchase\n\n🎤 SPEAKING ASSESSMENT\n• Interactive AI conversations with Maya, your virtual IELTS examiner\n• Real-time speech analysis across all 4 criteria:\n  - Fluency and Coherence\n  - Lexical Resource\n  - Grammatical Range and Accuracy\n  - Pronunciation\n• Part 1, 2, and 3 speaking test simulation\n• Personalized weekly practice schedule\n• 2 full speaking assessments per purchase\n\n🎯 FULL-LENGTH MOCK TESTS\n• Complete IELTS simulation with all 4 skills:\n  - Listening\n  - Reading\n  - Writing (with audio recordings)\n  - Speaking\n• 2 complete mock tests per purchase\n\n✨ KEY FEATURES\n• Mobile-first design for on-the-go practice\n• Cross-platform access (mobile + desktop)\n• Secure purchase through App Store\n• Permanent access to completed assessments\n• Global availability with multi-region support\n\n💡 PERFECT FOR\n• IELTS test preparation\n• Academic English improvement\n• Professional English development\n• Immigration requirements preparation\n\nDownload now and experience the future of IELTS preparation!"
     },
     "urls": {
       "privacyPolicy": "https://www.ieltsaiprep.com/privacy-policy",
       "termsOfService": "https://www.ieltsaiprep.com/terms-of-service",
       "support": "https://www.ieltsaiprep.com/"
     },
+    "appStoreCompliance": {
+      "privacyPolicyUrl": "https://www.ieltsaiprep.com/privacy-policy",
+      "termsOfServiceUrl": "https://www.ieltsaiprep.com/terms-of-service",
+      "noRefundPolicy": true,
+      "dataCollectionDisclosed": true,
+      "requiresAccount": true
+    },
     "inAppPurchases": [
       {
-        "productId": "com.ieltsgenaiprep.app.academic.writing",
+        "productId": "com.ieltsgenaiprep.app.writing.assessment",
         "type": "Non-Consumable",
-        "price": 36.00,
+        "price": 25.00,
         "currency": "USD",
-        "displayName": "TrueScore® Academic Writing Assessment",
-        "description": "AI-powered writing assessment for Academic IELTS with 4 unique tests"
+        "displayName": "Writing Assessments (Academic or General)",
+        "description": "2 comprehensive AI-powered writing assessments with detailed feedback, sample improvements, and personalized study plans"
       },
       {
-        "productId": "com.ieltsgenaiprep.app.academic.speaking",
+        "productId": "com.ieltsgenaiprep.app.speaking.assessment",
         "type": "Non-Consumable", 
-        "price": 36.00,
+        "price": 25.00,
         "currency": "USD",
-        "displayName": "ClearScore® Academic Speaking Assessment",
-        "description": "AI conversation-based speaking assessment for Academic IELTS with 4 unique tests"
+        "displayName": "Speaking Assessments (Academic or General)",
+        "description": "2 full AI conversation-based speaking assessments with Maya, including personalized improvement plans and practice schedules"
       },
       {
-        "productId": "com.ieltsgenaiprep.app.general.writing",
+        "productId": "com.ieltsgenaiprep.app.fullmock.test",
         "type": "Non-Consumable",
-        "price": 36.00,
+        "price": 99.00,
         "currency": "USD",
-        "displayName": "TrueScore® General Writing Assessment", 
-        "description": "AI-powered writing assessment for General Training IELTS with 4 unique tests"
-      },
-      {
-        "productId": "com.ieltsgenaiprep.app.general.speaking",
-        "type": "Non-Consumable",
-        "price": 36.00,
-        "currency": "USD",
-        "displayName": "ClearScore® General Speaking Assessment",
-        "description": "AI conversation-based speaking assessment for General Training IELTS with 4 unique tests"
+        "displayName": "Full-Length Mock Tests",
+        "description": "2 complete IELTS mock tests including Listening, Reading, Writing (with audio recordings), and Speaking with comprehensive AI feedback"
       }
     ],
-    "reviewNotes": "This app requires in-app purchases to access assessment features. The AI-powered assessments use Amazon Web Services for processing. Cross-platform functionality allows users to access purchased content on both mobile and web (www.ieltsaiprep.com).",
+    "reviewNotes": "This app requires in-app purchases to access assessment features. The AI-powered assessments use Google Cloud Platform (Gemini 2.5 Flash Live API and Gemini 2.5 Flash) for processing. Cross-platform functionality allows users to access purchased content on both mobile and web (www.ieltsaiprep.com). All assessments provide comprehensive feedback based on official IELTS band descriptors with personalized improvement plans.",
     "availability": {
       "regions": "All Countries and Regions",
       "releaseType": "Manual Release"

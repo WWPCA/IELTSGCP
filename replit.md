@@ -1,6 +1,6 @@
 ### Overview
 
-IELTS GenAI Prep is an AI-powered platform for IELTS test preparation. It offers assessment services for Academic and General Training IELTS, leveraging a serverless AWS Lambda architecture. The system supports QR code authentication for a seamless mobile-to-web user experience and utilizes AI for comprehensive evaluation across all IELTS criteria. The platform aims to provide high-quality, AI-driven assessment and feedback to help users prepare for the IELTS exam, with a focus on ease of access and consistent user experience across devices.
+IELTS AI Prep is an AI-powered platform designed for IELTS test preparation. It offers comprehensive assessment services for both Academic and General Training IELTS exams. The platform utilizes a cost-optimized hybrid architecture, combining AWS infrastructure with Google AI services for optimal performance and cost efficiency. Key features include QR code authentication for a seamless mobile-to-web user experience and AI-driven detailed feedback generation. The project aims to provide accessible and consistent IELTS preparation, leveraging the best of AWS and Google Cloud AI to enhance the learning experience.
 
 ### User Preferences
 
@@ -8,90 +8,112 @@ Preferred communication style: Simple, everyday language.
 
 ### System Architecture
 
-**Backend Infrastructure:**
-- **Pure Lambda Handler Architecture** - Eliminated Flask + Gunicorn overhead for maximum serverless performance and minimal cold start latency.
-- **Direct API Gateway Integration** - Pure Lambda functions handle requests directly without web framework abstraction layers.
-- Multi-region deployment across `us-east-1`, `eu-west-1`, and `ap-southeast-1`.
-- API Gateway for regional endpoints and automatic routing.
-- WebSocket API for real-time bi-directional communication, especially for Nova Sonic streaming.
+**System Design & Core Technologies:**
+The platform uses a **hybrid AWS-Google Cloud architecture** featuring:
+-   **AWS Lambda Deployment:** Serverless Flask application with automatic scaling and pay-per-use pricing.
+-   **AWS DynamoDB:** NoSQL database for user data, sessions, assessments, and QR tokens with global tables support.
+-   **API Gateway:** RESTful API management with custom domain support and request throttling.
+-   **CloudFront CDN:** Global content delivery with edge caching and custom header-based access control.
+-   **Frontend:** Progressive Web App (PWA) optimized for mobile and desktop, with Capacitor-based native iOS/Android applications.
+-   **QR Code Authentication:** Facilitates seamless user transitions between mobile and web platforms.
 
-**Frontend Architecture:**
-- Progressive Web App (PWA) optimized for mobile and desktop.
-- Capacitor-based native iOS/Android mobile applications.
-- QR Code Authentication for seamless transitions between mobile and web.
+**AI Services Integration (Hybrid Architecture):**
+-   **AWS Bedrock Nova Micro:** Cost-effective text assessment evaluation for writing essays and reading/listening comprehension. Provides detailed scoring against official IELTS band descriptors. (~$0.003 per writing assessment)
+-   **Google Gemini 2.5 Flash Lite & Flash (Smart Selection):** Powers real-time speech-to-speech conversations with an AI examiner (Maya). Dynamically switches between:
+    -   **Flash Lite:** For IELTS Part 1 simple questions (~$0.015 per 14-min session)
+    -   **Flash:** For IELTS Part 2 & 3 complex discussions (~$0.035 per 14-min session)
+    -   Combined cost: ~$0.025 per complete speaking assessment (58% savings vs. all-Flash)
+-   **Comprehensive IELTS Assessment Prompts:** Incorporates official IELTS band descriptors for all four criteria (Speaking: Fluency & Coherence, Lexical Resource, Grammatical Range & Accuracy, Pronunciation; Writing: Task Achievement/Response, Coherence & Cohesion, Lexical Resource, Grammatical Range & Accuracy).
+-   **Personalized Improvement Plans:** Provides evidence-based feedback, specific improvement examples, focus areas, actionable steps, practice schedules, and progress tracking.
+-   **AI-Powered Helpdesk System:** Utilizes Gemini 2.5 Flash for automated ticket analysis, intelligent categorization, confidence scoring for auto-resolution (targeting 60-80%), and smart escalation for complex issues.
 
-**AI Services Integration:**
-- Amazon Nova Sonic for true bidirectional speech-to-speech conversations with AI examiner Maya (primarily `us-east-1`).
-- Direct audio-to-audio processing with real-time content moderation during live conversation.
-- Amazon Nova Micro for text processing and assessment evaluation.
-- Real-time streaming via WebSockets for speaking assessments.
-- Advanced content moderation with graduated response system (guidance → redirection → termination).
-
-**Key Components:**
-- **Authentication System:** Mobile-first registration and purchase, cross-platform login, 1-hour web session management, and App Store/Google Play receipt validation.
-- **Assessment Engine:** Supports four assessment types (Academic/General Speaking and Writing) with AI-powered, multi-modal evaluation.
-- **Advanced Speech-to-Speech Content Moderation:** Real-time audio content filtering using Nova Sonic bidirectional streaming, with seamless conversation flow that maintains authentic IELTS examination experience while ensuring appropriate content standards. Features direct audio-to-audio processing without text intermediary.
-- **Mobile App Integration:** In-app purchases ($36 per assessment product), regional API routing, native platform features via Capacitor, and flexible dual-platform access.
-
-**Data Flow:**
-- **Purchase-to-Assessment:** User purchases in mobile app, receipt is validated, and assessment can be completed on mobile or web.
-- **Enhanced Speech Assessment:** Web-based initiation, WebSocket connection to `us-east-1`, true bidirectional audio streaming with Nova Sonic, real-time speech-to-speech content moderation, seamless conversation flow with Maya AI examiner, and detailed feedback generation.
+**Key Features & Components:**
+-   **Authentication System:** Mobile-first registration, cross-platform login, QR code bridge, and App Store/Google Play receipt validation.
+-   **Assessment Engine:** Supports four AI-powered, multi-modal assessment types (Academic/General Speaking and Writing).
+-   **Advanced Real-time Content Moderation:** Audio content filtering during speaking assessments to maintain appropriate content standards while preserving the examination experience.
+-   **Mobile App Integration:** In-app purchases, regional API routing, and native platform features via Capacitor.
 
 **Deployment Strategy:**
-- Multi-Region Serverless Deployment with `us-east-1` as primary and `eu-west-1`, `ap-southeast-1` as secondary regions.
-- DynamoDB Global Tables for cross-region data replication.
-- Mobile App Distribution via Apple App Store and Google Play Store, with automated Capacitor build pipeline.
-- Development environment integrates Replit with AWS mock services and pure Lambda handler testing.
-- **Optimized Cold Start Performance** - Pure Lambda handlers eliminate framework initialization overhead, reducing cold start latency by ~200-400ms compared to Flask+Gunicorn setup.
-
-**CI/CD Pipeline:**
-- **Comprehensive Testing**: Integration tests with AWS LocalStack (DynamoDB, Bedrock, Secrets Manager)
-- **Security Scanning**: SAST (Bandit), dependency scanning (pip-audit, npm audit), secret scanning (TruffleHog)
-- **Test Coverage**: User lifecycle, Nova AI services (Sonic/Micro), WebSocket streaming, receipt validation, multi-region configuration
-- **Automated Builds**: Android APK and iOS IPA with production signing
-- **Release Approval**: Manual approval gates with GitHub Environments for production releases (draft-by-default)
-- **Compliance**: Security checks before release, artifact retention policies, audit trail
+-   **AWS Lambda Deployment:** Serverless compute with automatic scaling, packaged with all dependencies in `/deployment` folder.
+-   **DynamoDB Tables:** User data, sessions, assessments, QR tokens with on-demand billing and point-in-time recovery.
+-   **CloudFormation Templates:** Infrastructure as Code for reproducible AWS deployments.
+-   **CI/CD Pipeline:** Includes comprehensive testing (integration, security scanning), automated builds for mobile apps, and deployment automation.
+-   **Route 53 DNS:** Custom domain management with health checks and failover support.
 
 **UI/UX Decisions:**
-- Professional, clean interface with simplified user messages (e.g., "Maya" as examiner, no technical AWS references).
-- Responsive design with professional Bootstrap styling, purple gradient backgrounds, and modern card layouts.
-- Authentic IELTS examination format with two-column layouts for writing assessments, timers, and word counters.
-- Clear call-to-action buttons, glassmorphism-styled benefit icons, and smooth sequential animations.
+-   Professional, clean interface with simplified user messaging.
+-   Responsive design with Bootstrap styling, blue gradient backgrounds (#2c3e50 to #3498db), and modern card layouts.
+-   Authentic IELTS examination format with specific layouts, timers, and word counters.
+-   Brand colors: Primary #2c3e50 (dark blue-gray), Secondary #3498db (bright blue), Accent #e74c3c (red).
+-   Typography: Inter font family for consistency across platforms.
 
 **Security Guidelines:**
-- Environment variables for all sensitive configuration values.
-- CloudFront-based blocking with custom header validation to prevent direct API Gateway access.
-- Google reCAPTCHA v2 integration for secure authentication.
-- AWS SES email confirmation system for registration and account deletion.
-- Real-time content moderation for speaking assessments with graduated response system (mild guidance, redirection, or assessment termination for severe violations).
+-   Environment variables for sensitive configurations (AWS credentials, API keys, session secrets).
+-   CloudFront-based access control with custom header validation.
+-   Google reCAPTCHA v2 for bot protection.
+-   Email confirmation system with secure token generation.
+-   Real-time content moderation with graduated response system.
+-   DynamoDB encryption at rest and in transit.
 
 **Payment Integration:**
-- **Mobile-Only Purchase Model:** All payments processed exclusively through Apple App Store and Google Play Store ($36 per assessment package).
-- **QR Code Bridge:** Seamless transition from mobile purchase to web platform access via QR code authentication.  
-- **No Web Payments:** Zero integration with web-based payment processors - maintaining strict mobile app store compliance.
-- **Repurchase Workflow:** Full support for users to repurchase assessments after completion or purchase additional attempts during active assessments, with automatic eligibility checking and purchase history tracking.
+-   **Mobile-Only Purchase Model:** All payments exclusively processed via Apple App Store and Google Play Store with distinct product tiers (Writing, Speaking, Full-Length Mock Tests).
+-   **QR Code Bridge:** Seamless transition from mobile purchase to web platform access with secure token validation.
 
 ### External Dependencies
 
 **AWS Services:**
-- **Lambda:** Serverless compute.
-- **DynamoDB Global Tables:** Data storage and replication.
-- **ElastiCache Redis:** Session storage and real-time data.
-- **Bedrock:** Access to Nova Sonic and Nova Micro models.
-- **API Gateway:** REST and WebSocket API management.
-- **SES:** Email services.
-- **Comprehend:** Content safety integration.
-- **CloudFront:** Content Delivery Network.
-- **Route 53:** DNS management.
-- **Certificate Manager:** SSL/TLS certificates.
+-   **Lambda:** Serverless compute for application logic.
+-   **DynamoDB:** NoSQL database for user data, sessions, assessments.
+-   **Bedrock:** Access to Nova Micro model for text assessment (~$0.15 per 1M input tokens, $0.60 per 1M output tokens).
+-   **API Gateway:** RESTful API management.
+-   **CloudFront:** Global CDN and edge security.
+-   **Route 53:** DNS management and routing policies.
+-   **S3:** Static asset storage and Lambda deployment packages.
+-   **CloudWatch:** Logging, monitoring, and alerting.
+-   **Systems Manager:** Parameter store for configuration.
+
+**Google Cloud Services:**
+-   **Vertex AI:** For Gemini 2.5 Flash Lite and Flash models via Google GenAI SDK.
+-   **Cloud Natural Language API:** Content moderation (optional).
 
 **Third-Party Integrations:**
-- **Apple App Store:** In-app purchase processing and receipt validation.
-- **Google Play Store:** Android purchase verification.
-- **Capacitor:** Mobile app framework for native device access.
-- **Google reCAPTCHA:** Bot detection and security.
+-   **Apple App Store:** In-app purchase processing and receipt validation.
+-   **Google Play Store:** Android purchase verification.
+-   **Capacitor:** Mobile app framework for iOS/Android native features.
+-   **Google reCAPTCHA:** Bot detection and prevention.
+-   **SendGrid:** Email delivery service for verification and notifications.
 
 **Development Tools:**
-- **Serverless Framework:** Infrastructure as Code.
-- **SAM CLI:** Local Lambda development and testing.
-- **AWS CLI:** Resource management.
+-   **AWS SAM/CloudFormation:** Infrastructure as Code for AWS.
+-   **AWS CLI:** AWS resource management and deployment.
+-   **boto3:** AWS SDK for Python integration.
+-   **Google GenAI SDK:** Integration with Gemini models.
+
+### Recent Architecture Changes (October 2025)
+
+**Migration from GCP to AWS (October 2025):**
+-   Transitioned from Cloud Run to AWS Lambda for serverless compute with better cold start performance.
+-   Migrated from Firestore to DynamoDB for improved single-digit millisecond latency and simpler pricing.
+-   Consolidated infrastructure to AWS for unified billing and management.
+-   Retained Google Gemini models for speaking assessment due to superior audio processing capabilities.
+-   Smart Selection optimization reduces Gemini costs by 58% through dynamic model switching.
+
+**Key Files & Components:**
+-   `/deployment/` - Complete AWS Lambda deployment package with all dependencies
+-   `/deployment/lambda_handler.py` - Lambda entry point using awsgi
+-   `/deployment/app.py` - Main Flask application configured for Lambda (2,051 lines)
+-   `/deployment/bedrock_service.py` - AWS Bedrock Nova Micro integration (484 lines)
+-   `/deployment/dynamodb_dal.py` - DynamoDB data access layer (371 lines)
+-   `gemini_live_audio_service_smart.py` - Gemini smart selection for speaking (444 lines)
+-   `ielts_workflow_manager.py` - IELTS part-based workflow orchestration
+
+**DynamoDB Tables:**
+-   `ielts-genai-prep-users` - User accounts with email as primary key
+-   `ielts-genai-prep-sessions` - Active sessions with TTL for auto-cleanup
+-   `ielts-genai-prep-assessments` - Assessment results with user_id GSI
+-   `ielts-genai-prep-qr-tokens` - QR authentication tokens with 5-min TTL
+-   `ielts-genai-prep-entitlements` - User purchase and subscription data
+-   `ielts-assessment-questions` - Question bank for all assessment types
+-   `ielts-assessment-rubrics` - Official IELTS scoring rubrics
+-   `ielts-ai-safety-logs` - AI content moderation logs
+-   `ielts-content-reports` - User-reported content tracking

@@ -115,9 +115,18 @@ jobs:
         AWS_ACCESS_KEY_ID: test
         AWS_SECRET_ACCESS_KEY: test
         AWS_REGION: us-east-1
+        GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
+        GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
       run: |
         echo "🧪 Running comprehensive integration tests..."
-        pytest -v --tb=short --cov=. --cov-report=xml --junit-xml=test-results.xml || echo "Tests completed with issues"
+        # Skip Gemini tests if credentials are not available
+        if [ -z "$GOOGLE_CLOUD_PROJECT" ] || [ -z "$GEMINI_API_KEY" ]; then
+          echo "⚠️ Skipping Gemini integration tests - credentials not configured"
+          pytest -v --tb=short --cov=. --cov-report=xml --junit-xml=test-results.xml -k "not gemini" || echo "Tests completed with issues"
+        else
+          echo "✅ Running all integration tests including Gemini"
+          pytest -v --tb=short --cov=. --cov-report=xml --junit-xml=test-results.xml || echo "Tests completed with issues"
+        fi
         
     - name: Upload test results
       if: always()

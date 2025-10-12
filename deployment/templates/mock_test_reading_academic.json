@@ -1,0 +1,112 @@
+{
+  "test_type": "reading_academic",
+  "format": "ielts_full_mock_test",
+  "duration_minutes": 60,
+  "total_questions": 40,
+  "instructions": "Read the three passages and answer 40 questions. You have 60 minutes including transfer time. Spelling and grammar must be correct.",
+  
+  "sections": [
+    {
+      "section_number": 1,
+      "title": "Academic Reading Passage 1",
+      "difficulty": "easier",
+      "question_range": "1-13",
+      "question_count": 13,
+      "passage_type": "descriptive/factual",
+      "word_count_range": "700-900",
+      "passage_text": null,
+      "passage_title": null,
+      "source_type": "journal/magazine/newspaper",
+      "topic_areas": ["science", "technology", "nature", "society"],
+      "question_types": [
+        "true_false_not_given",
+        "matching_headings",
+        "sentence_completion",
+        "summary_completion"
+      ],
+      "questions": []
+    },
+    {
+      "section_number": 2,
+      "title": "Academic Reading Passage 2",
+      "difficulty": "moderate",
+      "question_range": "14-26",
+      "question_count": 13,
+      "passage_type": "descriptive/analytical",
+      "word_count_range": "700-900",
+      "passage_text": null,
+      "passage_title": null,
+      "source_type": "books/journals/research",
+      "topic_areas": ["education", "environment", "business", "culture"],
+      "question_types": [
+        "yes_no_not_given",
+        "multiple_choice",
+        "matching_information",
+        "note_completion"
+      ],
+      "questions": []
+    },
+    {
+      "section_number": 3,
+      "title": "Academic Reading Passage 3",
+      "difficulty": "harder",
+      "question_range": "27-40",
+      "question_count": 14,
+      "passage_type": "discursive/analytical",
+      "word_count_range": "750-950",
+      "passage_text": null,
+      "passage_title": null,
+      "source_type": "academic_journals/specialized_magazines",
+      "topic_areas": ["research", "theory", "complex_issues"],
+      "question_types": [
+        "matching_features",
+        "multiple_choice",
+        "summary_completion",
+        "sentence_completion"
+      ],
+      "questions": []
+    }
+  ],
+  
+  "total_word_count_range": "2150-2750",
+  
+  "scoring": {
+    "total_marks": 40,
+    "band_conversion": {
+      "39-40": 9.0,
+      "37-38": 8.5,
+      "35-36": 8.0,
+      "33-34": 7.5,
+      "30-32": 7.0,
+      "27-29": 6.5,
+      "23-26": 6.0,
+      "19-22": 5.5,
+      "15-18": 5.0,
+      "13-14": 4.5,
+      "10-12": 4.0
+    }
+  },
+  
+  "question_type_reference": {
+    "true_false_not_given": "Statement matches info in text (factual)",
+    "yes_no_not_given": "Statement matches writer's views/claims (opinion)",
+    "multiple_choice": "Choose correct answer from options",
+    "matching_headings": "Match headings to paragraphs/sections",
+    "matching_information": "Find which paragraph contains information",
+    "matching_features": "Match statements to features in list",
+    "sentence_completion": "Complete sentences using words from passage",
+    "summary_completion": "Fill gaps in summary of passage",
+    "note_completion": "Complete notes using words from passage"
+  },
+  
+  "metadata": {
+    "for_academic_only": true,
+    "text_sources": "Books, journals, magazines, newspapers on academic subjects",
+    "topics": "Suitable for undergraduate/postgraduate study",
+    "no_specialist_knowledge_required": true,
+    "spelling_matters": true,
+    "word_limit_rules": "Must follow word limits (e.g., NO MORE THAN THREE WORDS)",
+    "created_date": "2025-10-05",
+    "template_version": "1.0"
+  }
+}

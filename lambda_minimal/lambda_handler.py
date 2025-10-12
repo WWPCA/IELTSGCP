@@ -1969,70 +1969,75 @@ def send_welcome_email(email: str) -> None:
         
         ses_client = boto3.client('ses', region_name='us-east-1')
         
-        subject = "Welcome to IELTS GenAI Prep - Your AI-Powered IELTS Preparation"
+        subject = "Welcome to IELTS AI Prep - Your Personalized Path to IELTS Success"
         
         html_body = f"""
         <!DOCTYPE html>
         <html>
         <head>
             <meta charset="UTF-8">
-            <style>
-                body {{ font-family: Arial, sans-serif; line-height: 1.6; color: #333; }}
-                .container {{ max-width: 600px; margin: 0 auto; padding: 20px; }}
-                .header {{ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: center; }}
-                .content {{ padding: 30px; background: #f8f9fa; }}
-                .footer {{ background: #333; color: white; padding: 20px; text-align: center; }}
-                .cta-button {{ background: #28a745; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block; margin: 20px 0; }}
-                .feature {{ background: white; padding: 15px; margin: 10px 0; border-radius: 5px; border-left: 4px solid #667eea; }}
-            </style>
+            <title>Welcome to IELTS AI Prep</title>
         </head>
-        <body>
-            <div class="container">
-                <div class="header">
-                    <h1>Welcome to IELTS GenAI Prep!</h1>
-                    <p>Your AI-Powered IELTS Preparation Platform</p>
+        <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5;">
+            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
+                <!-- Header -->
+                <div style="background: #ffffff; text-align: center; padding: 30px 20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #E33219;">
+                    <h1 style="color: #E33219; margin: 0 0 10px 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">IELTS AI Prep</h1>
+                    <p style="color: #666; margin: 0; font-size: 14px;">Your Personalized Path to IELTS Success</p>
                 </div>
                 
-                <div class="content">
-                    <h2>Hello {email.split('@')[0].title()},</h2>
+                <!-- Main Content -->
+                <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 8px 8px;">
+                    <h2 style="color: #1a1a1a; font-weight: 600; margin-bottom: 20px; font-size: 22px;">Welcome!</h2>
                     
-                    <p>Welcome to IELTS GenAI Prep! We're excited to help you achieve your IELTS goals with our advanced AI-powered assessment platform.</p>
+                    <p style="margin-bottom: 20px; color: #333;">Hello {email.split('@')[0].title()},</p>
                     
-                    <div class="feature">
-                        <h3>🎯 TrueScore® Writing Assessment</h3>
-                        <p>Get detailed feedback on your writing with official IELTS rubrics and AI-powered evaluation.</p>
+                    <p style="margin-bottom: 25px; color: #333;">Welcome to IELTS AI Prep! We're excited to help you achieve your IELTS goals with our AI-powered practice modules.</p>
+                    
+                    <!-- Features -->
+                    <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #0891B2;">
+                        <h3 style="color: #1a1a1a; font-size: 18px; font-weight: 600; margin: 0 0 15px 0;">✍️ Writing Practice</h3>
+                        <p style="color: #333; margin: 0; font-size: 14px;">Get detailed feedback aligned with official IELTS criteria.</p>
                     </div>
                     
-                    <div class="feature">
-                        <h3>🎙️ ClearScore® Speaking Assessment</h3>
-                        <p>Practice with Maya, our AI examiner, using AWS Nova Sonic British voice technology.</p>
+                    <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #0891B2;">
+                        <h3 style="color: #1a1a1a; font-size: 18px; font-weight: 600; margin: 0 0 15px 0;">🎙️ Speaking Practice</h3>
+                        <p style="color: #333; margin: 0; font-size: 14px;">Practice with Maya, your AI examiner, for realistic assessment.</p>
                     </div>
                     
-                    <div class="feature">
-                        <h3>📱 Multi-Platform Access</h3>
-                        <p>Access your assessments on mobile app or desktop with seamless synchronization.</p>
+                    <div style="background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #0891B2;">
+                        <h3 style="color: #1a1a1a; font-size: 18px; font-weight: 600; margin: 0 0 15px 0;">📱 Multi-Platform Access</h3>
+                        <p style="color: #333; margin: 0; font-size: 14px;">Seamlessly switch between mobile app and desktop.</p>
                     </div>
                     
-                    <a href="https://www.ieltsaiprep.com/dashboard" class="cta-button">Start Your Assessment</a>
+                    <!-- CTA Button -->
+                    <div style="text-align: center; margin: 35px 0;">
+                        <a href="https://www.ieltsaiprep.com/assessments" 
+                           style="background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%); color: white; padding: 16px 40px; 
+                                  text-decoration: none; border-radius: 8px; display: inline-block;
+                                  font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(227, 50, 25, 0.3);">
+                            Start Your Practice
+                        </a>
+                    </div>
                     
-                    <p><strong>Getting Started:</strong></p>
-                    <ol>
-                        <li>Download our mobile app from App Store or Google Play</li>
-                        <li>Purchase your assessment package ($36 for 4 attempts)</li>
-                        <li>Login to the website using your mobile credentials</li>
-                        <li>Start your AI-powered IELTS preparation</li>
-                    </ol>
+                    <!-- Getting Started -->
+                    <div style="background: #fff8f5; padding: 20px; border-radius: 8px; margin: 25px 0;">
+                        <p style="font-weight: 600; color: #1a1a1a; margin: 0 0 15px 0;">Getting Started:</p>
+                        <ol style="color: #333; margin: 0; padding-left: 20px;">
+                            <li style="margin-bottom: 8px;">Download our mobile app from App Store or Google Play</li>
+                            <li style="margin-bottom: 8px;">Purchase your practice package</li>
+                            <li style="margin-bottom: 8px;">Login to the website using your mobile credentials</li>
+                            <li>Start your personalized IELTS preparation journey</li>
+                        </ol>
+                    </div>
                     
-                    <p>If you have any questions, visit our support center or contact our team.</p>
+                    <p style="margin: 25px 0 10px 0; color: #333;">Best of luck with your IELTS preparation!</p>
                     
-                    <p>Best of luck with your IELTS preparation!</p>
-                    
-                    <p>The IELTS GenAI Prep Team</p>
-                </div>
-                
-                <div class="footer">
-                    <p>&copy; 2025 IELTS GenAI Prep. All rights reserved.</p>
-                    <p>Visit us at <a href="https://www.ieltsaiprep.com" style="color: #667eea;">www.ieltsaiprep.com</a></p>
+                    <div style="text-align: center; margin-top: 35px;">
+                        <p style="margin-bottom: 5px; font-weight: 600; color: #1a1a1a;">Best regards,</p>
+                        <p style="margin-bottom: 15px; color: #333;">The IELTS AI Prep Team</p>
+                        <p style="font-size: 12px; color: #999;">© 2025 IELTS AI Prep. All rights reserved.</p>
+                    </div>
                 </div>
             </div>
         </body>
@@ -2040,32 +2045,30 @@ def send_welcome_email(email: str) -> None:
         """
         
         text_body = f"""
-        Welcome to IELTS GenAI Prep!
+        Welcome to IELTS AI Prep!
         
         Hello {email.split('@')[0].title()},
         
-        Welcome to IELTS GenAI Prep! We're excited to help you achieve your IELTS goals with our advanced AI-powered assessment platform.
+        Welcome to IELTS AI Prep! We're excited to help you achieve your IELTS goals with our AI-powered practice modules.
         
         Features:
-        - TrueScore® Writing Assessment with official IELTS rubrics
-        - ClearScore® Speaking Assessment with Maya AI examiner
+        - Writing Practice with detailed feedback aligned with official IELTS criteria
+        - Speaking Practice with Maya, your AI examiner
         - Multi-platform access (mobile app and desktop)
         
         Getting Started:
         1. Download our mobile app from App Store or Google Play
-        2. Purchase your assessment package ($36 for 4 attempts)
+        2. Purchase your practice package
         3. Login to the website using your mobile credentials
-        4. Start your AI-powered IELTS preparation
+        4. Start your personalized IELTS preparation journey
         
-        Visit https://www.ieltsaiprep.com/dashboard to get started.
-        
-        If you have any questions, contact our support team.
+        Visit https://www.ieltsaiprep.com/assessments to get started.
         
         Best of luck with your IELTS preparation!
         
-        The IELTS GenAI Prep Team
+        The IELTS AI Prep Team
         
-        © 2025 IELTS GenAI Prep. All rights reserved.
+        © 2025 IELTS AI Prep. All rights reserved.
         """
         
         response = ses_client.send_email(

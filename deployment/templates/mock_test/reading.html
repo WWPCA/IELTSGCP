@@ -1,0 +1,309 @@
+{% extends "layout.html" %}
+
+{% block body_class %}bg-white assessment-page{% endblock %}
+
+{% block styles %}
+{{ super() }}
+<style>
+    .section-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        margin-bottom: 2rem;
+        box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    }
+    
+    .progress-tracker {
+        background: white;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 1rem;
+        margin-bottom: 2rem;
+    }
+    
+    .progress-step {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin: 0.5rem;
+        border-radius: 20px;
+        font-weight: bold;
+        font-size: 0.9rem;
+    }
+    
+    .progress-step.active {
+        background: #6f42c1;
+        color: white;
+    }
+    
+    .progress-step.completed {
+        background: #28a745;
+        color: white;
+    }
+    
+    .progress-step.pending {
+        background: #f8f9fa;
+        color: #6c757d;
+    }
+    
+    .timer-display {
+        font-size: 2rem;
+        font-weight: bold;
+        color: #6f42c1;
+        text-align: center;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+    }
+    
+    .reading-layout {
+        display: flex;
+        gap: 2rem;
+        min-height: 600px;
+    }
+    
+    .passage-panel {
+        flex: 1;
+        background: white;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 2rem;
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+    
+    .questions-panel {
+        flex: 1;
+        background: #f8f9fa;
+        border: 2px solid #dee2e6;
+        border-radius: 10px;
+        padding: 2rem;
+        overflow-y: auto;
+        max-height: 80vh;
+    }
+    
+    .passage-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #6f42c1;
+        margin-bottom: 1rem;
+        border-bottom: 3px solid #6f42c1;
+        padding-bottom: 0.5rem;
+    }
+    
+    .passage-text {
+        font-size: 1rem;
+        line-height: 1.8;
+        color: #333;
+    }
+    
+    .passage-text h4 {
+        color: #6f42c1;
+        margin-top: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .passage-text p {
+        margin-bottom: 1rem;
+        text-align: justify;
+    }
+    
+    .question-group {
+        background: white;
+        border: 1px solid #dee2e6;
+        border-radius: 5px;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .question-group-header {
+        font-size: 1.1rem;
+        font-weight: bold;
+        color: #6f42c1;
+        margin-bottom: 1rem;
+        border-bottom: 2px solid #6f42c1;
+        padding-bottom: 0.5rem;
+    }
+    
+    .question-instruction {
+        background: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 1rem;
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+    
+    .question-item {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #e9ecef;
+    }
+    
+    .question-item:last-child {
+        border-bottom: none;
+    }
+    
+    .question-number {
+        font-weight: bold;
+        color: #6f42c1;
+        margin-right: 0.5rem;
+    }
+    
+    .answer-input {
+        border: 2px solid #dee2e6;
+        border-radius: 5px;
+        padding: 0.75rem;
+        width: 100%;
+        transition: border-color 0.3s;
+    }
+    
+    .answer-input:focus {
+        border-color: #6f42c1;
+        outline: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid py-4">
+    <div class="section-header">
+        <h1 class="mb-2">IELTS Reading Test</h1>
+        <p class="mb-0">Passage {{ current_passage }} of 3 | {{ passage_title }}</p>
+    </div>
+    
+    <div class="row">
+        <div class="col-lg-2">
+            <div class="progress-tracker">
+                <h6 class="text-center mb-3">Sections</h6>
+                <div class="text-center">
+                    <div class="progress-step completed">✓ Listening</div>
+                    <div class="progress-step active">📖 Reading</div>
+                    <div class="progress-step pending">✍️ Writing</div>
+                    <div class="progress-step pending">🗣️ Speaking</div>
+                </div>
+            </div>
+            
+            <div class="timer-display">
+                <div class="small">Time Remaining</div>
+                <div id="test-timer">{{ time_remaining }}</div>
+            </div>
+        </div>
+        
+        <div class="col-lg-10">
+            <div class="reading-layout">
+                <!-- Passage Panel -->
+                <div class="passage-panel">
+                    <div class="passage-title">{{ passage_title }}</div>
+                    <div class="passage-text">
+                        {{ passage_content|safe }}
+                    </div>
+                </div>
+                
+                <!-- Questions Panel -->
+                <div class="questions-panel">
+                    <form id="reading-form" method="POST">
+                        <input type="hidden" name="assessment_id" value="{{ assessment_id }}">
+                        <input type="hidden" name="passage_number" value="{{ current_passage }}">
+                        
+                        {% for group in question_groups %}
+                        <div class="question-group">
+                            <div class="question-group-header">
+                                Questions {{ group.question_range }}
+                            </div>
+                            
+                            <div class="question-instruction">
+                                {{ group.instructions }}
+                            </div>
+                            
+                            {% for question in group.questions %}
+                            <div class="question-item">
+                                <div class="mb-2">
+                                    <span class="question-number">{{ question.number }}.</span>
+                                    <span>{{ question.text }}</span>
+                                </div>
+                                
+                                {% if question.type == 'multiple_choice' %}
+                                    {% for option_key, option_text in question.options.items() %}
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="radio" 
+                                               name="q{{ question.number }}" 
+                                               id="q{{ question.number }}_{{ option_key }}"
+                                               value="{{ option_key }}">
+                                        <label class="form-check-label" for="q{{ question.number }}_{{ option_key }}">
+                                            <strong>{{ option_key }}.</strong> {{ option_text }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                {% elif question.type == 'true_false_not_given' %}
+                                    {% for option in ['TRUE', 'FALSE', 'NOT GIVEN'] %}
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" 
+                                               name="q{{ question.number }}" 
+                                               id="q{{ question.number }}_{{ option|replace(' ', '_') }}"
+                                               value="{{ option }}">
+                                        <label class="form-check-label" for="q{{ question.number }}_{{ option|replace(' ', '_') }}">
+                                            {{ option }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                {% elif question.type == 'yes_no_not_given' %}
+                                    {% for option in ['YES', 'NO', 'NOT GIVEN'] %}
+                                    <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" 
+                                               name="q{{ question.number }}" 
+                                               id="q{{ question.number }}_{{ option|replace(' ', '_') }}"
+                                               value="{{ option }}">
+                                        <label class="form-check-label" for="q{{ question.number }}_{{ option|replace(' ', '_') }}">
+                                            {{ option }}
+                                        </label>
+                                    </div>
+                                    {% endfor %}
+                                {% else %}
+                                    <input type="text" name="q{{ question.number }}" class="answer-input" 
+                                           placeholder="Type your answer here">
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endfor %}
+                        
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                {% if current_passage < 3 %}
+                                    Continue to Passage {{ current_passage + 1 }} <i class="fas fa-arrow-right ms-2"></i>
+                                {% else %}
+                                    Complete Reading Section <i class="fas fa-check ms-2"></i>
+                                {% endif %}
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Timer countdown
+    const timerEl = document.getElementById('test-timer');
+    const [minutes, seconds] = timerEl.textContent.split(':').map(Number);
+    let totalSeconds = minutes * 60 + seconds;
+    
+    setInterval(() => {
+        if (totalSeconds > 0) {
+            totalSeconds--;
+            const m = Math.floor(totalSeconds / 60);
+            const s = totalSeconds % 60;
+            timerEl.textContent = `${m}:${s.toString().padStart(2, '0')}`;
+            
+            if (totalSeconds < 300) {
+                timerEl.style.color = '#dc3545';
+            }
+        }
+    }, 1000);
+});
+</script>
+{% endblock %}
