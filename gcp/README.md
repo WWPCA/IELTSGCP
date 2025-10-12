@@ -1,8 +1,18 @@
-# IELTS GenAI Prep - GCP Migration
+# ⚠️ DEPRECATED - GCP Migration (Not Used)
 
-## 🎯 Complete AWS to GCP Migration Infrastructure
+## ⚠️ DEPRECATION NOTICE
 
-This directory contains the complete infrastructure for migrating **IELTS GenAI Prep** from AWS to Google Cloud Platform.
+**This directory contains DEPRECATED code from a proposed GCP migration that was NOT executed.**
+
+The IELTS AI Prep platform uses **AWS infrastructure** (Lambda, DynamoDB, Bedrock Nova Micro) with Google AI services (Gemini) for assessments. This /gcp folder contains exploratory code for a GCP migration that was abandoned in favor of the current hybrid AWS-Google architecture.
+
+**Do not use this code in production.**
+
+---
+
+## 🎯 Original Plan: AWS to GCP Migration Infrastructure (DEPRECATED)
+
+This directory originally contained infrastructure planning for migrating **IELTS GenAI Prep** from AWS to Google Cloud Platform.
 
 ---
 

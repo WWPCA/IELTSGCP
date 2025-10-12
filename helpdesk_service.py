@@ -205,7 +205,7 @@ def log_helpdesk_ticket(user_email: str, message_subject: str, message_body: str
         'metadata': user_metadata or {}
     }
     
-    # TODO: Store in Firestore for persistent tracking
+    # TODO: Store in DynamoDB for persistent tracking
     # For now, just log it
     print(f"[HELPDESK] New ticket created: {ticket_id}")
     print(f"[HELPDESK] From: {user_email}")

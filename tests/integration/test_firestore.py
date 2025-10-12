@@ -1,5 +1,10 @@
 """
-Integration tests for Firestore database operations
+⚠️ DEPRECATED - Firestore Integration Tests (Not Used)
+
+These tests are for the deprecated GCP Firestore implementation.
+The platform now uses AWS DynamoDB. See tests for DynamoDB instead.
+
+Integration tests for Firestore database operations (DEPRECATED)
 """
 import pytest
 import os

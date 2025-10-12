@@ -1,6 +1,6 @@
 """
 IELTS AI Prep - Production Flask Application  
-Uses GCP Firestore for data storage with fallback to mock services for development
+Uses AWS DynamoDB for data storage with fallback to mock services for development
 """
 
 from flask import Flask, send_from_directory, render_template, request, jsonify, redirect, url_for, session, flash
@@ -2031,7 +2031,7 @@ def gdpr_update_consent():
     if not user_data:
         return jsonify({'error': 'User not found'}), 404
     
-    # Update preferences in Firestore
+    # Update preferences in DynamoDB
     preferences = user_data.get('preferences', {})
     preferences['marketing_consent'] = marketing_consent
     preferences['analytics_consent'] = analytics_consent

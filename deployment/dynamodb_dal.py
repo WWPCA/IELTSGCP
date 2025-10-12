@@ -1,6 +1,6 @@
 """
 AWS DynamoDB Data Access Layer for IELTS AI Prep
-Replaces Firestore with real AWS DynamoDB integration
+Provides data access for users, sessions, assessments, and QR tokens using DynamoDB
 """
 import boto3
 from boto3.dynamodb.conditions import Key, Attr

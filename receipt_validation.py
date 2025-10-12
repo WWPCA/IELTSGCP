@@ -1,6 +1,6 @@
 """
 Apple App Store and Google Play Store Receipt Validation
-Implements secure purchase verification with GCP Secret Manager
+Implements secure purchase verification with AWS Systems Manager Parameter Store
 """
 import os
 import json
@@ -18,13 +18,12 @@ from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import rsa, padding
 from cryptography.x509 import load_pem_x509_certificate
 
-# Import GCP Firestore DAL
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'gcp'))
+# Import AWS DynamoDB DAL
 try:
-    from firestore_dal import FirestoreConnection
-    use_firestore = True
+    from dynamodb_dal import DynamoDBConnection, EntitlementDAL
+    use_dynamodb = True
 except ImportError:
-    use_firestore = False
+    use_dynamodb = False
 
 logger = logging.getLogger(__name__)
 
@@ -61,12 +60,12 @@ class AppleReceiptValidator:
         self.production_url = "https://buy.itunes.apple.com/verifyReceipt"
         self.sandbox_url = "https://sandbox.itunes.apple.com/verifyReceipt"
         
-        # Initialize Firestore DAL if available
-        if use_firestore:
-            project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+        # Initialize DynamoDB DAL if available
+        if use_dynamodb:
+            region = os.environ.get('AWS_REGION', 'us-east-1')
             environment = os.environ.get('ENVIRONMENT', 'production')
-            db_connection = FirestoreConnection(project_id=project_id, environment=environment)
-            self.dal = db_connection
+            db_connection = DynamoDBConnection(region=region, environment=environment)
+            self.dal = EntitlementDAL(db_connection)
         else:
             self.dal = None
     
@@ -239,12 +238,12 @@ class GooglePlayValidator:
             'GOOGLE_PACKAGE_NAME': os.environ.get('ANDROID_PACKAGE_NAME', 'com.ieltsaiprep.app')
         }
         
-        # Initialize Firestore DAL if available
-        if use_firestore:
-            project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+        # Initialize DynamoDB DAL if available
+        if use_dynamodb:
+            region = os.environ.get('AWS_REGION', 'us-east-1')
             environment = os.environ.get('ENVIRONMENT', 'production')
-            db_connection = FirestoreConnection(project_id=project_id, environment=environment)
-            self.dal = db_connection
+            db_connection = DynamoDBConnection(region=region, environment=environment)
+            self.dal = EntitlementDAL(db_connection)
         else:
             self.dal = None
             
@@ -422,12 +421,12 @@ class ReceiptValidationService:
             self.apple_validator = AppleReceiptValidator()
             self.google_validator = GooglePlayValidator()
             
-            # Initialize Firestore DAL if available
-            if use_firestore:
-                project_id = os.environ.get('GOOGLE_CLOUD_PROJECT')
+            # Initialize DynamoDB DAL if available
+            if use_dynamodb:
+                region = os.environ.get('AWS_REGION', 'us-east-1')
                 environment = os.environ.get('ENVIRONMENT', 'production')
-                db_connection = FirestoreConnection(project_id=project_id, environment=environment)
-                self.dal = db_connection
+                db_connection = DynamoDBConnection(region=region, environment=environment)
+                self.dal = EntitlementDAL(db_connection)
             else:
                 self.dal = None
             
