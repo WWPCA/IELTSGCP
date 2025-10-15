@@ -125,23 +125,40 @@ try:
 except ImportError:
     print("[INFO] Mobile API blueprint not available")
 
-# Initialize Gemini Smart Selection for Speaking
+# Initialize Regional Gemini Service with DSQ for Speaking
 try:
-    from gemini_live_audio_service_smart import create_smart_selection_service
-    from hybrid_integration_routes_smart import create_hybrid_routes_smart
+    from gemini_regional_service import create_regional_gemini_service
+    from hybrid_integration_routes_regional import create_hybrid_routes_regional
     
-    gemini_smart_service = create_smart_selection_service(
-        project_id=os.environ.get('GOOGLE_CLOUD_PROJECT'),
-        region='us-central1'
+    # Create regional service with DSQ support
+    gemini_regional_service = create_regional_gemini_service(
+        project_id=os.environ.get('GOOGLE_CLOUD_PROJECT')
     )
     
-    # Register hybrid routes for speaking assessments
-    hybrid_blueprint = create_hybrid_routes_smart(gemini_smart_service, assessment_dal)
+    # Register hybrid routes with regional optimization
+    hybrid_blueprint = create_hybrid_routes_regional(assessment_dal)
     app.register_blueprint(hybrid_blueprint)
-    print("[INFO] Gemini Smart Selection for speaking initialized")
+    print("[INFO] Gemini Regional Service with DSQ initialized")
+    print(f"[INFO] Supporting {len(set(list(getattr(__import__('gemini_regional_service'), 'REGION_MAP', {}).values())))} regions globally")
 except ImportError as e:
-    print(f"[INFO] Gemini Smart Selection not available: {e}")
-    gemini_smart_service = None
+    print(f"[INFO] Gemini Regional Service not available: {e}")
+    # Fallback to original smart selection if regional not available
+    try:
+        from gemini_live_audio_service_smart import create_smart_selection_service
+        from hybrid_integration_routes_smart import create_hybrid_routes_smart
+        
+        gemini_smart_service = create_smart_selection_service(
+            project_id=os.environ.get('GOOGLE_CLOUD_PROJECT'),
+            region='us-central1'
+        )
+        
+        # Register original hybrid routes
+        from hybrid_integration_routes_smart import hybrid_routes_smart
+        app.register_blueprint(hybrid_routes_smart)
+        print("[INFO] Fallback to Gemini Smart Selection (single region)")
+    except ImportError:
+        print("[INFO] No Gemini service available")
+        gemini_regional_service = None
 
 # Import receipt validation for endpoints (lazy initialization)
 receipt_service = None
