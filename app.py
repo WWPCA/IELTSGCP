@@ -2019,6 +2019,11 @@ def evaluate_listening():
         logger.error(f"Listening evaluation error: {e}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/speaking-assessment-demo')
+def speaking_assessment_demo():
+    """Serve the speaking assessment demo page with sound waves fallback"""
+    return render_template('speaking_assessment_with_fallback.html')
+
 @app.route('/api/speaking/start', methods=['POST'])
 def start_speaking_assessment():
     """Start IELTS speaking assessment with Gemini Smart Selection"""
