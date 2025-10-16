@@ -99,10 +99,14 @@ jobs:
       env:
         AWS_ENDPOINT_URL: http://localhost:4566
         DATABASE_URL: postgresql://test:test@localhost:5432/test
-        SESSION_SECRET: test-secret-key-for-ci
+        SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
         AWS_ACCESS_KEY_ID: test
         AWS_SECRET_ACCESS_KEY: test
         AWS_REGION: us-east-1
+        RECAPTCHA_V2_SITE_KEY: ${{ secrets.RECAPTCHA_V2_SITE_KEY }}
+        RECAPTCHA_V2_SECRET_KEY: ${{ secrets.RECAPTCHA_V2_SECRET_KEY }}
+        HELPDESK_ADMIN_PASSWORD: ${{ secrets.HELPDESK_ADMIN_PASSWORD }}
+        GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
       run: |
         echo "🚀 Starting Flask test server..."
         gunicorn --bind 0.0.0.0:5000 --timeout 30 main:app &
