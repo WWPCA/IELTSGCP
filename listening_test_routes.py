@@ -42,6 +42,16 @@ def get_available_tests():
                 'sections': 4,
                 'available': True
             })
+            
+            tests.append({
+                'test_id': 'academic-listening-test-2',
+                'title': 'Academic Listening Test 2',
+                'type': 'academic',
+                'duration': 30,
+                'questions': 40,
+                'sections': 4,
+                'available': True
+            })
         
         return jsonify({
             'success': True,
