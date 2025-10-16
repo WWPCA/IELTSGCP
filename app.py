@@ -2024,6 +2024,19 @@ def speaking_assessment_demo():
     """Serve the speaking assessment demo page with sound waves fallback"""
     return render_template('speaking_assessment_with_fallback.html')
 
+@app.route('/listening-test')
+def listening_test_page():
+    """Serve the listening test page"""
+    return render_template('listening_test.html')
+
+# Register listening test routes
+try:
+    from listening_test_routes import listening_routes
+    app.register_blueprint(listening_routes)
+    print("[INFO] Listening test routes registered")
+except ImportError as e:
+    print(f"[INFO] Listening test routes not available: {e}")
+
 @app.route('/api/speaking/start', methods=['POST'])
 def start_speaking_assessment():
     """Start IELTS speaking assessment with Gemini Smart Selection"""
