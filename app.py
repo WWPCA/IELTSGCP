@@ -863,7 +863,7 @@ def generate_reset_token(email: str) -> str:
     return token
 
 def send_password_reset_email(email: str, reset_token: str) -> bool:
-    """Send password reset email using SendGrid"""
+    """Send password reset email using AWS SES"""
     try:
         # Check if running in development mode
         if os.environ.get('REPLIT_ENVIRONMENT') == 'true':
@@ -873,117 +873,11 @@ def send_password_reset_email(email: str, reset_token: str) -> bool:
             print(f"[DEV_MODE] Reset link: {reset_link}")
             return True
         
-        # Production mode - use SendGrid
-        from sendgrid import SendGridAPIClient
-        from sendgrid.helpers.mail import Mail
+        # Production mode - use AWS SES
+        from ses_email_service import ses_service
         
-        sendgrid_api_key = os.environ.get('SENDGRID_API_KEY')
-        if not sendgrid_api_key:
-            print("[ERROR] SENDGRID_API_KEY not configured")
-            return False
-        
-        # Build reset link
-        base_url = os.environ.get('DOMAIN_URL', 'https://ieltsaiprep.com')
-        reset_link = f"{base_url}/reset_password?token={reset_token}"
-        username = email.split('@')[0].title()
-        
-        subject = "IELTS AI Prep - Password Reset Request"
-        
-        # Professional HTML email template matching new IELTS.org-inspired branding
-        html_body = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="UTF-8">
-            <title>Password Reset - IELTS AI Prep</title>
-        </head>
-        <body style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; background-color: #f5f5f5;">
-            <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                <!-- Header -->
-                <div style="background: #ffffff; text-align: center; padding: 30px 20px; border-radius: 8px 8px 0 0; border-bottom: 3px solid #E33219;">
-                    <h1 style="color: #E33219; margin: 0 0 10px 0; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">IELTS AI Prep</h1>
-                    <p style="color: #666; margin: 0; font-size: 14px;">Your Personalized Path to IELTS Success</p>
-                </div>
-                
-                <!-- Main Content -->
-                <div style="background: #ffffff; padding: 40px 30px; border-radius: 0 0 8px 8px;">
-                    <h2 style="color: #1a1a1a; font-weight: 600; margin-bottom: 20px; font-size: 22px;">Password Reset Request</h2>
-                    
-                    <p style="margin-bottom: 20px; color: #333;">Hello {username},</p>
-                    
-                    <p style="margin-bottom: 25px; color: #333;">We received a request to reset your password for your IELTS AI Prep account. 
-                    If you made this request, please click the button below to reset your password:</p>
-                    
-                    <div style="text-align: center; margin: 35px 0;">
-                        <a href="{reset_link}" 
-                           style="background: linear-gradient(135deg, #E33219 0%, #FF6B55 100%); color: white; padding: 16px 40px; 
-                                  text-decoration: none; border-radius: 8px; display: inline-block;
-                                  font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(227, 50, 25, 0.3);">
-                            Reset My Password
-                        </a>
-                    </div>
-                    
-                    <div style="background: #fff3cd; padding: 16px; border-radius: 8px; border-left: 4px solid #E33219; margin: 25px 0;">
-                        <p style="margin: 0; color: #856404; font-size: 14px;">
-                            <strong>Security Notice:</strong> This link will expire in 1 hour for your protection.
-                        </p>
-                    </div>
-                    
-                    <p style="margin-bottom: 0; color: #333;">If you didn't request a password reset, please ignore this email. 
-                    Your password will remain unchanged and your account is secure.</p>
-                    
-                    <hr style="border: none; border-top: 1px solid #e5e5e5; margin: 30px 0;">
-                    
-                    <p style="margin-bottom: 10px; color: #666; font-size: 14px;">If the button doesn't work, copy and paste this link into your browser:</p>
-                    <p style="word-break: break-all; background: #f5f5f5; padding: 12px; border-radius: 6px; margin-bottom: 25px; font-size: 13px; color: #0891B2;">{reset_link}</p>
-                    
-                    <div style="text-align: center; margin-top: 35px;">
-                        <p style="margin-bottom: 5px; font-weight: 600; color: #1a1a1a;">Best regards,</p>
-                        <p style="margin-bottom: 15px; color: #333;">The IELTS AI Prep Team</p>
-                        <p style="font-size: 12px; color: #999;">© 2025 IELTS AI Prep. All rights reserved.</p>
-                    </div>
-                </div>
-            </div>
-        </body>
-        </html>
-        """
-        
-        # Text version for email clients that don't support HTML
-        text_body = f"""
-IELTS AI Prep - Password Reset Request
-
-Hello {username},
-
-We received a request to reset your password for your IELTS AI Prep account.
-
-If you made this request, please copy and paste the following link into your browser to reset your password:
-
-{reset_link}
-
-This link will expire in 1 hour for security reasons.
-
-If you didn't request a password reset, please ignore this email. Your password will remain unchanged.
-
-Best regards,
-The IELTS AI Prep Team
-
-© 2025 IELTS AI Prep. All rights reserved.
-        """
-        
-        # Send email via SendGrid
-        message = Mail(
-            from_email='noreply@ieltsaiprep.com',
-            to_emails=email,
-            subject=subject,
-            html_content=html_body
-        )
-        message.add_content(text_body, 'text/plain')
-        
-        sg = SendGridAPIClient(sendgrid_api_key)
-        response = sg.send(message)
-        
-        print(f"[SendGrid] Password reset email sent to {email}: Status {response.status_code}")
-        return True
+        # Send email via SES
+        return ses_service.send_password_reset_email(email, reset_token)
         
     except Exception as e:
         print(f"[ERROR] Failed to send password reset email: {str(e)}")
