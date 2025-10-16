@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Academic Reading Test</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --success-color: #27ae60;
+            --danger-color: #e74c3c;
+            --warning-color: #f39c12;
+            --light-bg: #f8f9fa;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .test-container {
+            max-width: 1400px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .test-header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .timer {
+            font-size: 24px;
+            font-weight: 600;
+            padding: 10px 20px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 10px;
+        }
+
+        .timer.warning {
+            background: var(--warning-color);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .test-content {
+            display: flex;
+            height: calc(100vh - 200px);
+        }
+
+        .passage-section {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+            background: var(--light-bg);
+            border-right: 2px solid #dee2e6;
+        }
+
+        .questions-section {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .passage-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .passage-text {
+            line-height: 1.8;
+            color: #333;
+            font-size: 16px;
+            text-align: justify;
+        }
+
+        .passage-text p {
+            margin-bottom: 15px;
+        }
+
+        .question-item {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+
+        .question-item:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.1);
+        }
+
+        .question-item.answered {
+            background: #e8f8f5;
+            border-color: var(--success-color);
+        }
+
+        .question-number {
+            display: inline-block;
+            width: 35px;
+            height: 35px;
+            line-height: 33px;
+            text-align: center;
+            background: var(--secondary-color);
+            color: white;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: 600;
+        }
+
+        .question-item.answered .question-number {
+            background: var(--success-color);
+        }
+
+        .question-type {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 5px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .answer-input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: border-color 0.3s;
+        }
+
+        .answer-input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+        }
+
+        .options-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 15px;
+        }
+
+        .option-item {
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .option-item:hover {
+            background: #e9ecef;
+            border-color: var(--secondary-color);
+        }
+
+        .option-item.selected {
+            background: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .navigation-bar {
+            background: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 2px solid #dee2e6;
+        }
+
+        .passage-nav {
+            display: flex;
+            gap: 10px;
+        }
+
+        .passage-btn {
+            padding: 8px 16px;
+            border: 2px solid var(--secondary-color);
+            background: white;
+            color: var(--secondary-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .passage-btn:hover, .passage-btn.active {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .progress-indicator {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            max-width: 600px;
+        }
+
+        .progress-dot {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #dee2e6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .progress-dot.answered {
+            background: var(--success-color);
+            color: white;
+        }
+
+        .progress-dot.current {
+            background: var(--secondary-color);
+            color: white;
+            transform: scale(1.2);
+        }
+
+        .submit-btn {
+            padding: 12px 40px;
+            background: linear-gradient(135deg, var(--success-color), #229954);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .submit-btn:disabled {
+            background: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Results Modal */
+        .results-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .results-content {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            text-align: center;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .band-score {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--secondary-color);
+            margin: 20px 0;
+        }
+
+        .score-details {
+            display: flex;
+            justify-content: space-around;
+            margin: 30px 0;
+        }
+
+        .score-item {
+            text-align: center;
+        }
+
+        .score-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .score-value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .passage-performance {
+            margin: 30px 0;
+        }
+
+        .passage-bar {
+            display: flex;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .passage-label {
+            width: 100px;
+            font-weight: 500;
+        }
+
+        .progress-bar-container {
+            flex: 1;
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 0 15px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--success-color), var(--secondary-color));
+            transition: width 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <!-- Test Header -->
+        <div class="test-header">
+            <div>
+                <h2>IELTS Academic Reading Test</h2>
+                <small>40 Questions • 3 Passages • 60 Minutes</small>
+            </div>
+            <div class="timer" id="timer">60:00</div>
+        </div>
+
+        <!-- Test Content -->
+        <div class="test-content">
+            <!-- Passage Section -->
+            <div class="passage-section" id="passageSection">
+                <div class="passage-title" id="passageTitle">Loading passage...</div>
+                <div class="passage-text" id="passageText">
+                    <!-- Passage text will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Questions Section -->
+            <div class="questions-section" id="questionsSection">
+                <!-- Questions will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Navigation Bar -->
+        <div class="navigation-bar">
+            <div class="passage-nav">
+                <button class="passage-btn active" onclick="loadPassage(1)">Passage 1</button>
+                <button class="passage-btn" onclick="loadPassage(2)">Passage 2</button>
+                <button class="passage-btn" onclick="loadPassage(3)">Passage 3</button>
+            </div>
+            
+            <div class="progress-indicator" id="progressIndicator">
+                <!-- Progress dots will be generated -->
+            </div>
+
+            <button class="submit-btn" id="submitBtn" onclick="submitTest()">
+                Submit Test
+            </button>
+        </div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="results-modal" id="resultsModal">
+        <div class="results-content">
+            <h2>Test Completed!</h2>
+            <div class="band-score" id="bandScore">--</div>
+            <p>IELTS Band Score</p>
+            
+            <div class="score-details">
+                <div class="score-item">
+                    <div class="score-label">Correct</div>
+                    <div class="score-value" id="correctScore">--</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Incorrect</div>
+                    <div class="score-value" id="incorrectScore">--</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-label">Unanswered</div>
+                    <div class="score-value" id="unansweredScore">--</div>
+                </div>
+            </div>
+
+            <div class="passage-performance">
+                <h4>Passage Performance</h4>
+                <div id="passagePerformance"></div>
+            </div>
+
+            <button class="btn btn-primary btn-lg" onclick="location.reload()">
+                Try Another Test
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Test data storage
+        let testData = null;
+        let questions = null;
+        let userAnswers = {};
+        let currentPassage = 1;
+        let timeRemaining = 3600; // 60 minutes in seconds
+        let timerInterval = null;
+
+        // Passage texts (abbreviated for demo)
+        const passages = {
+            1: {
+                title: "The History of Urban Vertical Farming",
+                text: `
+                    <p><strong>A.</strong> The concept of vertical farming—growing crops in vertically stacked layers within controlled environments—has emerged as a revolutionary solution to the challenges facing traditional agriculture in the 21st century. While the practice may seem futuristic, its roots trace back several decades, evolving from simple greenhouse cultivation to sophisticated, technology-driven operations that are reshaping urban food production.</p>
+
+                    <p><strong>B.</strong> The modern vision of vertical farming was popularized by Dickson Despommier, a professor at Columbia University, who in 1999 challenged his students to feed the population of Manhattan using rooftop gardens. When calculations revealed rooftops alone were insufficient, Despommier proposed growing food within tall buildings, using hydroponic and aeroponic systems. His ideas, though initially met with skepticism, laid the groundwork for what would become a rapidly expanding industry. While others had experimented with multi-layer cultivation, Despommier's contribution was envisioning an unprecedented scale and integration with urban infrastructure.</p>
+
+                    <p><strong>C.</strong> The technological foundations for vertical farming, however, preceded Despommier's proposals. In 1915, American geologist Gilbert Ellis Bailey wrote about "vertical farming" in his book, coining the term that would gain prominence decades later. More significantly, intensive indoor farming began gaining traction in Japan during the 1970s and 1980s, when researchers at Chiba University pioneered hydroponic rice cultivation in response to land scarcity. These early facilities demonstrated that crops could be grown year-round without soil, using nutrient-rich water solutions and artificial lighting.</p>
+
+                    <p><strong>D.</strong> The breakthrough that truly enabled commercial vertical farming came with advances in LED lighting technology in the early 2000s. Traditional high-pressure sodium lamps generated excessive heat and consumed enormous amounts of energy, making indoor farming economically unviable for most crops. LEDs, by contrast, consume significantly less energy, produce minimal heat, and can be tuned to specific wavelengths that optimize photosynthesis. This development, combined with sophisticated climate control systems and automation, transformed vertical farming from an experimental concept into a practical solution.</p>
+
+                    <p><strong>E.</strong> Today's vertical farms represent marvels of agricultural engineering. Companies like AeroFarms in New Jersey and Plenty in California operate facilities that can produce yields up to 390 times higher per square foot than traditional farming, while using up to 95% less water. These operations employ precise environmental controls, managing temperature, humidity, CO2 levels, and nutrient delivery to create optimal growing conditions year-round. The water efficiency is achieved through recirculating hydroponic or aeroponic systems that deliver nutrients directly to plant roots, virtually eliminating runoff and evaporation. Additionally, the controlled environment eliminates the need for pesticides and herbicides, producing cleaner, more consistent crops.</p>
+
+                    <p><strong>F.</strong> Despite these advantages, vertical farming faces significant challenges that have limited its widespread adoption. The initial capital investment required to build and equip a vertical farm is considerable, often running into millions of dollars for commercial-scale operations. Energy costs, while reduced by LED technology, remain substantial, particularly in regions where electricity is expensive. Moreover, vertical farming is currently economically viable only for certain crops—primarily leafy greens, herbs, and some fruits like strawberries and tomatoes. Staple crops like wheat, rice, and corn require too much space and energy to grow profitably in vertical systems.</p>
+
+                    <p><strong>G.</strong> The social and economic implications of vertical farming extend beyond agricultural productivity. Proponents argue that localizing food production in urban centers could revolutionize food systems, reducing transportation costs and emissions while providing fresh produce to food deserts. Urban vertical farms could create jobs in communities that have lost manufacturing employment, though critics note these positions often require technical skills that displaced workers may lack. There are also concerns about vertical farming exacerbating inequality if it primarily serves affluent urban populations while traditional farmers in rural areas struggle to compete.</p>
+
+                    <p><strong>H.</strong> Looking ahead, the future of vertical farming will likely depend on continued technological innovation and evolving economic conditions. Researchers are developing new LED spectrums, automation systems, and even exploring the integration of renewable energy sources like solar panels to reduce operational costs. Climate change may also shift the economic equation, as extreme weather events make traditional farming increasingly unpredictable and water scarcity drives demand for more efficient agricultural methods. Some experts envision vertical farms eventually producing a significant portion of the world's fresh produce, while others see them filling a niche role, supplementing rather than replacing traditional agriculture. What seems certain is that vertical farming will play an increasingly important role in feeding growing urban populations while adapting to environmental constraints.</p>
+                `
+            },
+            2: {
+                title: "The Cognitive Benefits of Bilingualism",
+                text: `
+                    <p>For decades, researchers have investigated the cognitive effects of speaking more than one language, and recent studies have revealed that bilingualism offers significant advantages beyond the obvious benefit of being able to communicate with more people. These cognitive benefits affect multiple aspects of brain function, from executive control to creativity, and persist throughout the lifespan. Understanding these effects has important implications for education policy, healthcare, and our broader understanding of human cognitive development.</p>
+
+                    <p>The bilingual brain operates differently from the monolingual brain in fundamental ways. When bilingual individuals speak or listen to language, both of their language systems become activated simultaneously, even when only one language is being used. This means that the bilingual brain must constantly manage this parallel activation, inhibiting one language while selecting appropriate words and grammatical structures from the other. This ongoing mental juggling act, which researchers call "cognitive control" or "executive function," strengthens the brain's ability to focus attention, switch between tasks, and resolve conflicting information. Recent brain imaging techniques have shown that this linguistic juggling act strengthens the brain's executive control networks, particularly in the prefrontal cortex, which governs planning, decision-making, and attention management.</p>
+
+                    <p>Studies examining children have found particularly striking evidence of bilingualism's cognitive benefits. Bilingual children as young as seven months show enhanced cognitive control compared to their monolingual peers. In one landmark study, researchers found that bilingual infants demonstrated superior ability to adjust to changes in tasks requiring different responses, suggesting that the cognitive advantages of bilingualism begin developing even before children can speak. As bilingual children grow, they consistently outperform monolinguals on tasks requiring conflict resolution and attention control, such as sorting cards by changing rules or identifying the direction of an arrow while ignoring misleading information. These advantages appear regardless of the specific languages spoken or the socioeconomic status of the children, indicating that bilingualism itself, rather than associated cultural or economic factors, drives these cognitive enhancements.</p>
+
+                    <p>Perhaps the most remarkable finding in bilingualism research concerns its protective effects against age-related cognitive decline. Multiple studies have shown that bilingual individuals develop dementia symptoms approximately four to five years later than monolinguals with similar education levels and socioeconomic backgrounds. This delay appears across different types of dementia, including Alzheimer's disease, suggesting that bilingualism provides a general protective effect rather than targeting specific pathological processes. Brain imaging of older bilinguals reveals that they maintain greater gray matter density and white matter integrity compared to monolinguals, particularly in areas associated with executive control and language processing. Researchers hypothesize that the constant mental exercise required to manage two languages creates a "cognitive reserve" that helps the brain compensate for age-related deterioration. While bilingualism is not a cure for dementia, this substantial delay in symptom onset represents one of the most robust protective factors identified in dementia research.</p>
+
+                    <p>Bilingualism also enhances what researchers call "metalinguistic awareness"—the ability to think about language as an abstract system. Bilingual individuals often demonstrate superior understanding of the arbitrary nature of language, recognizing earlier than monolinguals that words are symbols rather than intrinsic properties of objects. This enhanced metalinguistic awareness contributes to advantages in learning to read, understanding grammar, and even learning additional languages. Bilingual children often show greater phonological awareness, the ability to recognize and manipulate sounds in language, which is a crucial precursor to reading ability.</p>
+
+                    <p>The social cognitive benefits of bilingualism extend to enhanced perspective-taking abilities. Research has shown that bilingual children may develop theory of mind—the understanding that others have different thoughts, knowledge, and beliefs—earlier than monolingual children. This advantage likely stems from bilinguals' daily experience navigating between languages based on their conversation partners' linguistic abilities. Bilingual children must constantly assess which language to use with different people and adjust their communication accordingly, providing extensive practice in considering others' perspectives.</p>
+
+                    <p>However, bilingualism is not without its challenges. Bilinguals typically have slightly smaller vocabularies in each individual language compared to monolinguals, though their total vocabulary across both languages often exceeds that of monolinguals. They may also experience more "tip-of-the-tongue" moments, where they know a word but temporarily cannot retrieve it, likely because their mental lexicon must accommodate two language systems. Additionally, bilingual children sometimes show slightly slower initial vocabulary development, though they typically catch up to monolinguals by school age. These minor disadvantages are generally considered negligible compared to the cognitive benefits, and many are temporary or can be addressed through appropriate educational support.</p>
+
+                    <p>The implications of bilingualism research extend far beyond individual cognitive development. In an increasingly globalized world, these findings challenge monolingual educational policies and suggest that promoting bilingualism could have broad societal benefits. Some researchers argue that bilingual education should be available to all children, not just those from immigrant families or elite backgrounds. Healthcare providers are beginning to consider bilingualism as a factor in assessing cognitive decline and designing interventions for aging populations. As our understanding of the bilingual brain continues to evolve, it becomes increasingly clear that speaking multiple languages is not just a practical skill but a fundamental enhancer of human cognitive capacity.</p>
+                `
+            },
+            3: {
+                title: "The Economics of Happiness",
+                text: `
+                    <p><strong>A.</strong> The relationship between economic prosperity and human wellbeing has preoccupied philosophers, economists, and policymakers for centuries. While conventional economic wisdom assumes that increased wealth leads to greater happiness, empirical research over the past few decades has revealed a far more complex picture. This complexity has given rise to a new field—happiness economics—which challenges traditional assumptions about the goals of economic policy and offers alternative measures of societal progress beyond gross domestic product (GDP).</p>
+
+                    <p><strong>B.</strong> The paradox at the heart of happiness economics was first articulated by economist Richard Easterlin in 1974. The "Easterlin Paradox" observes that while wealthier individuals within a country tend to report higher happiness levels than poorer individuals, average happiness levels in developed nations have remained relatively flat despite substantial increases in per capita income over time. For instance, average reported life satisfaction in the United States has barely changed since the 1970s, despite real incomes more than doubling. This phenomenon, replicated across numerous developed nations, suggests that beyond a certain threshold, additional wealth yields diminishing returns for subjective wellbeing. The psychological mechanism underlying this paradox appears to be hedonic adaptation—humans' remarkable ability to quickly adjust to positive changes in their circumstances, returning to baseline happiness levels even after significant improvements in material conditions.</p>
+
+                    <p><strong>C.</strong> Cross-national comparisons have yielded equally intriguing insights. Some of the world's wealthiest nations, such as Japan and South Korea, report lower average happiness levels than considerably poorer countries like Costa Rica or Colombia. These disparities cannot be explained by income alone and have prompted researchers to investigate cultural, social, and institutional factors that influence national happiness. Studies have identified several consistent predictors of happiness across cultures: strong social relationships, good health, meaningful work, personal freedom, and trust in institutions. Notably, Scandinavian countries consistently rank highest in happiness surveys, combining high incomes with robust social safety nets, low corruption, and strong social cohesion.</p>
+
+                    <p><strong>D.</strong> The role of relative income, as opposed to absolute income, has emerged as crucial to understanding the wealth-happiness relationship. Humans are inherently social beings who constantly compare themselves to others, and these social comparisons powerfully influence subjective wellbeing. Research shows that individuals' happiness depends not just on their own income but on how it compares to that of their reference group—neighbors, colleagues, and social peers. This explains why general income increases that lift all boats may not increase average happiness: if everyone's income doubles, relative positions remain unchanged. Some studies suggest that positional concerns are so strong that many people would prefer to earn less in absolute terms if it meant earning more than their peers. This phenomenon has profound implications for economic policy, suggesting that inequality itself, independent of absolute poverty, may reduce societal wellbeing.</p>
+
+                    <p><strong>E.</strong> The concept of hedonic adaptation, briefly mentioned earlier, deserves deeper examination. Laboratory and field studies have shown that people adapt surprisingly quickly to both positive and negative changes in their lives. Lottery winners, after an initial surge of elation, typically return to pre-winning happiness levels within months. Similarly, individuals who become paraplegic through accidents show remarkable resilience, with happiness levels recovering substantially, though not always completely, within a year or two. This adaptation is asymmetric, however: people adapt more completely to positive changes than to negative ones, and some conditions, such as unemployment or the death of a child, show little adaptation even after many years. Understanding what humans do and don't adapt to has important implications for policy priorities and individual decision-making.</p>
+
+                    <p><strong>F.</strong> Research by Nobel laureate Daniel Kahneman and economist Angus Deaton has helped clarify the relationship between income and different aspects of wellbeing. Their analysis of data from over 450,000 Americans found that emotional wellbeing—the frequency of positive emotions and absence of negative emotions—increases with income up to approximately $75,000 per year (in 2010 dollars) but plateaus thereafter. Life evaluation—people's assessment of their lives as a whole—continues to rise with income even beyond this threshold, though at a decreasing rate. This distinction helps explain some of the confusion in earlier research: money does continue to "buy" satisfaction with one's life, but its ability to purchase day-to-day emotional happiness is limited. The threshold itself appears to represent the point at which basic needs are comfortably met and financial stress is eliminated, suggesting that money matters enormously for those struggling to meet basic needs but offers diminishing returns for emotional wellbeing once those needs are satisfied.</p>
+
+                    <p><strong>G.</strong> The implications of happiness economics for public policy are controversial and evolving. Some governments have begun incorporating wellbeing measures into policy evaluation, moving beyond purely economic metrics. Bhutan famously prioritizes "Gross National Happiness" over GDP, though critics argue this has been used to justify authoritarian policies. The United Kingdom established a national wellbeing measurement program in 2010, tracking citizens' life satisfaction, sense of purpose, and anxiety levels alongside traditional economic indicators. New Zealand introduced a "Wellbeing Budget" in 2019, allocating resources based on their expected impact on citizens' wellbeing rather than solely on economic returns.</p>
+
+                    <p><strong>H.</strong> Critics of the happiness economics movement raise several important concerns. Some argue that subjective wellbeing is too culturally specific and philosophically contested to guide policy. What makes a good life varies dramatically across cultures and individuals, and government attempts to maximize a particular conception of happiness could be paternalistic or even totalitarian. Others worry that focusing on happiness could justify complacency about material deprivation—if poor people report being happy, why address poverty? There are also measurement challenges: self-reported happiness may be influenced by social desirability bias, current mood, and cultural norms about expressing satisfaction. Additionally, exclusive focus on subjective wellbeing might neglect important values like justice, freedom, and dignity that don't always maximize happiness but are nonetheless crucial for human flourishing.</p>
+
+                    <p><strong>I.</strong> Despite these challenges, happiness economics has already influenced how we think about progress and prosperity. It has highlighted the importance of non-material factors in human wellbeing and challenged the assumption that economic growth automatically translates into better lives. As societies grapple with issues like inequality, environmental degradation, and technological disruption, the insights of happiness economics offer valuable perspectives on what truly matters for human flourishing. The field suggests that while economic growth remains important, particularly for developing nations, rich countries might benefit from prioritizing social connections, mental health, work-life balance, and environmental quality over continued GDP growth. Ultimately, happiness economics doesn't provide simple answers but rather enriches our understanding of the complex relationship between material progress and human wellbeing, encouraging more nuanced and holistic approaches to policy and personal decision-making.</p>
+                `
+            }
+        };
+
+        // Initialize test
+        async function initializeTest() {
+            try {
+                // Load test data
+                const response = await fetch('/api/reading/test/academic-reading-test-1');
+                const data = await response.json();
+                
+                if (data.success) {
+                    testData = data.test;
+                    questions = data.questions;
+                    
+                    // Initialize progress indicators
+                    generateProgressIndicators();
+                    
+                    // Load first passage
+                    loadPassage(1);
+                    
+                    // Start timer
+                    startTimer();
+                    
+                    // Auto-save progress every 30 seconds
+                    setInterval(saveProgress, 30000);
+                }
+            } catch (error) {
+                console.error('Error loading test:', error);
+                alert('Error loading test. Please refresh the page.');
+            }
+        }
+
+        // Generate progress indicators
+        function generateProgressIndicators() {
+            const container = document.getElementById('progressIndicator');
+            container.innerHTML = '';
+            
+            for (let i = 1; i <= 40; i++) {
+                const dot = document.createElement('div');
+                dot.className = 'progress-dot';
+                dot.id = `progress-${i}`;
+                dot.textContent = i;
+                dot.onclick = () => jumpToQuestion(i);
+                container.appendChild(dot);
+            }
+        }
+
+        // Load passage and questions
+        function loadPassage(passageNum) {
+            currentPassage = passageNum;
+            
+            // Update passage buttons
+            document.querySelectorAll('.passage-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx + 1 === passageNum);
+            });
+            
+            // Load passage text
+            const passageData = passages[passageNum];
+            document.getElementById('passageTitle').textContent = passageData.title;
+            document.getElementById('passageText').innerHTML = passageData.text;
+            
+            // Load questions for this passage
+            loadQuestions(passageNum);
+        }
+
+        // Load questions for current passage
+        function loadQuestions(passageNum) {
+            const questionsContainer = document.getElementById('questionsSection');
+            questionsContainer.innerHTML = '';
+            
+            // Determine question range
+            let startQ, endQ;
+            if (passageNum === 1) {
+                startQ = 1; endQ = 13;
+            } else if (passageNum === 2) {
+                startQ = 14; endQ = 26;
+            } else {
+                startQ = 27; endQ = 40;
+            }
+            
+            // Create question elements
+            for (let i = startQ; i <= endQ; i++) {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question-item';
+                questionDiv.id = `question-${i}`;
+                
+                if (userAnswers[i]) {
+                    questionDiv.classList.add('answered');
+                }
+                
+                // Question header
+                const header = document.createElement('div');
+                header.innerHTML = `
+                    <span class="question-number">${i}</span>
+                    <strong>Question ${i}</strong>
+                    <span class="question-type">${getQuestionType(i)}</span>
+                `;
+                questionDiv.appendChild(header);
+                
+                // Question text
+                const questionText = document.createElement('div');
+                questionText.style.marginTop = '15px';
+                questionText.innerHTML = getQuestionText(i);
+                questionDiv.appendChild(questionText);
+                
+                // Answer input based on question type
+                const answerDiv = document.createElement('div');
+                answerDiv.appendChild(createAnswerInput(i));
+                questionDiv.appendChild(answerDiv);
+                
+                questionsContainer.appendChild(questionDiv);
+            }
+            
+            // Update progress indicators
+            updateProgressIndicators();
+        }
+
+        // Get question type
+        function getQuestionType(num) {
+            if (num <= 6) return 'Paragraph Matching';
+            if (num <= 10) return 'Multiple Choice';
+            if (num <= 13) return 'Sentence Completion';
+            if (num <= 18) return 'True/False/Not Given';
+            if (num <= 22) return 'Matching';
+            if (num <= 26) return 'Summary Completion';
+            if (num <= 30) return 'Heading Matching';
+            if (num <= 35) return 'Yes/No/Not Given';
+            return 'Multiple Choice';
+        }
+
+        // Get question text (simplified for demo)
+        function getQuestionText(num) {
+            const questionTexts = {
+                1: "a reference to the earliest published use of the term 'vertical farming'",
+                2: "mention of the types of crops currently unsuitable for vertical farming",
+                3: "a description of how LED technology benefits plant cultivation",
+                4: "concerns about inequality in access to vertical farming produce",
+                5: "the origins of hydroponic farming research in Asia",
+                6: "potential future uses of renewable energy in vertical farming",
+                7: "According to the passage, Dickson Despommier's contribution to vertical farming was<br>A. inventing hydroponic growing systems<br>B. proposing large-scale urban integration of food production<br>C. developing the first commercial vertical farm<br>D. creating renewable energy systems for agriculture",
+                8: "What does the writer suggest about vertical farming in the 1970s and 1980s?<br>A. It was economically profitable from the start<br>B. It proved crops could be grown without soil year-round<br>C. It was rejected by researchers at Chiba University<br>D. It relied entirely on natural sunlight",
+                9: "The main advantage of vertical farming in terms of water usage is that it<br>A. requires no water at all<br>B. uses rainwater exclusively<br>C. recirculates water in its systems<br>D. imports water from other regions",
+                10: "According to the passage, which factor has prevented vertical farming from becoming widespread?<br>A. lack of suitable crops<br>B. consumer rejection<br>C. government regulations<br>D. high initial investment costs",
+                11: "Growing food locally through vertical farming reduces __________, which lowers carbon emissions.",
+                12: "Vertical farms protect crops from __________, which are increasing due to climate change.",
+                13: "Some urban planners believe vertical farms could help __________ reconnect with food production.",
+                14: "Bilingual people must use both languages simultaneously when speaking.",
+                15: "Brain imaging studies show that managing two languages strengthens the prefrontal cortex.",
+                16: "Bilingual individuals develop dementia symptoms later than monolinguals with similar backgrounds.",
+                17: "Bilingualism completely prevents the development of Alzheimer's disease.",
+                18: "Research shows that bilingual education always produces better academic results than monolingual education.",
+                19: "Better performance on attention control tasks",
+                20: "Delayed onset of dementia symptoms",
+                21: "Enhanced metalinguistic awareness",
+                22: "Earlier development of theory of mind",
+                23: "Bilinguals may have slightly smaller __________ in each language compared to monolinguals.",
+                24: "They may also experience __________ moments when they cannot retrieve a specific word.",
+                25: "This happens because their __________ must accommodate two languages.",
+                26: "Additionally, bilingual children might show slower __________ initial development.",
+                27: "Paragraph B",
+                28: "Paragraph D",
+                29: "Paragraph F",
+                30: "Paragraph H",
+                31: "Economic growth is the most important goal for any society to pursue.",
+                32: "People living in poverty experience significant improvements in happiness when their income increases.",
+                33: "All cultures define and value happiness in exactly the same way.",
+                34: "Scandinavian countries are happy primarily because of their high income levels.",
+                35: "Governments should focus exclusively on economic metrics rather than happiness.",
+                36: "The Easterlin Paradox suggests that<br>A. poor people are happier than wealthy people<br>B. national wealth increases do not always increase average happiness<br>C. happiness is impossible to measure accurately<br>D. economic growth should be a government's primary goal",
+                37: "According to the passage, hedonic adaptation means that<br>A. people never experience happiness<br>B. income increases produce permanent happiness gains<br>C. people return to baseline happiness levels after changes<br>D. adaptation prevents all forms of happiness",
+                38: "Research on lottery winners indicates that<br>A. winning money guarantees long-term happiness<br>B. winners adjust their expectations after winning<br>C. lottery tickets should be banned<br>D. winners become less happy than before",
+                39: "The research by Kahneman and Deaton found that<br>A. money has no relationship with happiness<br>B. only extremely wealthy people are happy<br>C. emotional wellbeing increases with income up to a point<br>D. happiness decreases as income rises",
+                40: "What is the writer's main point about happiness economics?<br>A. It proves that money is irrelevant to happiness<br>B. It challenges the idea that economic growth equals societal progress<br>C. It demonstrates that happiness cannot be studied scientifically<br>D. It shows that poor countries are happier than rich ones"
+            };
+            return questionTexts[num] || "Question text loading...";
+        }
+
+        // Create answer input based on question type
+        function createAnswerInput(num) {
+            if (num <= 6 || num >= 27 && num <= 30) {
+                // Paragraph/Heading matching - dropdown
+                const select = document.createElement('select');
+                select.className = 'answer-input';
+                select.onchange = (e) => saveAnswer(num, e.target.value);
+                
+                const options = num <= 6 ? 
+                    ['', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'] :
+                    ['', 'i', 'ii', 'iii', 'iv', 'v', 'vi', 'vii', 'viii', 'ix', 'x'];
+                
+                options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt;
+                    option.textContent = opt || 'Select answer';
+                    select.appendChild(option);
+                });
+                
+                if (userAnswers[num]) {
+                    select.value = userAnswers[num];
+                }
+                
+                return select;
+            } else if (num === 7 || num === 8 || num === 9 || num === 10 || num >= 36) {
+                // Multiple choice - radio buttons
+                const optionsDiv = document.createElement('ul');
+                optionsDiv.className = 'options-list';
+                
+                ['A', 'B', 'C', 'D'].forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    if (userAnswers[num] === opt) {
+                        li.classList.add('selected');
+                    }
+                    li.textContent = opt;
+                    li.onclick = () => {
+                        document.querySelectorAll(`#question-${num} .option-item`).forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        li.classList.add('selected');
+                        saveAnswer(num, opt);
+                    };
+                    optionsDiv.appendChild(li);
+                });
+                
+                return optionsDiv;
+            } else if (num >= 14 && num <= 18) {
+                // True/False/Not Given
+                const optionsDiv = document.createElement('ul');
+                optionsDiv.className = 'options-list';
+                
+                ['TRUE', 'FALSE', 'NOT GIVEN'].forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    if (userAnswers[num] === opt) {
+                        li.classList.add('selected');
+                    }
+                    li.textContent = opt;
+                    li.onclick = () => {
+                        document.querySelectorAll(`#question-${num} .option-item`).forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        li.classList.add('selected');
+                        saveAnswer(num, opt);
+                    };
+                    optionsDiv.appendChild(li);
+                });
+                
+                return optionsDiv;
+            } else if (num >= 19 && num <= 22) {
+                // Matching groups A/B/C
+                const select = document.createElement('select');
+                select.className = 'answer-input';
+                select.onchange = (e) => saveAnswer(num, e.target.value);
+                
+                const options = [
+                    {value: '', text: 'Select answer'},
+                    {value: 'A', text: 'A - Bilingual children'},
+                    {value: 'B', text: 'B - Bilingual adults'},
+                    {value: 'C', text: 'C - Both children and adults'}
+                ];
+                
+                options.forEach(opt => {
+                    const option = document.createElement('option');
+                    option.value = opt.value;
+                    option.textContent = opt.text;
+                    select.appendChild(option);
+                });
+                
+                if (userAnswers[num]) {
+                    select.value = userAnswers[num];
+                }
+                
+                return select;
+            } else if (num >= 31 && num <= 35) {
+                // Yes/No/Not Given
+                const optionsDiv = document.createElement('ul');
+                optionsDiv.className = 'options-list';
+                
+                ['YES', 'NO', 'NOT GIVEN'].forEach(opt => {
+                    const li = document.createElement('li');
+                    li.className = 'option-item';
+                    if (userAnswers[num] === opt) {
+                        li.classList.add('selected');
+                    }
+                    li.textContent = opt;
+                    li.onclick = () => {
+                        document.querySelectorAll(`#question-${num} .option-item`).forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        li.classList.add('selected');
+                        saveAnswer(num, opt);
+                    };
+                    optionsDiv.appendChild(li);
+                });
+                
+                return optionsDiv;
+            } else {
+                // Text input for completion questions
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.className = 'answer-input';
+                input.placeholder = num <= 13 ? 'Enter up to 3 words' : 'Enter up to 2 words';
+                input.value = userAnswers[num] || '';
+                input.oninput = (e) => saveAnswer(num, e.target.value);
+                return input;
+            }
+        }
+
+        // Save answer
+        function saveAnswer(questionNum, answer) {
+            userAnswers[questionNum] = answer;
+            
+            // Update UI
+            const questionDiv = document.getElementById(`question-${questionNum}`);
+            if (answer) {
+                questionDiv.classList.add('answered');
+            } else {
+                questionDiv.classList.remove('answered');
+            }
+            
+            // Update progress indicator
+            const progressDot = document.getElementById(`progress-${questionNum}`);
+            if (answer) {
+                progressDot.classList.add('answered');
+            } else {
+                progressDot.classList.remove('answered');
+            }
+            
+            // Update submit button
+            updateSubmitButton();
+        }
+
+        // Jump to specific question
+        function jumpToQuestion(questionNum) {
+            // Determine which passage
+            let targetPassage = 1;
+            if (questionNum > 13 && questionNum <= 26) targetPassage = 2;
+            if (questionNum > 26) targetPassage = 3;
+            
+            // Load passage if different
+            if (targetPassage !== currentPassage) {
+                loadPassage(targetPassage);
+            }
+            
+            // Scroll to question
+            setTimeout(() => {
+                const questionElement = document.getElementById(`question-${questionNum}`);
+                if (questionElement) {
+                    questionElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    questionElement.style.border = '3px solid #3498db';
+                    setTimeout(() => {
+                        questionElement.style.border = '2px solid transparent';
+                    }, 2000);
+                }
+            }, 100);
+        }
+
+        // Update progress indicators
+        function updateProgressIndicators() {
+            for (let i = 1; i <= 40; i++) {
+                const dot = document.getElementById(`progress-${i}`);
+                if (userAnswers[i]) {
+                    dot.classList.add('answered');
+                } else {
+                    dot.classList.remove('answered');
+                }
+            }
+        }
+
+        // Update submit button
+        function updateSubmitButton() {
+            const answeredCount = Object.keys(userAnswers).filter(key => userAnswers[key]).length;
+            const submitBtn = document.getElementById('submitBtn');
+            
+            if (answeredCount === 40) {
+                submitBtn.textContent = 'Submit Test (All Answered)';
+                submitBtn.style.background = 'linear-gradient(135deg, #27ae60, #229954)';
+            } else if (answeredCount > 30) {
+                submitBtn.textContent = `Submit Test (${answeredCount}/40 Answered)`;
+                submitBtn.style.background = 'linear-gradient(135deg, #f39c12, #e67e22)';
+            } else {
+                submitBtn.textContent = `Submit Test (${answeredCount}/40 Answered)`;
+            }
+        }
+
+        // Timer functions
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    submitTest();
+                }
+                
+                // Warning at 5 minutes
+                if (timeRemaining === 300) {
+                    document.getElementById('timer').classList.add('warning');
+                    alert('5 minutes remaining!');
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timer').textContent = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Save progress to server
+        async function saveProgress() {
+            try {
+                const response = await fetch('/api/reading/progress', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        test_id: 'academic-reading-test-1',
+                        current_question: getCurrentQuestionNumber(),
+                        answers: userAnswers,
+                        time_remaining: timeRemaining
+                    })
+                });
+                
+                if (response.ok) {
+                    console.log('Progress saved');
+                }
+            } catch (error) {
+                console.error('Error saving progress:', error);
+            }
+        }
+
+        function getCurrentQuestionNumber() {
+            // Find the first unanswered question
+            for (let i = 1; i <= 40; i++) {
+                if (!userAnswers[i]) return i;
+            }
+            return 40;
+        }
+
+        // Submit test
+        async function submitTest() {
+            const answeredCount = Object.keys(userAnswers).filter(key => userAnswers[key]).length;
+            
+            if (answeredCount < 20) {
+                if (!confirm(`You have only answered ${answeredCount} out of 40 questions. Are you sure you want to submit?`)) {
+                    return;
+                }
+            }
+            
+            clearInterval(timerInterval);
+            document.getElementById('submitBtn').disabled = true;
+            document.getElementById('submitBtn').textContent = 'Submitting...';
+            
+            try {
+                const response = await fetch('/api/reading/submit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        test_id: 'academic-reading-test-1',
+                        answers: userAnswers
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    displayResults(result);
+                } else {
+                    alert('Error submitting test. Please try again.');
+                    document.getElementById('submitBtn').disabled = false;
+                    document.getElementById('submitBtn').textContent = 'Submit Test';
+                }
+            } catch (error) {
+                console.error('Error submitting test:', error);
+                alert('Error submitting test. Please try again.');
+                document.getElementById('submitBtn').disabled = false;
+                document.getElementById('submitBtn').textContent = 'Submit Test';
+            }
+        }
+
+        // Display results
+        function displayResults(result) {
+            // Update scores
+            document.getElementById('bandScore').textContent = result.band_score;
+            document.getElementById('correctScore').textContent = result.score.correct;
+            document.getElementById('incorrectScore').textContent = result.score.incorrect;
+            document.getElementById('unansweredScore').textContent = result.score.unanswered;
+            
+            // Display passage performance
+            const perfContainer = document.getElementById('passagePerformance');
+            perfContainer.innerHTML = '';
+            
+            result.passage_performance.forEach(passage => {
+                const bar = document.createElement('div');
+                bar.className = 'passage-bar';
+                bar.innerHTML = `
+                    <div class="passage-label">Passage ${passage.passage}</div>
+                    <div class="progress-bar-container">
+                        <div class="progress-bar-fill" style="width: ${passage.percentage}%"></div>
+                    </div>
+                    <div>${passage.score}/${passage.total}</div>
+                `;
+                perfContainer.appendChild(bar);
+            });
+            
+            // Show modal
+            document.getElementById('resultsModal').style.display = 'flex';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', initializeTest);
+    </script>
+</body>
+</html>
