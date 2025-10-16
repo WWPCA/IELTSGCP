@@ -5,6 +5,7 @@ Load Academic Listening Test 1 data into DynamoDB
 import boto3
 from datetime import datetime
 from parse_listening_test_data import ListeningTestParser
+from decimal import Decimal
 import os
 
 def load_test_to_dynamodb():
@@ -104,21 +105,21 @@ def load_test_to_dynamodb():
         'test_id': test_id,
         'answer_key': parsed_data['answers'],
         'band_score_conversion': {
-            '39-40': 9.0,
-            '37-38': 8.5,
-            '35-36': 8.0,
-            '32-34': 7.5,
-            '30-31': 7.0,
-            '26-29': 6.5,
-            '23-25': 6.0,
-            '18-22': 5.5,
-            '16-17': 5.0,
-            '13-15': 4.5,
-            '11-12': 4.0,
-            '8-10': 3.5,
-            '6-7': 3.0,
-            '4-5': 2.5,
-            '0-3': 2.0
+            '39-40': Decimal('9.0'),
+            '37-38': Decimal('8.5'),
+            '35-36': Decimal('8.0'),
+            '32-34': Decimal('7.5'),
+            '30-31': Decimal('7.0'),
+            '26-29': Decimal('6.5'),
+            '23-25': Decimal('6.0'),
+            '18-22': Decimal('5.5'),
+            '16-17': Decimal('5.0'),
+            '13-15': Decimal('4.5'),
+            '11-12': Decimal('4.0'),
+            '8-10': Decimal('3.5'),
+            '6-7': Decimal('3.0'),
+            '4-5': Decimal('2.5'),
+            '0-3': Decimal('2.0')
         },
         'created_at': datetime.utcnow().isoformat()
     }
