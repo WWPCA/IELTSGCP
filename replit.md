@@ -55,7 +55,7 @@ The platform uses a **hybrid AWS-Google Cloud architecture** featuring:
 -   Environment variables for sensitive configurations (AWS credentials, API keys, session secrets).
 -   CloudFront-based access control with custom header validation.
 -   Google reCAPTCHA v2 for bot protection.
--   Email confirmation system with secure token generation.
+-   Email confirmation system with secure token generation via AWS SES.
 -   Real-time content moderation with graduated response system.
 -   DynamoDB encryption at rest and in transit.
 
@@ -69,23 +69,21 @@ The platform uses a **hybrid AWS-Google Cloud architecture** featuring:
 -   **Lambda:** Serverless compute for application logic.
 -   **DynamoDB:** NoSQL database for user data, sessions, assessments.
 -   **Bedrock:** Access to Nova Micro model for text assessment (~$0.15 per 1M input tokens, $0.60 per 1M output tokens).
--   **API Gateway:** RESTful API management.
+-   **SES (Simple Email Service):** Email delivery for verification and notifications.
 -   **CloudFront:** Global CDN and edge security.
 -   **Route 53:** DNS management and routing policies.
--   **S3:** Static asset storage and Lambda deployment packages.
+-   **S3:** Static asset storage and audio/image files for tests.
 -   **CloudWatch:** Logging, monitoring, and alerting.
 -   **Systems Manager:** Parameter store for configuration.
+-   **WAF:** Web Application Firewall for bot protection (replaces Google reCAPTCHA).
 
-**Google Cloud Services:**
--   **Vertex AI:** For Gemini 2.5 Flash Lite and Flash models via Google GenAI SDK.
--   **Cloud Natural Language API:** Content moderation (optional).
+**Google Cloud Services (Single Service Only):**
+-   **Vertex AI:** EXCLUSIVELY for Gemini 2.5 Flash Lite and Flash models via Google GenAI SDK with Dynamic Shared Quota (DSQ) across 21 regions. This is the ONLY Google service used in the architecture.
 
 **Third-Party Integrations:**
 -   **Apple App Store:** In-app purchase processing and receipt validation.
 -   **Google Play Store:** Android purchase verification.
 -   **Capacitor:** Mobile app framework for iOS/Android native features.
--   **Google reCAPTCHA:** Bot detection and prevention.
--   **SendGrid:** Email delivery service for verification and notifications.
 
 **Development Tools:**
 -   **AWS SAM/CloudFormation:** Infrastructure as Code for AWS.
