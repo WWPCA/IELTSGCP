@@ -190,12 +190,15 @@ function displayQuestionContent(question) {
     html += `<div class="question-text">${question.question_text || ''}</div>`;
     
     // Add visual aid if needed (for map questions)
-    if (question.requires_visual && currentSection === 2) {
+    if (question.requires_visual || (currentSection === 2 && questionNum >= 15 && questionNum <= 20)) {
         const section = currentTest.sections.find(s => s.section_number === 2);
         if (section && section.visual_aid_url) {
             html += `
                 <div class="map-container">
-                    <img src="${section.visual_aid_url}" alt="Map for questions 15-20">
+                    <h5 style="margin-bottom: 15px;">Use the map below to answer questions 15-20:</h5>
+                    <img src="${section.visual_aid_url}" 
+                         alt="Bellingham Castle Map" 
+                         style="max-width: 100%; height: auto; border: 2px solid #dee2e6; border-radius: 8px;">
                 </div>
             `;
         }
