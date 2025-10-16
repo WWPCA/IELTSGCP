@@ -1923,13 +1923,25 @@ def listening_test_page():
     """Serve the listening test page"""
     return render_template('listening_test.html')
 
-# Register listening test routes
+@app.route('/reading-test')
+def reading_test_page():
+    """Serve the reading test page"""
+    return render_template('reading_test.html')
+
+# Register test routes
 try:
     from listening_test_routes import listening_routes
     app.register_blueprint(listening_routes)
     print("[INFO] Listening test routes registered")
 except ImportError as e:
     print(f"[INFO] Listening test routes not available: {e}")
+
+try:
+    from reading_test_routes import reading_routes
+    app.register_blueprint(reading_routes)
+    print("[INFO] Reading test routes registered")
+except ImportError as e:
+    print(f"[INFO] Reading test routes not available: {e}")
 
 @app.route('/api/speaking/start', methods=['POST'])
 def start_speaking_assessment():
