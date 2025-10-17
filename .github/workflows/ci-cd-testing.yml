@@ -110,10 +110,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest pytest-asyncio
       
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      # Skip Google Cloud authentication if service account key not available
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: ${{ secrets.GCP_SA_KEY }}
       
       - name: Run Gemini service integration tests
         run: pytest tests/integration/test_gemini_services.py -v
@@ -161,8 +162,10 @@ jobs:
         env:
           GOOGLE_CLOUD_PROJECT: ${{ secrets.GOOGLE_CLOUD_PROJECT }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          DATABASE_URL: ${{ secrets.TEST_DATABASE_URL }}
-          SESSION_SECRET: test-secret-key
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          SESSION_SECRET: ${{ secrets.SESSION_SECRET }}
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
       - name: Wait for application to start
         run: sleep 5
@@ -255,10 +258,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GCP_SA_KEY }}
+      # Skip Google Cloud authentication if service account key not available
+      # - name: Authenticate to Google Cloud
+      #   uses: google-github-actions/auth@v2
+      #   with:
+      #     credentials_json: ${{ secrets.GCP_SA_KEY }}
       
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
